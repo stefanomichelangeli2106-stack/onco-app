@@ -1,7 +1,7 @@
 {
-  "name": "Consultorio Onco — Simulador de cáncer de mama",
+  "name": "Consultorio Onco — Simulador clínico oncológico",
   "short_name": "Onco",
-  "description": "Simulador clínico interactivo de casos de cáncer de mama para práctica de decisiones oncológicas.",
+  "description": "Simulador clínico interactivo de casos de cáncer de mama y de pulmón para práctica de decisiones oncológicas.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

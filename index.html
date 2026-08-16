@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Consultorio Onco — Simulador de cáncer de mama</title>
+<title>Consultorio Onco — Simulador clínico oncológico</title>
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0F332F">
@@ -27,6 +27,7 @@
     --sage:#4B6B47; --sage-tint:#E1E9DA;
     --gold:#9C7A2E; --gold-tint:#F1E6C8;
     --plum:#6B4468; --plum-tint:#E9DEE7;
+    --steel:#3E5A6B; --steel-tint:#DEE7EA;
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased;}
@@ -38,6 +39,16 @@
   .crumb{font-size:12px;color:var(--ink-soft);margin-bottom:14px;}
   .crumb span{cursor:pointer;text-decoration:underline;}
   .intro{font-family:'Lora',serif;font-size:16px;line-height:1.7;color:var(--ink-soft);max-width:640px;margin:0 0 26px;}
+
+  .sectiongrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media (max-width:640px){.sectiongrid{grid-template-columns:1fr;}}
+  .sectioncard{background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:28px 26px;cursor:pointer;transition:border-color .12s,transform .12s;text-align:left;}
+  .sectioncard:hover{border-color:var(--ink-soft);transform:translateY(-1px);}
+  .sectioncard .icon{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);margin-bottom:10px;display:block;}
+  .sectioncard h2{font-family:'Lora',serif;font-size:23px;margin:0 0 8px;}
+  .sectioncard p{font-size:14px;color:var(--ink-soft);line-height:1.6;margin:0;}
+  .sectioncard.pulmon .icon{color:var(--steel);}
+
   .modgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
   .casegrid{display:grid;grid-template-columns:1fr;gap:14px;}
   @media (max-width:640px){.modgrid{grid-template-columns:1fr;}}
@@ -50,6 +61,10 @@
   .tag.lumB{background:var(--gold-tint);color:var(--gold);}
   .tag.her2{background:var(--plum-tint);color:var(--plum);}
   .tag.tnbc{background:var(--coral-tint);color:#7A2E19;}
+  .tag.egfr{background:var(--teal-tint);color:var(--teal-deep);}
+  .tag.alk{background:var(--plum-tint);color:var(--plum);}
+  .tag.nodriver{background:var(--gold-tint);color:var(--gold);}
+  .tag.sclc{background:var(--coral-tint);color:#7A2E19;}
   .casecard{display:flex;gap:14px;align-items:flex-start;}
   .casecard .casenum{font-family:'IBM Plex Mono',monospace;font-size:20px;color:var(--line);font-weight:500;flex-shrink:0;}
   .casecard:hover .casenum{color:var(--teal);}
@@ -136,11 +151,7 @@
 </div>
 
 <script>
-/* ===================== DATA ===================== */
-/* option: { label, points (2=optima,1=aceptable,0=incorrecta), feedback, paper, finding } */
-/* stage: { type: info|decision|epicrisis, phase, eyebrow, html/prompt, options, vitalsUpdate, buttonLabel } */
-
-const MODULES = {
+const MAMA_MODULES = {
 
 /* ============================================================ LUMINAL A */
 lumA: {
@@ -148,8 +159,8 @@ lumA: {
   moduleDesc:"RE/RP muy positivos, Ki67 bajo, HER2 negativo. El subtipo de mejor pronóstico y menor sensibilidad a quimioterapia.",
   cases: [
 
-  { key:"classic", label:"Caso 1 · Adyuvancia estándar y progresión metastásica",
-    cardDesc:"58 años, posmenopáusica, riesgo bajo (RS 12). Cirugía primero, sin quimioterapia, progresión con mutación de ESR1.",
+  { key:"classic", label:"Caso 1",
+    cardDesc:"58 años, posmenopáusica. Diagnóstico inicial de cáncer de mama Luminal A en estadio temprano.",
     patient:"M.R., 58 años · posmenopáusica<br>Motivo: nódulo palpable, mama izquierda",
     vitals:{"RE / RP":"95% / 80%","HER2":"negativo (IHQ 1+)","Ki67":"8%","Subtipo":"Luminal A","Estadio":"cT2N0","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Adyuvancia sistémica","Terapia endocrina","1ª línea metastásica","Manejo de toxicidad","2ª línea metastásica","Epicrisis"],
@@ -266,8 +277,8 @@ lumA: {
         ]}
     ]},
 
-  { key:"elderly", label:"Caso 2 · Paciente añosa con comorbilidades — sin progresión",
-    cardDesc:"76 años, frágil, múltiples comorbilidades. Terapia endocrina neoadyuvante, toxicidad musculoesquelética por inhibidor de aromatasa, remisión sostenida.",
+  { key:"elderly", label:"Caso 2",
+    cardDesc:"76 años, con comorbilidades cardíacas y deterioro cognitivo leve. Cáncer de mama Luminal A.",
     patient:"C.A., 76 años · posmenopáusica, ICC compensada, deterioro cognitivo leve<br>Motivo: nódulo palpable, mama derecha",
     vitals:{"RE / RP":"98% / 90%","HER2":"negativo (IHQ 0)","Ki67":"5%","Subtipo":"Luminal A","Estadio":"cT1cN0","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Cirugía y adyuvancia","Manejo de toxicidad","Duración de tratamiento","Epicrisis"],
@@ -348,8 +359,8 @@ lumA: {
         ]}
     ]},
 
-  { key:"denovo-akt", label:"Caso 3 · Riesgo genómico intermedio y mutación de AKT1",
-    cardDesc:"45 años, perimenopáusica, RS 22, neutropenia febril con quimioterapia, progresión metastásica con mutación de AKT1.",
+  { key:"denovo-akt", label:"Caso 3",
+    cardDesc:"45 años, perimenopáusica. Cáncer de mama Luminal A con perfil de riesgo intermedio.",
     patient:"P.G., 45 años · perimenopáusica<br>Motivo: nódulo palpable, mama derecha",
     vitals:{"RE / RP":"90% / 60%","HER2":"negativo (IHQ 0)","Ki67":"12%","Subtipo":"Luminal A (RS intermedio)","Estadio":"cT2N0","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Adyuvancia sistémica","Manejo de toxicidad","Terapia endocrina","1ª línea metastásica","2ª línea metastásica","Epicrisis"],
@@ -475,8 +486,8 @@ lumB: {
   moduleDesc:"RE/RP positivos pero con alta proliferación (Ki67 alto, grado 3). Mayor riesgo que Luminal A y decisiones de adyuvancia distintas.",
   cases:[
 
-  { key:"classic", label:"Caso 1 · Alto riesgo, sin pCR, progresión con PIK3CA mutado",
-    cardDesc:"47 años, premenopáusica. Neoadyuvancia sin respuesta patológica completa, CDK4/6i adyuvante, progresión con PIK3CA mutado.",
+  { key:"classic", label:"Caso 1",
+    cardDesc:"47 años, premenopáusica. Cáncer de mama Luminal B localmente avanzado.",
     patient:"L.F., 47 años · premenopáusica<br>Motivo: nódulo palpable, mama derecha",
     vitals:{"RE / RP":"60% / 10%","HER2":"negativo (IHQ 0)","Ki67":"35%","Subtipo":"Luminal B","Estadio":"cT3N1","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Adyuvancia sistémica","Manejo de toxicidad","Terapia endocrina","1ª línea metastásica","2ª línea metastásica","Epicrisis"],
@@ -578,8 +589,8 @@ lumB: {
         prompt:"Progresión bajo terapia endocrina + CDK4/6i, PIK3CA mutado (ESR1 wild-type). ¿Conducta más apropiada?",
         options:[
           {label:"Fulvestrant + alpelisib", points:2,
-            feedback:"Correcto. Dirigida específicamente a PIK3CA mutado.",
-            paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"Casi duplicó la supervivencia libre de progresión frente a fulvestrant solo en PIK3CA mutado."},
+            feedback:"Correcto. Dirigida específicamente a PIK3CA mutado, en una paciente que ya recibió y progresó a un CDK4/6i.",
+            paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"Casi duplicó la supervivencia libre de progresión frente a fulvestrant solo en PIK3CA mutado. Nota: en pacientes que aún no han recibido CDK4/6i en metastásico y presentan recaída endocrino-resistente (dentro de los 12 meses de finalizar la terapia endocrina adyuvante) con PIK3CA mutado, la combinación de primera línea inavolisib + palbociclib + fulvestrant (estudio INAVO120, Turner et al., N Engl J Med 2024) es hoy una alternativa preferida antes que agregar alpelisib después; ambas actúan sobre la misma vía PI3K pero en momentos distintos de la secuencia terapéutica."},
           {label:"Cambiar a elacestrant", points:0,
             feedback:"Beneficio en ESR1 mutado, negativo aquí.",
             paper:"EMERALD — Bidard et al., J Clin Oncol 2022", finding:"Mayor beneficio en el subgrupo con mutación de ESR1."},
@@ -592,8 +603,8 @@ lumB: {
         ]}
     ]},
 
-  { key:"pcr", label:"Caso 2 · Respuesta patológica completa — remisión sostenida",
-    cardDesc:"52 años, perimenopáusica. Logra respuesta patológica completa con neoadyuvancia; el pCR no cambia la indicación de CDK4/6i basada en riesgo basal.",
+  { key:"pcr", label:"Caso 2",
+    cardDesc:"52 años, perimenopáusica. Cáncer de mama Luminal B de alto grado.",
     patient:"V.M., 52 años · perimenopáusica<br>Motivo: nódulo palpable, mama izquierda",
     vitals:{"RE / RP":"70% / 40%","HER2":"negativo (IHQ 0)","Ki67":"40%","Subtipo":"Luminal B","Estadio":"cT2N1","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","Epicrisis"],
@@ -658,8 +669,8 @@ lumB: {
         ]}
     ]},
 
-  { key:"crisis", label:"Caso 3 · Mala respuesta a neoadyuvancia y crisis visceral",
-    cardDesc:"61 años, postmenopáusica, alto riesgo con respuesta patológica mínima. Hepatotoxicidad por ribociclib y recaída con crisis visceral.",
+  { key:"crisis", label:"Caso 3",
+    cardDesc:"61 años, posmenopáusica. Cáncer de mama Luminal B con compromiso ganglionar extenso.",
     patient:"E.R., 61 años · posmenopáusica<br>Motivo: nódulo palpable, mama izquierda",
     vitals:{"RE / RP":"55% / 5%","HER2":"negativo (IHQ 0)","Ki67":"45%","Subtipo":"Luminal B","Estadio":"cT3N2","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Adyuvancia sistémica","Manejo de toxicidad","Primera línea y crisis visceral","Epicrisis"],
@@ -752,8 +763,8 @@ her2: {
   moduleDesc:"HER2 sobreexpresado o amplificado. Alta sensibilidad a quimioterapia y bloqueo anti-HER2 dirigido, con conjugados anticuerpo-fármaco cada vez más centrales.",
   cases:[
 
-  { key:"classic", label:"Caso 1 · Enfermedad residual tras neoadyuvancia y cardiotoxicidad",
-    cardDesc:"45 años, RE negativo. Sin pCR tras THP neoadyuvante, cambio a T-DM1, cardiotoxicidad, progresión a T-DXd.",
+  { key:"classic", label:"Caso 1",
+    cardDesc:"45 años, premenopáusica. Cáncer de mama HER2 positivo localmente avanzado.",
     patient:"S.V., 45 años · premenopáusica<br>Motivo: nódulo de crecimiento rápido, mama derecha",
     vitals:{"RE / RP":"negativo / negativo","HER2":"positivo (IHQ 3+)","Ki67":"48%","Subtipo":"HER2 positivo","Estadio":"cT3N1","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Vigilancia de toxicidad","1ª línea metastásica","2ª línea metastásica","Epicrisis"],
@@ -852,8 +863,8 @@ her2: {
         ]}
     ]},
 
-  { key:"pcr", label:"Caso 2 · HER2/HR doble positivo con respuesta patológica completa",
-    cardDesc:"50 años, postmenopáusica, HER2+/RE+. Logra pCR, continúa bloqueo dual (no T-DM1), reacción de infusión aguda, remisión sostenida.",
+  { key:"pcr", label:"Caso 2",
+    cardDesc:"50 años, posmenopáusica. Cáncer de mama HER2 positivo con receptores hormonales también positivos.",
     patient:"A.D., 50 años · posmenopáusica<br>Motivo: nódulo palpable, mama izquierda",
     vitals:{"RE / RP":"80% / 60%","HER2":"positivo (IHQ 3+)","Ki67":"30%","Subtipo":"HER2+ / RE+ (doble positivo)","Estadio":"cT2N1","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","Epicrisis"],
@@ -918,8 +929,8 @@ her2: {
         ]}
     ]},
 
-  { key:"denovo", label:"Caso 3 · Metastásico de novo con compromiso leptomeníngeo",
-    cardDesc:"38 años, HER2+/RE negativo, estadio IV al diagnóstico. Toxicidad gastrointestinal por THP y progresión leptomeníngea tratada con tucatinib.",
+  { key:"denovo", label:"Caso 3",
+    cardDesc:"38 años. Cáncer de mama HER2 positivo con enfermedad metastásica al momento del diagnóstico.",
     patient:"F.N., 38 años · premenopáusica<br>Motivo: nódulo mamario y síntomas sistémicos",
     vitals:{"RE / RP":"negativo / negativo","HER2":"positivo (IHQ 3+)","Ki67":"55%","Subtipo":"HER2 positivo","Estadio":"metastásico de novo (hepático)","Tratamiento":"—"},
     timeline:["Diagnóstico metastásico","Rol de la cirugía local","1ª línea sistémica","Manejo de toxicidad","Progresión leptomeníngea","Epicrisis"],
@@ -1009,8 +1020,8 @@ tnbc: {
   moduleDesc:"Sin receptores hormonales ni sobreexpresión de HER2. El subtipo más transformado por la inmunoterapia y las terapias dirigidas por biomarcador.",
   cases:[
 
-  { key:"classic", label:"Caso 1 · BRCA1 positivo con colitis inmunomediada",
-    cardDesc:"39 años, BRCA1 germinal positivo. Colitis grado 3 por pembrolizumab que condiciona el resto del tratamiento, incluyendo la línea metastásica.",
+  { key:"classic", label:"Caso 1",
+    cardDesc:"39 años, premenopáusica, con antecedente familiar de cáncer de ovario. Cáncer de mama triple negativo.",
     patient:"N.T., 39 años · premenopáusica<br>Motivo: nódulo palpable, mama izquierda",
     vitals:{"RE / RP":"negativo / negativo","HER2":"negativo (IHQ 1+)","Ki67":"60%","Subtipo":"Triple negativo","Estadio":"cT2N1","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Manejo de toxicidad","Adyuvancia dirigida","Riesgo hereditario","1ª línea metastásica","2ª línea metastásica","Epicrisis"],
@@ -1125,8 +1136,8 @@ tnbc: {
         ]}
     ]},
 
-  { key:"pcr", label:"Caso 2 · Respuesta patológica completa y tiroiditis por pembrolizumab",
-    cardDesc:"44 años, BRCA negativo. Logra pCR, hipotiroidismo inmunomediado manejado sin discontinuar la inmunoterapia, remisión sostenida.",
+  { key:"pcr", label:"Caso 2",
+    cardDesc:"44 años, premenopáusica, sin antecedentes familiares relevantes. Cáncer de mama triple negativo.",
     patient:"R.O., 44 años · premenopáusica<br>Motivo: nódulo palpable, mama derecha",
     vitals:{"RE / RP":"negativo / negativo","HER2":"negativo (IHQ 0)","Ki67":"70%","Subtipo":"Triple negativo","Estadio":"cT2N0","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","Epicrisis"],
@@ -1191,8 +1202,8 @@ tnbc: {
         ]}
     ]},
 
-  { key:"inflammatory", label:"Caso 3 · Carcinoma inflamatorio, PD-L1 negativo, HER2-null",
-    cardDesc:"56 años, carcinoma inflamatorio. Neumonitis por pembrolizumab, PMRT obligatoria, y en metastásico HER2-null excluye T-DXd.",
+  { key:"inflammatory", label:"Caso 3",
+    cardDesc:"56 años, posmenopáusica. Presentación de carcinoma inflamatorio de mama.",
     patient:"M.J., 56 años · posmenopáusica<br>Motivo: eritema y edema mamario de rápida evolución",
     vitals:{"RE / RP":"negativo / negativo","HER2":"negativo (IHQ 0 — HER2-null)","Ki67":"65%","Subtipo":"Triple negativo (inflamatorio)","Estadio":"cT4dN2","Tratamiento":"—"},
     timeline:["Diagnóstico","Abordaje inicial","Manejo de toxicidad","Cirugía y radioterapia","1ª línea metastásica","2ª línea metastásica","Epicrisis"],
@@ -1281,9 +1292,340 @@ tnbc: {
 }
 
 };
+const PULMON_MODULES = {
+
+/* ============================================================ CPNM EGFR MUTADO */
+egfr: {
+  tag:"egfr", tagLabel:"CPNM EGFR mutado", title:"CPNM con mutación de EGFR",
+  moduleDesc:"Adenocarcinoma de pulmón con mutación activante de EGFR (deleción del exón 19 o L858R). El paradigma con más tratamiento dirigido oral desarrollado en oncología torácica.",
+  cases:[
+  { key:"classic", label:"Caso 1",
+    cardDesc:"58 años, no fumadora. Hallazgo incidental de un nódulo pulmonar.",
+    patient:"C.L., 58 años · no fumadora<br>Motivo: hallazgo incidental en TC de tórax",
+    vitals:{"Histología":"Adenocarcinoma","EGFR":"deleción exón 19 (positivo)","PD-L1":"TPS 5%","Estadio":"IIB (resecado)","Tratamiento":"—"},
+    timeline:["Diagnóstico","Cirugía y adyuvancia","Manejo de toxicidad","Progresión y estudio de resistencia","Tratamiento dirigido por resistencia","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>C.L., 58 años, no fumadora, sin síntomas respiratorios, consulta tras un <b>hallazgo incidental de un nódulo pulmonar de 3.2 cm en el lóbulo superior derecho</b> en una tomografía solicitada por otro motivo. PET-TC: captación en el nódulo y en un ganglio hiliar ipsilateral, sin enfermedad a distancia.</p>
+        <p>Biopsia guiada por broncoscopía: <b>adenocarcinoma de pulmón</b>. Panel molecular: <b>mutación de EGFR (deleción del exón 19), PD-L1 TPS 5%, ALK y ROS1 negativos</b>. Estadificación quirúrgica tras lobectomía: <b>estadio IIB (T2bN1)</b>.</p>
+        <div class="callout">El perfil clínico (no fumadora, adenocarcinoma) y la mutación de EGFR son consistentes con el subtipo molecular más frecuente en pacientes no fumadoras con cáncer de pulmón, con múltiples terapias dirigidas orales disponibles según la línea de tratamiento.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Adyuvancia tras resección completa",
+        prompt:"Adenocarcinoma resecado, estadio IIB, EGFR mutado (deleción exón 19), tras lobectomía completa con márgenes negativos. ¿Qué adyuvancia corresponde?",
+        options:[
+          {label:"Osimertinib adyuvante por 3 años", points:2,
+            feedback:"Correcto. En NSCLC resecado EGFR mutado (exón 19 o L858R) estadio IB-IIIA, osimertinib adyuvante es el estándar de cuidado, con o sin quimioterapia adyuvante previa.",
+            paper:"ADAURA — Wu et al., N Engl J Med 2020; actualización de supervivencia global, Tsuboi et al., N Engl J Med 2023", finding:"Osimertinib adyuvante redujo el riesgo de recurrencia o muerte de forma marcada frente a placebo en estadio II-IIIA (HR 0.17 en el análisis inicial), con beneficio también en supervivencia global confirmado en el análisis final a más de 5 años de seguimiento, y beneficio específico en la reducción de recurrencia a nivel del sistema nervioso central."},
+          {label:"Quimioterapia adyuvante con platino, sin terapia dirigida", points:1,
+            feedback:"Es razonable como componente adicional (osimertinib se estudió con o sin quimioterapia adyuvante previa), pero omitir el osimertinib deja fuera el componente con mayor impacto demostrado en este perfil molecular.",
+            paper:"ADAURA — Wu et al., N Engl J Med 2020", finding:"El beneficio de osimertinib se observó tanto en pacientes que habían recibido quimioterapia adyuvante como en quienes no, siendo el osimertinib el componente que aportó el mayor beneficio adicional."},
+          {label:"Inmunoterapia adyuvante (atezolizumab), igual que en NSCLC sin mutación conductora", points:0,
+            feedback:"No corresponde: los pacientes con mutaciones conductoras como EGFR fueron excluidos o mostraron menor beneficio en los estudios de inmunoterapia adyuvante, mientras que existe una terapia dirigida específica y más efectiva para este perfil.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda reservar la inmunoterapia adyuvante para tumores sin alteraciones conductoras significativas como EGFR o ALK, para quienes existen terapias dirigidas de mayor beneficio esperado."},
+          {label:"Observación sin tratamiento adyuvante", points:0,
+            feedback:"Con un beneficio tan marcado y consistente de osimertinib adyuvante en este estadio y perfil molecular, la observación sin tratamiento representa una pérdida significativa de beneficio potencial.",
+            paper:"ADAURA — Wu et al., N Engl J Med 2020", finding:"El beneficio en supervivencia libre de enfermedad fue de tal magnitud que el comité de monitoreo de datos recomendó desenmascarar el estudio antes de lo planeado por la clara superioridad de osimertinib."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Evento de toxicidad · 8 meses de osimertinib adyuvante", vitalsUpdate:{"Tratamiento":"Osimertinib adyuvante — evento de toxicidad pulmonar"}, html:`
+        <p>A los 8 meses de osimertinib adyuvante, la paciente presenta <b>tos seca progresiva y disnea de esfuerzo</b> de 10 días de evolución, sin fiebre. TC de tórax: <b>opacidades en vidrio esmerilado bilaterales de distribución difusa</b>, sin evidencia de progresión tumoral ni de infección en los estudios complementarios. Saturación de oxígeno 93% al aire ambiente.</p>
+        <div class="callout warn">La enfermedad pulmonar intersticial (neumonitis) es una toxicidad característica y potencialmente grave de osimertinib, distinta de la progresión tumoral o de una neumonía infecciosa, con implicancias específicas sobre la posibilidad de continuar el fármaco.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:2, eyebrow:"Decisión de toxicidad · Enfermedad pulmonar intersticial por osimertinib",
+        prompt:"Neumonitis grado 2 por osimertinib (disnea, hipoxemia leve, opacidades en vidrio esmerilado), sin evidencia de infección ni progresión tumoral. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Suspender osimertinib de inmediato, iniciar corticoides sistémicos, y no reiniciar el fármaco salvo que un neumonólogo confirme una causa alternativa y considere el riesgo-beneficio individualmente", points:2,
+            feedback:"Correcto. Ante una neumonitis relacionada con osimertinib de grado ≥2, se suspende el fármaco y se inician corticoides; a diferencia de otras toxicidades de este módulo, la enfermedad pulmonar intersticial por osimertinib tiene un riesgo relevante de recurrencia grave con la reexposición, por lo que la decisión de reintentar el fármaco es cautelosa y individualizada, priorizando la seguridad.",
+            paper:"Perfil de seguridad de osimertinib (FLAURA — Soria et al., N Engl J Med 2018; ADAURA — Wu et al., N Engl J Med 2020)", finding:"La enfermedad pulmonar intersticial se documentó en aproximadamente el 3-4% de los pacientes tratados con osimertinib en los ensayos pivotales, con casos graves e incluso fatales descritos; las guías de manejo recomiendan suspensión inmediata ante sospecha, descartar causas alternativas, e individualizar cuidadosamente cualquier reexposición dado el riesgo de recurrencia."},
+          {label:"Continuar osimertinib a la misma dosis, dado que la paciente está clínicamente estable", points:0,
+            feedback:"Continuar el fármaco ante una neumonitis grado 2 en progreso conlleva riesgo de progresión a una forma más grave, potencialmente fatal.",
+            paper:"Perfil de seguridad de osimertinib", finding:"Las guías de manejo de neumonitis por osimertinib recomiendan suspensión inmediata ante cualquier sospecha clínica y radiológica, independientemente de la estabilidad aparente."},
+          {label:"Reducir la dosis de osimertinib a la mitad sin suspenderlo, mientras se observa la evolución", points:0,
+            feedback:"La reducción de dosis no es la conducta recomendada ante sospecha de neumonitis; el manejo estándar es la suspensión completa mientras se evalúa y trata el cuadro.",
+            paper:"Perfil de seguridad de osimertinib", finding:"El protocolo de manejo de eventos pulmonares en los ensayos con osimertinib contempla suspensión completa del fármaco ante sospecha de neumonitis, no reducción de dosis."},
+          {label:"Indicar antibióticos empíricos de amplio espectro, asumiendo neumonía atípica", points:0,
+            feedback:"Los estudios ya orientan a un origen no infeccioso (sin fiebre, patrón radiológico compatible con toxicidad farmacológica); tratar como infección retrasa la suspensión del fármaco y el inicio de corticoides que realmente tratan este cuadro.",
+            paper:"Perfil de seguridad de osimertinib", finding:"Recomienda descartar razonablemente una causa infecciosa, pero una vez hecho esto, orientar el manejo hacia la toxicidad farmacológica con suspensión del fármaco y corticoides."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Progresión — 22 meses tras reiniciar osimertinib", vitalsUpdate:{"Tratamiento":"Progresión bajo osimertinib"}, html:`
+        <p>Tras la resolución de la neumonitis con corticoides, se reinicia osimertinib con monitoreo estrecho, sin recurrencia del evento. A los 22 meses de tratamiento adyuvante completo, un control de rutina detecta <b>una lesión hepática nueva y adenopatías mediastínicas</b> en la tomografía de seguimiento: recaída de la enfermedad.</p>
+        <div class="callout">Ante la progresión de un NSCLC EGFR mutado bajo osimertinib, identificar el mecanismo de resistencia es un paso central antes de elegir el siguiente tratamiento, ya que distintos mecanismos tienen opciones terapéuticas específicas.</div>`, buttonLabel:"Decidir el siguiente paso →"},
+      {type:"decision", phase:3, eyebrow:"Decisión 2 · Estudio ante la progresión",
+        prompt:"Progresión confirmada bajo osimertinib (hepática y mediastínica), sin tratamiento sistémico adicional aún. ¿Cuál es la conducta más apropiada antes de elegir el siguiente tratamiento?",
+        options:[
+          {label:"Realizar una nueva biopsia (o perfil molecular en ADN tumoral circulante) de la lesión progresiva para identificar el mecanismo de resistencia", points:2,
+            feedback:"Correcto. Ante progresión a osimertinib, se recomienda reevaluar el perfil molecular, ya que mecanismos de resistencia distintos (mutación de EGFR C797S, amplificación de MET, transformación a carcinoma de células pequeñas, entre otros) tienen implicancias terapéuticas específicas y diferentes.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda estudiar el mecanismo de resistencia mediante nueva biopsia tisular o perfil molecular en ADN tumoral circulante al momento de la progresión a un inhibidor de EGFR de tercera generación, dado que distintos mecanismos orientan a estrategias de tratamiento diferentes."},
+          {label:"Iniciar quimioterapia con platino de inmediato, sin estudiar el mecanismo de resistencia", points:1,
+            feedback:"La quimioterapia con platino sigue siendo la base del tratamiento tras progresión a osimertinib en ausencia de un mecanismo accionable específico, pero omitir el estudio del mecanismo de resistencia pierde la oportunidad de identificar una alternativa dirigida (por ejemplo, ante amplificación de MET) antes de decidir.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda el estudio del mecanismo de resistencia como paso previo a definir el tratamiento posterior, siempre que sea factible obtenerlo sin demoras clínicamente relevantes."},
+          {label:"Aumentar la dosis de osimertinib asumiendo una resistencia parcial", points:0,
+            feedback:"No existe evidencia que sustente aumentar la dosis de osimertinib ante progresión documentada; la resistencia clínica no se revierte con mayor dosis del mismo fármaco.",
+            paper:"—", finding:"No hay evidencia de relación dosis-respuesta que sustente el aumento de dosis de osimertinib ante progresión clínica documentada."},
+          {label:"Suspender todo tratamiento oncológico y pasar a cuidados paliativos exclusivos", points:0,
+            feedback:"Es prematuro: existen múltiples opciones de tratamiento sistémico tras progresión a osimertinib, y el estado general de la paciente no se ha descrito como deteriorado.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda continuar evaluando opciones de tratamiento sistémico activo tras progresión a primera línea en pacientes con adecuado estado funcional."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Resultado del estudio de resistencia", vitalsUpdate:{"Tratamiento":"Mecanismo de resistencia identificado"}, html:`
+        <p>La nueva biopsia de la lesión hepática confirma: <b>persistencia de la mutación original de EGFR (deleción exón 19)</b>, sin mutación de resistencia C797S, pero con <b>amplificación de MET</b> de novo. No hay evidencia de transformación a carcinoma de células pequeñas.</p>
+        <div class="callout">La amplificación de MET es uno de los mecanismos de resistencia adquirida más frecuentes a osimertinib, presente en aproximadamente el 5-15% de los casos de progresión.</div>`, buttonLabel:"Definir tratamiento dirigido por el mecanismo de resistencia →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 3 · Tratamiento tras identificar amplificación de MET",
+        prompt:"Progresión a osimertinib con amplificación de MET confirmada como mecanismo de resistencia, sin mutación C797S. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Quimioterapia con platino como base del tratamiento, considerando el ingreso a un ensayo clínico o el acceso a un esquema combinado con osimertinib más un inhibidor de MET si está disponible", points:2,
+            feedback:"Correcto. Aunque la combinación de osimertinib con un inhibidor de MET (como savolitinib) ha mostrado actividad prometedora específicamente en este mecanismo de resistencia, esta combinación aún no es un estándar universalmente disponible fuera de contextos de ensayo clínico o aprobación regional específica; por eso la base del tratamiento sigue siendo la quimioterapia con platino, buscando activamente el acceso a la combinación dirigida cuando esté disponible.",
+            paper:"SAVANNAH — Sequist et al., datos presentados en ASCO/actualizaciones de la combinación osimertinib + savolitinib en amplificación de MET tras progresión a osimertinib", finding:"La combinación de osimertinib con savolitinib mostró tasas de respuesta relevantes específicamente en pacientes con amplificación de MET como mecanismo de resistencia a un inhibidor de EGFR previo, apoyando el valor de identificar este mecanismo, aunque la disponibilidad de la combinación varía según la región y el contexto regulatorio."},
+          {label:"Continuar osimertinib en monoterapia sin cambios, dado que la mutación original de EGFR persiste", points:0,
+            feedback:"La persistencia de la mutación original no significa que el fármaco siga siendo eficaz: la amplificación de MET es un mecanismo de escape que vuelve ineficaz a osimertinib en monoterapia, incluso si el objetivo original sigue presente.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"La progresión clínica documentada, independientemente de la persistencia de la mutación original, indica la necesidad de cambiar de estrategia terapéutica."},
+          {label:"Terapia endocrina, dado que es una paciente mujer", points:0,
+            feedback:"No tiene ningún sustento: el cáncer de pulmón no tiene un impulsor hormonal análogo al de cáncer de mama; esta opción no corresponde a ningún mecanismo biológico relevante en este contexto.",
+            paper:"—", finding:"No existe evidencia ni mecanismo biológico que sustente el uso de terapia endocrina en cáncer de pulmón."},
+          {label:"Radioterapia sistémica como único tratamiento de la enfermedad hepática y mediastínica", points:0,
+            feedback:"La radioterapia tiene un rol para el control local de lesiones específicas, pero no reemplaza al tratamiento sistémico ante enfermedad diseminada con progresión documentada.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda tratamiento sistémico como pilar en enfermedad metastásica diseminada, con radioterapia como complemento para control local."}
+        ]}
+    ]}
+  ]
+},
+
+/* ============================================================ CPNM ALK POSITIVO */
+alk: {
+  tag:"alk", tagLabel:"CPNM ALK positivo", title:"CPNM con reordenamiento de ALK",
+  moduleDesc:"Adenocarcinoma con fusión del gen ALK, típico de pacientes jóvenes y no fumadores, con alto tropismo por el sistema nervioso central.",
+  cases:[
+  { key:"classic", label:"Caso 1",
+    cardDesc:"45 años, no fumador. Cáncer de pulmón diagnosticado por tos persistente.",
+    patient:"J.M., 45 años · no fumador<br>Motivo: tos persistente",
+    vitals:{"Histología":"Adenocarcinoma","ALK":"fusión EML4-ALK (positivo)","PD-L1":"TPS 1%","Estadio":"IIIA (resecado)","Tratamiento":"—"},
+    timeline:["Diagnóstico","Cirugía y adyuvancia","Manejo de toxicidad","Progresión cerebral","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>J.M., 45 años, no fumador, consulta por tos persistente de 6 semanas. TC de tórax: <b>masa de 4.5 cm en el lóbulo inferior izquierdo con adenopatías mediastínicas</b>. PET-TC sin evidencia de enfermedad a distancia.</p>
+        <p>Biopsia: <b>adenocarcinoma de pulmón</b>. Panel molecular: <b>fusión EML4-ALK (positivo), EGFR negativo, PD-L1 TPS 1%</b>. Tras neoadyuvancia con quimioterapia y cirugía (lobectomía + linfadenectomía), estadificación patológica: <b>estadio IIIA (T2N2)</b>, márgenes negativos.</p>
+        <div class="callout">Los reordenamientos de ALK son característicos de pacientes más jóvenes, frecuentemente no fumadores, y se asocian a un riesgo particularmente alto de metástasis en el sistema nervioso central a lo largo de la enfermedad.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Adyuvancia tras resección completa",
+        prompt:"Adenocarcinoma resecado, estadio IIIA, ALK positivo, tras neoadyuvancia con quimioterapia y cirugía completa. ¿Qué adyuvancia corresponde?",
+        options:[
+          {label:"Alectinib adyuvante por 2 años", points:2,
+            feedback:"Correcto. En NSCLC resecado ALK positivo estadio IB-IIIA, alectinib adyuvante es superior a la quimioterapia adyuvante y es hoy el estándar de cuidado.",
+            paper:"ALINA — Wu et al., N Engl J Med 2024", finding:"Alectinib adyuvante durante 24 meses redujo el riesgo de recurrencia o muerte en un 76% frente a quimioterapia con platino en pacientes con NSCLC resecado ALK positivo estadio IB-IIIA, con un beneficio particularmente marcado en la reducción de recurrencias en el sistema nervioso central."},
+          {label:"Osimertinib adyuvante, igual que en EGFR mutado", points:0,
+            feedback:"No corresponde: osimertinib es un inhibidor de EGFR sin actividad relevante contra ALK; el fármaco dirigido específico para este perfil molecular es un inhibidor de ALK como alectinib.",
+            paper:"ALINA — Wu et al., N Engl J Med 2024", finding:"El beneficio adyuvante demostrado en NSCLC ALK positivo corresponde específicamente a alectinib, un inhibidor de ALK, no a osimertinib."},
+          {label:"Quimioterapia adyuvante adicional, sin terapia dirigida", points:1,
+            feedback:"La quimioterapia ya recibida en el contexto neoadyuvante forma parte del tratamiento estándar, pero omitir alectinib adyuvante deja fuera el componente con mayor beneficio demostrado específicamente en este perfil molecular.",
+            paper:"ALINA — Wu et al., N Engl J Med 2024", finding:"Alectinib mostró superioridad clara frente a la quimioterapia con platino sola en la reducción del riesgo de recurrencia."},
+          {label:"Inmunoterapia adyuvante, igual que en tumores sin alteración conductora", points:0,
+            feedback:"Los tumores con reordenamientos de ALK muestran, en general, menor beneficio de la inmunoterapia que los tumores sin alteraciones conductoras, y existe una terapia dirigida específica de mayor eficacia esperada.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda reservar la inmunoterapia adyuvante para tumores sin alteraciones conductoras significativas como ALK o EGFR."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Evento de toxicidad · 6 semanas de alectinib adyuvante", vitalsUpdate:{"Tratamiento":"Alectinib — evento de toxicidad hepática"}, html:`
+        <p>Laboratorio de control a las 6 semanas: <b>ALT 245 U/L, AST 198 U/L</b> (grado 3, más de 5 veces el límite superior normal), bilirrubina normal. Paciente asintomático.</p>
+        <div class="callout warn">La hepatotoxicidad es una toxicidad característica de alectinib que requiere monitoreo periódico de enzimas hepáticas durante el tratamiento.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:2, eyebrow:"Decisión de toxicidad · Hepatotoxicidad grado 3 por alectinib",
+        prompt:"Elevación asintomática de transaminasas grado 3 bajo alectinib adyuvante. ¿Conducta más apropiada?",
+        options:[
+          {label:"Suspender temporalmente alectinib, repetir función hepática en 1-2 semanas, y reiniciar a dosis reducida cuando mejore a grado ≤1", points:2,
+            feedback:"Correcto. La hepatotoxicidad grado 3 por alectinib se maneja con interrupción temporal y reinicio a dosis reducida tras la mejoría, según el algoritmo de manejo del fármaco.",
+            paper:"ALEX — Peters et al., N Engl J Med 2017 (perfil de seguridad de alectinib)", finding:"La elevación de transaminasas fue uno de los eventos adversos de mayor grado descritos con alectinib; el protocolo de manejo especifica interrupción ante elevaciones grado 3, con reinicio a dosis reducida tras la normalización o mejoría."},
+          {label:"Continuar alectinib a la misma dosis dado que está asintomático", points:0,
+            feedback:"Una elevación grado 3 de transaminasas requiere interrupción del fármaco, independientemente de los síntomas, por riesgo de progresión a daño hepático más severo.",
+            paper:"ALEX — Peters et al., N Engl J Med 2017", finding:"El protocolo de manejo de seguridad exige interrupción del fármaco ante elevaciones grado 3 de transaminasas."},
+          {label:"Suspender alectinib de forma definitiva sin reintentar a dosis reducida", points:1,
+            feedback:"Puede ser necesario si la toxicidad recurre, pero como primera conducta se prefiere la interrupción temporal con reinicio a dosis reducida, dado el beneficio adyuvante sustancial del fármaco.",
+            paper:"ALEX — Peters et al., N Engl J Med 2017", finding:"El algoritmo de manejo contempla niveles de reducción de dosis antes de la discontinuación definitiva."},
+          {label:"Cambiar directamente a lorlatinib, asumiendo que será mejor tolerado", points:0,
+            feedback:"No hay indicación de cambiar de fármaco ante una toxicidad manejable con ajuste de dosis; además, lorlatinib tiene su propio perfil de toxicidad distinto (metabólico y neurocognitivo) que no necesariamente sería mejor tolerado en este contexto.",
+            paper:"CROWN — Solomon et al., N Engl J Med 2020", finding:"Lorlatinib tiene un perfil de toxicidad característico propio (hiperlipidemia, efectos cognitivos y del estado de ánimo), distinto al de alectinib, sin evidencia de que sea sistemáticamente mejor tolerado en casos de hepatotoxicidad por alectinib."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Progresión cerebral — 20 meses de alectinib adyuvante", vitalsUpdate:{"Tratamiento":"Progresión cerebral bajo alectinib"}, html:`
+        <p>A los 20 meses de alectinib adyuvante (con dosis ajustada tras el evento hepático, sin nueva toxicidad relevante), el paciente presenta <b>cefalea y un episodio de desorientación breve</b>. RM cerebral: <b>tres lesiones metastásicas cerebrales</b> de hasta 1.2 cm, sin evidencia de progresión extracraneal en la tomografía de cuerpo.</p>
+        <div class="callout warn">La progresión aislada en el sistema nervioso central es una presentación característica en NSCLC ALK positivo, incluso bajo tratamiento adyuvante con un inhibidor de ALK de segunda generación como alectinib.</div>`, buttonLabel:"Definir conducta ante la progresión cerebral →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 2 · Tratamiento tras progresión cerebral bajo alectinib",
+        prompt:"Progresión aislada en el sistema nervioso central bajo alectinib, sin progresión extracraneal. ¿Cuál es la conducta sistémica más apropiada?",
+        options:[
+          {label:"Cambiar a lorlatinib (inhibidor de ALK de tercera generación)", points:2,
+            feedback:"Correcto. Lorlatinib tiene mayor penetración y actividad en el sistema nervioso central que alectinib, y es la opción preferida ante progresión cerebral bajo un inhibidor de ALK de generación anterior.",
+            paper:"CROWN — Solomon et al., N Engl J Med 2020; actualización a 5 años, Solomon et al., 2024", finding:"Lorlatinib mostró alta tasa de respuesta intracraneal y control prolongado de la enfermedad cerebral, incluyendo en pacientes con progresión bajo inhibidores de ALK de generación previa, con un perfil de penetración al sistema nervioso central superior."},
+          {label:"Continuar alectinib sin cambios, ya que la enfermedad extracraneal está controlada", points:0,
+            feedback:"La progresión cerebral documentada, aunque la enfermedad extracraneal esté controlada, indica la necesidad de cambiar a un inhibidor de ALK con mejor penetración al sistema nervioso central.",
+            paper:"CROWN — Solomon et al., N Engl J Med 2020", finding:"Se diseñó específicamente considerando el alto riesgo de progresión cerebral en NSCLC ALK positivo, mostrando el beneficio de un inhibidor de mayor penetración al sistema nervioso central."},
+          {label:"Radioterapia holocraneal exclusiva, sin cambio de tratamiento sistémico", points:1,
+            feedback:"La radioterapia focal o holocraneal puede tener un rol complementario según el número y tamaño de las lesiones, pero cambiar a un inhibidor de ALK con mejor penetración al sistema nervioso central aborda la causa sistémica de la progresión y puede evitar o complementar la radioterapia según el caso.",
+            paper:"CROWN — Solomon et al., N Engl J Med 2020", finding:"Mostró que un inhibidor de ALK con alta penetración al sistema nervioso central puede lograr control intracraneal prolongado, lo que en muchos casos permite diferir o evitar la radioterapia holocraneal y su toxicidad asociada."},
+          {label:"Quimioterapia con platino, discontinuando todo tratamiento dirigido contra ALK", points:0,
+            feedback:"Prescindir de la terapia dirigida contra ALK en un tumor que la mantiene como impulsor molecular, y que dispone de opciones de generación posterior con mejor penetración al sistema nervioso central, no es la conducta preferida en este momento.",
+            paper:"CROWN — Solomon et al., N Engl J Med 2020", finding:"Los inhibidores de ALK de generaciones sucesivas mostraron beneficio clínico relevante tras progresión a inhibidores previos, antes de recurrir a quimioterapia."}
+        ]}
+    ]}
+  ]
+},
+
+/* ============================================================ CPNM SIN MUTACIÓN CONDUCTORA */
+nodriver: {
+  tag:"nodriver", tagLabel:"CPNM sin driver, PD-L1+", title:"CPNM sin mutación conductora",
+  moduleDesc:"Adenocarcinoma o carcinoma escamoso sin alteración molecular accionable. La inmunoterapia, guiada por la expresión de PD-L1, es el pilar del tratamiento.",
+  cases:[
+  { key:"classic", label:"Caso 1",
+    cardDesc:"66 años, fumador activo. Cáncer de pulmón metastásico al momento del diagnóstico.",
+    patient:"H.G., 66 años · fumador activo (40 paquetes-año)<br>Motivo: dolor torácico y pérdida de peso",
+    vitals:{"Histología":"Adenocarcinoma","Driver molecular":"EGFR, ALK, ROS1 negativos","PD-L1":"TPS 60%","Estadio":"IV (metastásico de novo)","Tratamiento":"—"},
+    timeline:["Diagnóstico","Primera línea sistémica","Manejo de toxicidad","Progresión","Segunda línea","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>H.G., 66 años, fumador activo (40 paquetes-año), consulta por dolor torácico y pérdida de peso de 2 meses. TC de tórax: <b>masa de 5 cm en el lóbulo superior derecho con múltiples nódulos pulmonares contralaterales y una lesión suprarrenal</b>.</p>
+        <p>Biopsia: <b>adenocarcinoma de pulmón</b>. Panel molecular: <b>EGFR, ALK, ROS1, BRAF, MET, RET y NTRK negativos</b> (sin alteración conductora accionable). <b>PD-L1 (TPS) 60%</b>. Estadio <b>IV metastásico de novo</b>. ECOG 1.</p>
+        <div class="callout">Sin alteración molecular accionable, el tratamiento se orienta según la expresión de PD-L1: un TPS alto (≥50%) permite considerar inmunoterapia en monoterapia como primera línea.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Primera línea sistémica",
+        prompt:"NSCLC metastásico sin alteración conductora, PD-L1 TPS 60%, ECOG 1, sin enfermedad de progresión rápida que amenace la vida. ¿Cuál es la conducta de primera línea más apropiada?",
+        options:[
+          {label:"Pembrolizumab en monoterapia", points:2,
+            feedback:"Correcto. Con PD-L1 TPS ≥50% y sin alteración conductora, pembrolizumab en monoterapia es una opción de primera línea preferida, con un perfil de toxicidad más favorable que agregar quimioterapia y eficacia bien establecida en este subgrupo.",
+            paper:"KEYNOTE-024 — Reck et al., N Engl J Med 2016; actualización a 5 años, Reck et al., 2021", finding:"En pacientes con PD-L1 TPS ≥50% sin alteración conductora, pembrolizumab en monoterapia mejoró significativamente la supervivencia libre de progresión y la supervivencia global frente a quimioterapia con platino, con una tasa de supervivencia a 5 años sustancialmente mayor que la esperada históricamente con quimioterapia sola."},
+          {label:"Pembrolizumab + quimioterapia con platino", points:1,
+            feedback:"Es también una opción válida y razonable en PD-L1 alto, especialmente si se busca una respuesta más rápida o hay mayor volumen de enfermedad, pero con TPS ≥50% pembrolizumab en monoterapia ofrece eficacia comparable con menor toxicidad, por lo que suele preferirse como primera elección salvo indicación específica de combinar.",
+            paper:"KEYNOTE-189 — Gandhi et al., N Engl J Med 2018", finding:"Mostró beneficio de agregar pembrolizumab a quimioterapia en la población general no seleccionada por PD-L1 alto; en el subgrupo específico de TPS ≥50%, los resultados de monoterapia con pembrolizumab (KEYNOTE-024) son comparables con menor toxicidad acumulada."},
+          {label:"Quimioterapia con platino sola, sin inmunoterapia", points:0,
+            feedback:"Omitir la inmunoterapia en un tumor con PD-L1 alto (TPS 60%) prescinde del tratamiento con mayor beneficio demostrado en este subgrupo específico.",
+            paper:"KEYNOTE-024 — Reck et al., N Engl J Med 2016", finding:"Pembrolizumab en monoterapia fue claramente superior a la quimioterapia con platino sola en el subgrupo de PD-L1 TPS ≥50%."},
+          {label:"Terapia dirigida empírica contra EGFR, dado que es un adenocarcinoma", points:0,
+            feedback:"No corresponde: el panel molecular confirmó ausencia de mutación de EGFR; la terapia dirigida solo tiene indicación si existe la alteración molecular correspondiente, no por el solo hecho de tratarse de un adenocarcinoma.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda basar la elección de terapia dirigida exclusivamente en la presencia confirmada de la alteración molecular correspondiente."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Evento de toxicidad · 4 meses de pembrolizumab", vitalsUpdate:{"Tratamiento":"Pembrolizumab — evento de toxicidad pulmonar"}, html:`
+        <p>A los 4 meses, presenta <b>tos seca y disnea de esfuerzo progresiva</b>. TC de tórax: <b>nuevas opacidades en vidrio esmerilado bilaterales</b>, sin progresión de las lesiones tumorales conocidas ni evidencia de infección. Saturación de oxígeno 92% al aire ambiente. Se interpreta como <b>neumonitis inmunomediada grado 2-3</b>.</p>
+        <div class="callout warn">Distinguir la neumonitis inmunomediada de la progresión tumoral o de una infección respiratoria es clave, ya que el manejo es completamente distinto en cada caso.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:2, eyebrow:"Decisión de toxicidad · Neumonitis inmunomediada por pembrolizumab",
+        prompt:"Neumonitis inmunomediada grado 2-3 (hipoxemia, opacidades bilaterales, sin infección ni progresión tumoral), bajo pembrolizumab. ¿Conducta más apropiada?",
+        options:[
+          {label:"Suspender pembrolizumab, iniciar corticoides sistémicos (dosis más alta si hay hipoxemia significativa), y reevaluar estrechamente antes de decidir sobre la reanudación", points:2,
+            feedback:"Correcto. La neumonitis inmunomediada grado 2-3 requiere suspensión del inhibidor de checkpoint y corticoides sistémicos, con el umbral de dosis y la necesidad de hospitalización ajustados según la severidad e hipoxemia.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021 (manejo de eventos adversos inmunomediados)", finding:"Recomienda suspender el inhibidor de checkpoint ante neumonitis grado ≥2 e iniciar corticoides sistémicos, escalando la dosis y considerando hospitalización según la severidad de la hipoxemia y el compromiso respiratorio."},
+          {label:"Continuar pembrolizumab, dado que la enfermedad tumoral está respondiendo bien", points:0,
+            feedback:"La buena respuesta oncológica no compensa el riesgo de continuar el fármaco durante una neumonitis activa grado 2-3, que puede progresar a insuficiencia respiratoria grave.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Indica suspensión del inhibidor de checkpoint ante neumonitis grado ≥2 independientemente de la respuesta oncológica observada."},
+          {label:"Solicitar solo cultivos respiratorios y esperar el resultado antes de iniciar cualquier tratamiento", points:0,
+            feedback:"Retrasar el inicio de corticoides mientras se espera un resultado microbiológico puede permitir la progresión del cuadro respiratorio; el manejo estándar es actuar sobre la sospecha clínico-radiológica de inmunomediada mientras se descarta infección en paralelo.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Recomienda iniciar tratamiento con corticoides basado en la sospecha clínico-radiológica sin esperar la exclusión completa de causas alternativas cuando hay compromiso respiratorio relevante."},
+          {label:"Indicar broncodilatadores exclusivamente, sin corticoides ni suspensión del fármaco", points:0,
+            feedback:"Los broncodilatadores no tratan la inflamación inmunomediada subyacente; el pilar del tratamiento es la suspensión del fármaco y los corticoides sistémicos.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Establece los corticoides sistémicos, no los broncodilatadores, como el tratamiento central de la neumonitis inmunomediada."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Progresión — 13 meses de primera línea", vitalsUpdate:{"Tratamiento":"Progresión bajo pembrolizumab"}, html:`
+        <p>Tras resolver la neumonitis con corticoides, se reanuda pembrolizumab con precaución, sin recurrencia del evento. A los 13 meses, una tomografía muestra <b>progresión de las lesiones pulmonares y nuevas lesiones hepáticas</b>. ECOG 1.</p>`, buttonLabel:"Definir segunda línea →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 2 · Segunda línea tras progresión a inmunoterapia",
+        prompt:"Progresión tras primera línea con pembrolizumab en monoterapia, sin alteración conductora accionable. ¿Cuál es la conducta más apropiada de segunda línea?",
+        options:[
+          {label:"Quimioterapia con platino (esquema con pemetrexed si la histología es no escamosa)", points:2,
+            feedback:"Correcto. Tras progresión a inmunoterapia en monoterapia sin alteración conductora, la quimioterapia con platino es el estándar de segunda línea.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda quimioterapia basada en platino como tratamiento estándar de segunda línea tras progresión a inmunoterapia de primera línea en ausencia de alteraciones moleculares accionables."},
+          {label:"Reintentar pembrolizumab en monoterapia a mayor dosis", points:0,
+            feedback:"No existe evidencia que sustente aumentar la dosis del mismo inhibidor de checkpoint ante progresión documentada; la resistencia clínica no se revierte con mayor dosis del mismo fármaco.",
+            paper:"—", finding:"No hay evidencia de relación dosis-respuesta que sustente el aumento de dosis de pembrolizumab ante progresión clínica confirmada."},
+          {label:"Terapia dirigida contra EGFR de forma empírica", points:0,
+            feedback:"El panel molecular ya confirmó la ausencia de mutación de EGFR; no hay sustento para terapia dirigida empírica sin la alteración correspondiente.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda basar la terapia dirigida exclusivamente en alteraciones moleculares confirmadas."},
+          {label:"Suspender todo tratamiento oncológico activo y pasar a cuidados paliativos exclusivos", points:0,
+            feedback:"Con buen estado funcional (ECOG 1) y una opción estándar de segunda línea disponible con beneficio demostrado, no corresponde suspender el tratamiento activo en este momento.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda continuar tratamiento sistémico activo en pacientes con adecuado estado funcional tras progresión a primera línea."}
+        ]}
+    ]}
+  ]
+},
+
+/* ============================================================ CÁNCER DE PULMÓN DE CÉLULAS PEQUEÑAS */
+sclc: {
+  tag:"sclc", tagLabel:"Pulmón — células pequeñas", title:"Cáncer de pulmón de células pequeñas",
+  moduleDesc:"Carcinoma neuroendocrino de alto grado, de crecimiento rápido y alta quimiosensibilidad inicial, con recaída casi universal.",
+  cases:[
+  { key:"classic", label:"Caso 1",
+    cardDesc:"68 años, fumador activo. Cáncer de pulmón de células pequeñas en estadio extenso.",
+    patient:"O.P., 68 años · fumador activo (50 paquetes-año)<br>Motivo: tos, hemoptisis y dolor óseo",
+    vitals:{"Histología":"Carcinoma de células pequeñas","Estadio":"Extenso (hepático + óseo)","ECOG":"1","Tratamiento":"—"},
+    timeline:["Diagnóstico","Primera línea sistémica","Manejo de toxicidad","Recaída y segunda línea","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>O.P., 68 años, fumador activo (50 paquetes-año), consulta por tos, un episodio de hemoptisis leve y dolor óseo en columna lumbar de 3 semanas de evolución. TC de tórax: <b>masa hiliar derecha de 6 cm con adenopatías mediastínicas voluminosas</b>. Estadificación completa: <b>lesiones hepáticas múltiples y lesiones óseas líticas</b>.</p>
+        <p>Biopsia de la masa hiliar: <b>carcinoma de células pequeñas</b> (alto índice mitótico, necrosis extensa, tinción positiva para marcadores neuroendocrinos). Estadio: <b>enfermedad extensa</b> (por definición, todo compromiso a distancia). ECOG 1.</p>
+        <div class="callout warn">El carcinoma de células pequeñas es de crecimiento muy rápido y alta quimiosensibilidad inicial, pero con un patrón casi universal de recaída, frecuentemente resistente al tratamiento previamente efectivo.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Primera línea sistémica",
+        prompt:"Carcinoma de células pequeñas en estadio extenso (hepático y óseo), ECOG 1, sin tratamiento previo. ¿Cuál es el esquema de primera línea preferido?",
+        options:[
+          {label:"Quimioterapia con platino y etopósido, combinada con inmunoterapia (atezolizumab o durvalumab)", points:2,
+            feedback:"Correcto. La combinación de quimioterapia con un inhibidor de checkpoint es el estándar actual de primera línea en enfermedad extensa, superando a la quimioterapia sola.",
+            paper:"IMpower133 — Horn et al., N Engl J Med 2018; CASPIAN — Paz-Ares et al., Lancet 2019", finding:"Ambos estudios mostraron mejora en supervivencia global al agregar un inhibidor de checkpoint (atezolizumab o durvalumab, respectivamente) a la quimioterapia con platino y etopósido de primera línea en enfermedad extensa, estableciendo esta combinación como el nuevo estándar de cuidado."},
+          {label:"Quimioterapia con platino y etopósido sola, sin inmunoterapia", points:1,
+            feedback:"Fue el estándar histórico y sigue siendo razonable si hay contraindicación a inmunoterapia, pero hoy se considera subóptimo frente a la combinación con un inhibidor de checkpoint.",
+            paper:"IMpower133 / CASPIAN", finding:"Ambos estudios demostraron la superioridad de agregar inmunoterapia a la quimioterapia estándar como nuevo estándar de primera línea."},
+          {label:"Radioterapia torácica como tratamiento inicial, sin tratamiento sistémico", points:0,
+            feedback:"En enfermedad extensa con compromiso a distancia (hepático y óseo), el tratamiento sistémico es la prioridad; la radioterapia torácica no es el tratamiento inicial en esta presentación.",
+            paper:"NCCN Guidelines — Small Cell Lung Cancer, versión vigente", finding:"Recomienda tratamiento sistémico como pilar inicial en enfermedad extensa, con radioterapia torácica considerada de forma individualizada tras la respuesta al tratamiento sistémico en casos seleccionados."},
+          {label:"Inmunoterapia en monoterapia, sin quimioterapia", points:0,
+            feedback:"No es el esquema validado: la evidencia respalda la combinación de inmunoterapia con quimioterapia de primera línea, no la inmunoterapia sola.",
+            paper:"IMpower133 / CASPIAN", finding:"Ambos estudios evaluaron la inmunoterapia siempre en combinación con quimioterapia de primera línea, no como monoterapia."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Evento de toxicidad · 9 días tras el segundo ciclo", vitalsUpdate:{"Tratamiento":"Platino-etopósido + atezolizumab — evento de toxicidad"}, html:`
+        <p>Nueve días después del segundo ciclo de quimioterapia con platino y etopósido, el paciente consulta a guardia por <b>fiebre de 39.1°C y escalofríos</b>. Laboratorio: <b>recuento absoluto de neutrófilos 220/mm³</b> (neutropenia grado 4). Presión arterial 100/65, frecuencia cardíaca 108, sin foco infeccioso evidente al examen físico inicial.</p>
+        <div class="callout warn">El esquema con platino y etopósido tiene un perfil de mielosupresión significativo; la neutropenia febril en este contexto es una urgencia oncológica frecuente que requiere manejo hospitalario inmediato.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:2, eyebrow:"Decisión de toxicidad · Neutropenia febril grado 4 post-quimioterapia",
+        prompt:"Fiebre 39.1°C con ANC 220/mm³ tras el segundo ciclo de platino-etopósido. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Internar de inmediato, tomar hemocultivos y cultivos según foco, iniciar antibióticos empíricos de amplio espectro sin demora, y agregar profilaxis con factor estimulante de colonias en los ciclos siguientes", points:2,
+            feedback:"Correcto. La neutropenia febril grado 4 es una urgencia oncológica que requiere hospitalización, cultivos y antibióticos empíricos de amplio espectro iniciados dentro de la primera hora, con profilaxis con factor estimulante de colonias en ciclos posteriores para reducir el riesgo de recurrencia.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia in Patients With Cancer", finding:"Establece que la fiebre con ANC menor a 500/mm³ requiere hospitalización y antibióticos empíricos de amplio espectro de forma inmediata, con profilaxis primaria con factor estimulante de colonias recomendada en esquemas con alto riesgo de neutropenia febril como platino-etopósido, especialmente tras un primer episodio."},
+          {label:"Manejo ambulatorio con antibióticos orales y control en 48 horas", points:0,
+            feedback:"Insuficiente para el grado de neutropenia (ANC 220, grado 4) con fiebre alta y taquicardia; el manejo ambulatorio se reserva para pacientes de bajo riesgo cuidadosamente seleccionados.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia", finding:"El manejo ambulatorio solo se considera en pacientes de bajo riesgo según escalas validadas, lo que generalmente excluye neutropenia grado 4 con signos de inestabilidad."},
+          {label:"Esperar el resultado de los cultivos antes de iniciar antibióticos", points:0,
+            feedback:"Retrasar el inicio de antibióticos hasta tener cultivos puede ser fatal en este contexto; el estándar es iniciar tratamiento empírico inmediato.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia", finding:"Recomienda iniciar antibióticos empíricos dentro de la primera hora de la evaluación, sin esperar los resultados microbiológicos."},
+          {label:"Suspender la quimioterapia de forma definitiva sin planear reanudarla", points:0,
+            feedback:"No corresponde discontinuar definitivamente por un episodio de neutropenia febril tratable; con profilaxis de factor estimulante de colonias en los ciclos siguientes se puede continuar el tratamiento planificado.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia", finding:"Recomienda profilaxis con factor estimulante de colonias en ciclos posteriores tras un episodio de neutropenia febril, permitiendo continuar el tratamiento planificado."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Recaída — 4 meses tras finalizar la primera línea", vitalsUpdate:{"Tratamiento":"Recaída temprana, resistente al platino","Estadio":"Progresión hepática y ósea"}, html:`
+        <p>Completa la primera línea con buena respuesta inicial y continúa con atezolizumab de mantenimiento. Sin embargo, a los <b>4 meses de finalizada la quimioterapia</b>, una tomografía de control muestra <b>progresión hepática y ósea</b>.</p>
+        <div class="callout warn">Una recaída dentro de los primeros 3-6 meses de finalizado el platino se considera <b>resistente al platino</b>, lo que tiene implicancias directas sobre la elección del tratamiento de segunda línea: el pronóstico es peor y la probabilidad de respuesta a un nuevo esquema con platino es baja.</div>`, buttonLabel:"Definir segunda línea →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 2 · Segunda línea en recaída resistente al platino",
+        prompt:"Recaída a los 4 meses de finalizada la primera línea con platino (recaída resistente al platino, definida como menor a 3-6 meses). ¿Cuál es la conducta más apropiada de segunda línea?",
+        options:[
+          {label:"Lurbinectedina", points:2,
+            feedback:"Correcto. En recaída resistente al platino (intervalo corto desde la última dosis de platino), lurbinectedina es una opción de segunda línea preferida, con actividad demostrada en este escenario específico de peor pronóstico.",
+            paper:"Estudio de fase II — Trigo et al., Lancet Oncol 2020", finding:"Lurbinectedina mostró una tasa de respuesta relevante y un perfil de toxicidad manejable en pacientes con carcinoma de células pequeñas en recaída, incluyendo aquellos con intervalo corto desde el platino (enfermedad resistente al platino), un escenario históricamente de muy difícil manejo."},
+          {label:"Reintroducir el mismo esquema de platino y etopósido", points:0,
+            feedback:"En una recaída resistente al platino (menos de 3-6 meses desde la última dosis), la probabilidad de respuesta a reintroducir el mismo platino es baja; esta estrategia se reserva para recaídas platino-sensibles con intervalos más largos.",
+            paper:"NCCN Guidelines — Small Cell Lung Cancer, versión vigente", finding:"Recomienda reintroducir platino solo en recaídas platino-sensibles (intervalo mayor a 3-6 meses); en recaídas resistentes al platino, recomienda otras opciones como lurbinectedina o topotecán."},
+          {label:"Continuar atezolizumab de mantenimiento sin agregar tratamiento citotóxico adicional", points:0,
+            feedback:"Ante progresión documentada bajo mantenimiento con atezolizumab, continuar sin cambios no tiene sustento; se requiere un cambio de esquema de tratamiento.",
+            paper:"NCCN Guidelines — Small Cell Lung Cancer, versión vigente", finding:"Recomienda cambiar de esquema terapéutico ante progresión documentada durante el mantenimiento con inmunoterapia."},
+          {label:"Suspender todo tratamiento oncológico activo y pasar a cuidados paliativos exclusivos", points:0,
+            feedback:"Con buen estado funcional (ECOG 1) y una opción de segunda línea con actividad demostrada específicamente en este escenario de recaída resistente al platino, no corresponde suspender el tratamiento activo en este momento.",
+            paper:"Trigo et al., Lancet Oncol 2020", finding:"Demostró actividad clínica relevante de lurbinectedina en pacientes con buen estado funcional y recaída resistente al platino, un grupo que históricamente tenía pocas opciones activas."}
+        ]}
+    ]}
+  ]
+}
+
+};
+
+/* ===================== CANCER TYPES (nivel superior) ===================== */
+
+const CANCER = {
+  mama: {
+    label: "Cáncer de Mama",
+    icon: "Oncología mamaria",
+    desc: "Cuatro subtipos moleculares —Luminal A, Luminal B, HER2 positivo y triple negativo— cada uno con su propia lógica de tratamiento, de la cirugía a la enfermedad metastásica.",
+    modules: MAMA_MODULES
+  },
+  pulmon: {
+    label: "Cáncer de Pulmón",
+    icon: "Oncología torácica",
+    desc: "Cuatro perfiles moleculares —EGFR mutado, ALK positivo, sin mutación conductora y células pequeñas— con decisiones de tratamiento dirigido e inmunoterapia.",
+    modules: PULMON_MODULES
+  }
+};
 
 /* ===================== ENGINE ===================== */
 
+let activeCancer = null;
 let activeModule = null;
 let activeCaseKey = null;
 let stages = null;
@@ -1291,52 +1633,74 @@ let state = { step:0, score:0, maxScore:0, answered:false, vitals:{} };
 let currentOptions = null;
 
 function renderHome(){
-  activeModule = null; activeCaseKey = null;
+  activeCancer = null; activeModule = null; activeCaseKey = null;
   const app = document.getElementById("app");
   app.innerHTML = `
-    <p class="intro">Elegí el módulo de la consulta oncológica que querés simular. Cada módulo tiene tres casos distintos —con presentaciones, respuestas al tratamiento y toxicidades diferentes— para practicar variedad de escenarios reales.</p>
-    <div class="modgrid" id="modgrid"></div>
+    <p class="intro">Elegí qué tipo de cáncer querés simular. Cada sección tiene sus propios módulos por subtipo molecular, y cada módulo tiene varios casos distintos para practicar.</p>
+    <div class="sectiongrid" id="sectiongrid"></div>
   `;
-  const grid = document.getElementById("modgrid");
-  Object.entries(MODULES).forEach(([key, m]) => {
+  const grid = document.getElementById("sectiongrid");
+  Object.entries(CANCER).forEach(([key, c]) => {
     const card = document.createElement("button");
-    card.className = "modcard";
-    card.innerHTML = `<span class="tag ${m.tag}">${m.tagLabel}</span><h3>${m.title}</h3><p>${m.moduleDesc}</p>`;
-    card.onclick = () => renderCaseSelect(key);
+    card.className = "sectioncard" + (key === "pulmon" ? " pulmon" : "");
+    card.innerHTML = `<span class="icon">${c.icon}</span><h2>${c.label}</h2><p>${c.desc}</p>`;
+    card.onclick = () => renderModuleSelect(key);
     grid.appendChild(card);
   });
 }
 
-function renderCaseSelect(moduleKey){
-  activeModule = moduleKey; activeCaseKey = null;
-  const m = MODULES[moduleKey];
+function renderModuleSelect(cancerKey){
+  activeCancer = cancerKey; activeModule = null; activeCaseKey = null;
+  const cancer = CANCER[cancerKey];
   const app = document.getElementById("app");
   app.innerHTML = `
-    <div class="crumb"><span id="crumbHome">Módulos</span> / ${m.title}</div>
-    <p class="intro">${m.moduleDesc} Elegí uno de los tres casos para empezar la consulta.</p>
+    <div class="crumb"><span id="crumbHome">Inicio</span> / ${cancer.label}</div>
+    <p class="intro">${cancer.desc}</p>
+    <div class="modgrid" id="modgrid"></div>
+  `;
+  document.getElementById("crumbHome").onclick = renderHome;
+  const grid = document.getElementById("modgrid");
+  Object.entries(cancer.modules).forEach(([key, m]) => {
+    const card = document.createElement("button");
+    card.className = "modcard";
+    card.innerHTML = `<span class="tag ${m.tag}">${m.tagLabel}</span><h3>${m.title}</h3><p>${m.moduleDesc}</p>`;
+    card.onclick = () => renderCaseSelect(cancerKey, key);
+    grid.appendChild(card);
+  });
+}
+
+function renderCaseSelect(cancerKey, moduleKey){
+  activeCancer = cancerKey; activeModule = moduleKey; activeCaseKey = null;
+  const cancer = CANCER[cancerKey];
+  const m = cancer.modules[moduleKey];
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <div class="crumb"><span id="crumbHome">Inicio</span> / <span id="crumbCancer">${cancer.label}</span> / ${m.title}</div>
+    <p class="intro">${m.moduleDesc} Elegí uno de los casos para empezar la consulta.</p>
     <div class="casegrid" id="casegrid"></div>
   `;
   document.getElementById("crumbHome").onclick = renderHome;
+  document.getElementById("crumbCancer").onclick = () => renderModuleSelect(cancerKey);
   const grid = document.getElementById("casegrid");
   m.cases.forEach((c, i) => {
     const card = document.createElement("button");
     card.className = "modcard casecard";
     card.innerHTML = `<span class="casenum">${String(i+1).padStart(2,"0")}</span><div><h3>${c.label}</h3><p>${c.cardDesc}</p></div>`;
-    card.onclick = () => startCase(moduleKey, c.key);
+    card.onclick = () => startCase(cancerKey, moduleKey, c.key);
     grid.appendChild(card);
   });
 }
 
-function startCase(moduleKey, caseKey){
-  activeModule = moduleKey; activeCaseKey = caseKey;
-  const c = MODULES[moduleKey].cases.find(x => x.key === caseKey);
+function startCase(cancerKey, moduleKey, caseKey){
+  activeCancer = cancerKey; activeModule = moduleKey; activeCaseKey = caseKey;
+  const c = CANCER[cancerKey].modules[moduleKey].cases.find(x => x.key === caseKey);
   stages = c.stages;
   state = { step:0, score:0, maxScore:0, answered:false, vitals: Object.assign({}, c.vitals) };
   renderGame();
 }
 
 function getActiveCase(){
-  return MODULES[activeModule].cases.find(x => x.key === activeCaseKey);
+  return CANCER[activeCancer].modules[activeModule].cases.find(x => x.key === activeCaseKey);
 }
 
 function renderVitals(){
@@ -1385,7 +1749,7 @@ function renderGame(){
       <main class="panel" id="panel"></main>
     </div>
   `;
-  document.getElementById("backBtn").onclick = () => renderCaseSelect(activeModule);
+  document.getElementById("backBtn").onclick = () => renderCaseSelect(activeCancer, activeModule);
   const chartAside = document.getElementById("chartAside");
   const toggleBtn = document.getElementById("toggleBtn");
   toggleBtn.onclick = () => {
@@ -1447,17 +1811,17 @@ function render(){
     panel.innerHTML = `
       <div class="eyebrow">Epicrisis</div>
       <div class="epicrisis">
-        <h2>${c.patient.split("·")[0].trim()} — ${MODULES[activeModule].title}</h2>
-        <p style="color:var(--ink-soft);font-size:14px;">${c.label}</p>
+        <h2>${c.patient.split("·")[0].trim()} — ${CANCER[activeCancer].modules[activeModule].title}</h2>
+        <p style="color:var(--ink-soft);font-size:14px;">${c.label} · ${CANCER[activeCancer].label}</p>
         <div class="grade">${state.score} / ${state.maxScore}</div>
         <p>${grade}</p>
       </div>
       <button class="next-btn" id="retryBtn">Repetir este caso</button>
       <button class="ghost-btn" id="otherCaseBtn">Elegir otro caso</button>
-      <button class="ghost-btn" id="homeBtn">Elegir otro módulo</button>
+      <button class="ghost-btn" id="homeBtn">Elegir otro tipo de cáncer</button>
     `;
-    document.getElementById("retryBtn").onclick = () => startCase(activeModule, activeCaseKey);
-    document.getElementById("otherCaseBtn").onclick = () => renderCaseSelect(activeModule);
+    document.getElementById("retryBtn").onclick = () => startCase(activeCancer, activeModule, activeCaseKey);
+    document.getElementById("otherCaseBtn").onclick = () => renderCaseSelect(activeCancer, activeModule);
     document.getElementById("homeBtn").onclick = renderHome;
   }
 }
