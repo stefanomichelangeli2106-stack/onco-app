@@ -7,6 +7,7 @@
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0F332F">
+<meta name="color-scheme" content="light">
 <link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="icons/favicon-16.png" sizes="16x16" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -19,6 +20,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
+    color-scheme: light;
     --paper:#EFEAE0; --paper-2:#F7F3EA; --ink:#26241F; --ink-soft:#5B584E; --line:#D8D2C2;
     --teal:#1B4B47; --teal-deep:#0F332F; --teal-tint:#DCE9E6;
     --coral:#B8462B; --coral-tint:#F4DFD6;
@@ -56,9 +58,16 @@
   @media (max-width:760px){.layout{grid-template-columns:1fr;}}
 
   .chart{position:sticky;top:16px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
-  .chart-head{background:var(--teal-deep);color:var(--paper-2);padding:12px 14px;font-family:'Lora',serif;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
+  .chart-head{background:var(--teal-deep);color:var(--paper-2);padding:12px 14px;font-family:'Lora',serif;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .chart-head .head-actions{display:flex;gap:12px;align-items:center;flex-shrink:0;}
   .chart-head .back{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:400;text-decoration:underline;cursor:pointer;opacity:.85;}
+  .chart-head .toggle{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:400;text-decoration:underline;cursor:pointer;opacity:.85;display:none;}
   .chart-body{padding:14px;}
+  @media (max-width:760px){
+    .chart-head .toggle{display:inline-block;}
+    .chart .chart-body{display:none;}
+    .chart.open .chart-body{display:block;}
+  }
   .patient-row{font-size:13px;line-height:1.5;color:var(--ink-soft);margin-bottom:10px;}
   .patient-row b{color:var(--ink);}
   .vitals{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--ink);color:#EDE7D5;border-radius:4px;padding:10px 12px;margin:10px 0;}
@@ -1358,8 +1367,14 @@ function renderGame(){
   const app = document.getElementById("app");
   app.innerHTML = `
     <div class="layout">
-      <aside class="chart">
-        <div class="chart-head"><span>Historia clínica</span><span class="back" id="backBtn">← casos</span></div>
+      <aside class="chart" id="chartAside">
+        <div class="chart-head">
+          <span>Historia clínica</span>
+          <div class="head-actions">
+            <span class="toggle" id="toggleBtn">Ver detalle ▾</span>
+            <span class="back" id="backBtn">← casos</span>
+          </div>
+        </div>
         <div class="chart-body">
           <div class="patient-row"><b>Paciente:</b> ${c.patient}</div>
           <div class="vitals" id="vitals"></div>
@@ -1371,6 +1386,12 @@ function renderGame(){
     </div>
   `;
   document.getElementById("backBtn").onclick = () => renderCaseSelect(activeModule);
+  const chartAside = document.getElementById("chartAside");
+  const toggleBtn = document.getElementById("toggleBtn");
+  toggleBtn.onclick = () => {
+    chartAside.classList.toggle("open");
+    toggleBtn.textContent = chartAside.classList.contains("open") ? "Ocultar ▲" : "Ver detalle ▾";
+  };
   render();
 }
 
