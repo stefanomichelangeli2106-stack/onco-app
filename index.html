@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Consultorio Onco — Simulador de cáncer de mama</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0F332F">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Onco">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFEAE0; --paper-2:#F7F3EA; --ink:#26241F; --ink-soft:#5B584E; --line:#D8D2C2;
+    --teal:#1B4B47; --teal-deep:#0F332F; --teal-tint:#DCE9E6;
+    --coral:#B8462B; --coral-tint:#F4DFD6;
+    --sage:#4B6B47; --sage-tint:#E1E9DA;
+    --gold:#9C7A2E; --gold-tint:#F1E6C8;
+    --plum:#6B4468; --plum-tint:#E9DEE7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1040px;margin:0 auto;padding:calc(28px + env(safe-area-inset-top)) 20px calc(80px + env(safe-area-inset-bottom));}
+  .masthead{display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:22px;flex-wrap:wrap;gap:8px;}
+  .masthead h1{font-family:'Lora',serif;font-weight:600;font-size:26px;margin:0;letter-spacing:.2px;cursor:pointer;}
+  .masthead .sub{font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:1.5px;}
+
+  .crumb{font-size:12px;color:var(--ink-soft);margin-bottom:14px;}
+  .crumb span{cursor:pointer;text-decoration:underline;}
+  .intro{font-family:'Lora',serif;font-size:16px;line-height:1.7;color:var(--ink-soft);max-width:640px;margin:0 0 26px;}
+  .modgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .casegrid{display:grid;grid-template-columns:1fr;gap:14px;}
+  @media (max-width:640px){.modgrid{grid-template-columns:1fr;}}
+  .modcard{background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:20px 22px;cursor:pointer;transition:border-color .12s,transform .12s;text-align:left;}
+  .modcard:hover{border-color:var(--ink-soft);transform:translateY(-1px);}
+  .modcard .tag{font-size:11px;text-transform:uppercase;letter-spacing:1.3px;font-weight:600;padding:3px 9px;border-radius:20px;display:inline-block;margin-bottom:10px;}
+  .modcard h3{font-family:'Lora',serif;font-size:19px;margin:0 0 8px;}
+  .modcard p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:0;}
+  .tag.lumA{background:var(--teal-tint);color:var(--teal-deep);}
+  .tag.lumB{background:var(--gold-tint);color:var(--gold);}
+  .tag.her2{background:var(--plum-tint);color:var(--plum);}
+  .tag.tnbc{background:var(--coral-tint);color:#7A2E19;}
+  .casecard{display:flex;gap:14px;align-items:flex-start;}
+  .casecard .casenum{font-family:'IBM Plex Mono',monospace;font-size:20px;color:var(--line);font-weight:500;flex-shrink:0;}
+  .casecard:hover .casenum{color:var(--teal);}
+
+  .layout{display:grid;grid-template-columns:270px 1fr;gap:24px;align-items:start;}
+  @media (max-width:760px){.layout{grid-template-columns:1fr;}}
+
+  .chart{position:sticky;top:16px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+  .chart-head{background:var(--teal-deep);color:var(--paper-2);padding:12px 14px;font-family:'Lora',serif;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
+  .chart-head .back{font-family:'IBM Plex Sans',sans-serif;font-size:11px;font-weight:400;text-decoration:underline;cursor:pointer;opacity:.85;}
+  .chart-body{padding:14px;}
+  .patient-row{font-size:13px;line-height:1.5;color:var(--ink-soft);margin-bottom:10px;}
+  .patient-row b{color:var(--ink);}
+  .vitals{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--ink);color:#EDE7D5;border-radius:4px;padding:10px 12px;margin:10px 0;}
+  .vitals div{display:flex;justify-content:space-between;padding:1.5px 0;gap:8px;}
+  .vitals span.k{opacity:.65;flex-shrink:0;}
+  .vitals span.v{font-weight:500;text-align:right;}
+  .timeline{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px;}
+  .tl-item{display:flex;gap:8px;font-size:12px;padding:5px 0;color:var(--ink-soft);}
+  .tl-dot{width:8px;height:8px;border-radius:50%;background:var(--line);margin-top:3px;flex-shrink:0;}
+  .tl-item.done .tl-dot{background:var(--teal);}
+  .tl-item.done{color:var(--ink);}
+  .tl-item.tox .tl-dot{background:var(--coral);}
+  .score-box{margin-top:12px;background:var(--gold-tint);border:1px solid var(--gold);border-radius:4px;padding:8px 12px;font-size:12px;display:flex;justify-content:space-between;align-items:center;}
+  .score-box b{font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--gold);}
+
+  .panel{background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:26px 28px;}
+  .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);font-weight:600;margin-bottom:8px;}
+  .eyebrow.tox{color:var(--coral);}
+  .narrative{font-family:'Lora',serif;font-size:16.5px;line-height:1.7;color:var(--ink);}
+  .narrative p{margin:0 0 14px;}
+  .narrative b{font-weight:600;}
+  .callout{border-left:3px solid var(--teal);background:var(--teal-tint);padding:10px 14px;border-radius:0 4px 4px 0;font-size:14px;margin:16px 0;color:var(--teal-deep);}
+  .callout.warn{border-color:var(--coral);background:var(--coral-tint);color:#7A2E19;}
+  .callout.good{border-color:var(--sage);background:var(--sage-tint);color:#2E4A2B;}
+
+  .options{margin-top:22px;display:flex;flex-direction:column;gap:10px;}
+  .opt{text-align:left;width:100%;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:13px 16px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;color:var(--ink);transition:border-color .12s;display:flex;gap:12px;align-items:flex-start;}
+  .opt:hover{border-color:var(--ink-soft);}
+  .opt .letter{font-family:'IBM Plex Mono',monospace;font-weight:500;color:var(--teal);flex-shrink:0;}
+  .opt:disabled{cursor:default;}
+  .opt.correct{background:var(--sage-tint);border-color:var(--sage);}
+  .opt.partial{background:var(--gold-tint);border-color:var(--gold);}
+  .opt.incorrect{background:var(--coral-tint);border-color:var(--coral);}
+  .opt.neutral-off{opacity:.5;}
+
+  .feedback{margin-top:16px;padding:14px 16px;border-radius:5px;font-size:14px;line-height:1.6;}
+  .feedback.correct{background:var(--sage-tint);border:1px solid var(--sage);color:#2E4A2B;}
+  .feedback.partial{background:var(--gold-tint);border:1px solid var(--gold);color:#5C4713;}
+  .feedback.incorrect{background:var(--coral-tint);border:1px solid var(--coral);color:#7A2E19;}
+  .feedback .tag2{font-weight:600;display:block;margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;}
+
+  .bestref{margin-top:10px;padding:10px 14px;border-radius:5px;font-size:13px;background:var(--paper);border:1px dashed var(--line);color:var(--ink-soft);}
+  .bestref b{color:var(--ink);}
+
+  .evidence{margin-top:10px;background:var(--ink);color:#EDE7D5;border-radius:5px;padding:11px 14px;font-size:12.5px;line-height:1.55;}
+  .evidence .ev-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:1px;opacity:.6;display:block;margin-bottom:4px;}
+  .evidence .ev-study{font-weight:500;color:#F1E6C8;}
+
+  .next-btn{margin-top:20px;background:var(--teal);color:#fff;border:none;padding:11px 22px;border-radius:5px;font-size:14px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;}
+  .next-btn:hover{background:var(--teal-deep);}
+  .ghost-btn{margin-top:12px;margin-left:10px;background:transparent;color:var(--ink-soft);border:1px solid var(--line);padding:10px 18px;border-radius:5px;font-size:13px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;}
+
+  .epicrisis h2{font-family:'Lora',serif;font-size:20px;margin:0 0 4px;}
+  .epicrisis .grade{font-family:'IBM Plex Mono',monospace;font-size:34px;color:var(--teal);margin:10px 0;}
+  .refs{margin-top:20px;font-size:12px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:14px;line-height:1.8;}
+  .refs b{color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <h1 id="titleHome">Consultorio Onco</h1>
+    <div class="sub">Simulador clínico oncológico</div>
+  </div>
+  <div id="app"></div>
+</div>
+
+<script>
+/* ===================== DATA ===================== */
+/* option: { label, points (2=optima,1=aceptable,0=incorrecta), feedback, paper, finding } */
+/* stage: { type: info|decision|epicrisis, phase, eyebrow, html/prompt, options, vitalsUpdate, buttonLabel } */
+
+const MODULES = {
+
+/* ============================================================ LUMINAL A */
+lumA: {
+  tag:"lumA", tagLabel:"Luminal A", title:"Luminal A",
+  moduleDesc:"RE/RP muy positivos, Ki67 bajo, HER2 negativo. El subtipo de mejor pronóstico y menor sensibilidad a quimioterapia.",
+  cases: [
+
+  { key:"classic", label:"Caso 1 · Adyuvancia estándar y progresión metastásica",
+    cardDesc:"58 años, posmenopáusica, riesgo bajo (RS 12). Cirugía primero, sin quimioterapia, progresión con mutación de ESR1.",
+    patient:"M.R., 58 años · posmenopáusica<br>Motivo: nódulo palpable, mama izquierda",
+    vitals:{"RE / RP":"95% / 80%","HER2":"negativo (IHQ 1+)","Ki67":"8%","Subtipo":"Luminal A","Estadio":"cT2N0","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia sistémica","Terapia endocrina","1ª línea metastásica","Manejo de toxicidad","2ª línea metastásica","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>M.R., 58 años, posmenopáusica sin antecedentes relevantes, consulta por un nódulo palpable en el cuadrante superoexterno de la mama izquierda de 3 semanas de evolución, indoloro.</p>
+        <p>La <b>mamografía y ecografía</b> muestran una lesión sólida irregular de 2.3 cm, BI-RADS 5. <b>Biopsia core</b>: carcinoma ductal infiltrante, grado 2.</p>
+        <p>Perfil: <b>RE 95%, RP 80%, HER2 negativo (IHQ 1+), Ki67 8%</b>. Axila clínicamente negativa (cN0).</p>
+        <div class="callout">Receptores hormonales muy positivos, HER2 negativo, Ki67 bajo: <b>Luminal A</b>, el de mejor pronóstico y menor sensibilidad relativa a la quimioterapia.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Con este perfil (Luminal A, cT2N0, sin indicación de reducción tumoral urgente), ¿cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Cirugía primero (tumorectomía + biopsia de ganglio centinela)", points:2,
+            feedback:"Correcto. Los tumores luminal A tienen tasas de respuesta patológica completa muy bajas con quimioterapia neoadyuvante; operar de entrada permite la estadificación patológica definitiva.",
+            paper:"Rouzier et al., Clin Cancer Res 2005", finding:"La respuesta patológica completa a quimioterapia preoperatoria varía según el subtipo molecular, siendo mínima en tumores luminales de baja proliferación."},
+          {label:"Quimioterapia neoadyuvante estándar", points:0,
+            feedback:"La baja proliferación (Ki67 8%) predice pobre respuesta a quimioterapia; sería sobretratamiento.",
+            paper:"Rouzier et al., Clin Cancer Res 2005", finding:"Los tumores luminales de baja proliferación tuvieron las tasas más bajas de respuesta patológica completa entre todos los subtipos."},
+          {label:"Terapia endocrina neoadyuvante por varios meses", points:1,
+            feedback:"Alternativa razonable en casos seleccionados, pero no la primera línea aquí: el tumor ya es operable de entrada.",
+            paper:"ACOSOG Z1031 — Ellis et al., J Clin Oncol 2011", finding:"La terapia endocrina neoadyuvante puede reducir el tamaño tumoral en RE+ posmenopáusicas."},
+          {label:"Radioterapia como tratamiento inicial", points:0,
+            feedback:"No tiene rol como tratamiento inicial en enfermedad operable.",
+            paper:"—", finding:"No existe evidencia que sustente radioterapia como tratamiento primario en cáncer de mama operable."}
+        ]},
+      {type:"info", phase:1, eyebrow:"Resultado quirúrgico", vitalsUpdate:{"Tratamiento":"Cirugía realizada"}, html:`
+        <p><b>Tumorectomía + ganglio centinela</b>: carcinoma ductal infiltrante 2.4 cm, márgenes negativos, <b>0/2 ganglios positivos (pN0)</b>. pT2N0.</p>`, buttonLabel:"Evaluar riesgo de recurrencia →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Adyuvancia sistémica",
+        prompt:"Oncotype DX: Recurrence Score 12 (bajo). RE/RP fuertemente positivos, HER2 negativo, pN0. ¿Qué adyuvancia corresponde?",
+        options:[
+          {label:"Terapia endocrina sola, sin quimioterapia", points:2,
+            feedback:"Correcto. Con RS bajo y N0, la quimioterapia adyuvante no aporta beneficio adicional.",
+            paper:"TAILORx — Sparano et al., N Engl J Med 2018", finding:"En N0 con RS 11-25 (y más claramente en RS bajo), la quimioterapia no mejoró la supervivencia libre de enfermedad frente a terapia endocrina sola."},
+          {label:"Quimioterapia seguida de terapia endocrina", points:0,
+            feedback:"Sobretratamiento con RS 12 y N0.",
+            paper:"TAILORx — Sparano et al., N Engl J Med 2018", finding:"El beneficio de quimioterapia solo se observó en RS 26-100, o en menores de 50 con RS 16-25."},
+          {label:"Terapia endocrina + inhibidor de CDK4/6", points:0,
+            feedback:"Indicado en alto riesgo; esta paciente es pN0 con RS bajo, no cumple criterios.",
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"Beneficio únicamente en población de alto riesgo definida por el estudio."},
+          {label:"Quimioterapia sola, sin terapia endocrina", points:0,
+            feedback:"La terapia endocrina no debe omitirse en un tumor RE+.",
+            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"La terapia endocrina adyuvante reduce sustancialmente el riesgo de recurrencia en tumores RE+."}
+        ]},
+      {type:"decision", phase:3, eyebrow:"Decisión 3 · Elección de terapia endocrina adyuvante",
+        prompt:"¿Cuál es la elección más apropiada de terapia endocrina en esta paciente posmenopáusica?",
+        options:[
+          {label:"Inhibidor de aromatasa (letrozol o anastrozol) por 5 a 10 años", points:2,
+            feedback:"Correcto. En posmenopáusicas, los inhibidores de aromatasa son superiores al tamoxifeno.",
+            paper:"ATAC trial — Cuzick et al., Lancet Oncol 2010", finding:"Anastrozol mostró mejor supervivencia libre de enfermedad que tamoxifeno en posmenopáusicas RE+."},
+          {label:"Tamoxifeno por 5 años", points:1,
+            feedback:"Válida con contraindicación a inhibidores de aromatasa, pero subóptima sin ella.",
+            paper:"EBCTCG meta-analysis, Lancet Oncol 2015", finding:"Las estrategias con inhibidor de aromatasa redujeron más la recurrencia a 10 años."},
+          {label:"Supresión ovárica + inhibidor de aromatasa", points:0,
+            feedback:"Se reserva para premenopáusicas; esta paciente ya es posmenopáusica.",
+            paper:"SOFT/TEXT — Francis et al., N Engl J Med 2018", finding:"El beneficio se demostró en premenopáusicas de riesgo alto."},
+          {label:"Ninguna terapia endocrina, solo seguimiento", points:0,
+            feedback:"Sería un error grave con RE 95%.",
+            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"La omisión de terapia endocrina en tumores RE+ se asocia a exceso de recurrencias."}
+        ]},
+      {type:"info", phase:4, eyebrow:"Seguimiento — 18 meses después", vitalsUpdate:{"Tratamiento":"Letrozol adyuvante","Estadio":"Sin evidencia de enfermedad"}, html:`
+        <p>Dieciocho meses después consulta por <b>dolor lumbar progresivo</b>. TC y centellograma: <b>lesiones líticas lumbares y lesión hepática de 1.8 cm</b>. Biopsia: <b>metastásico, RE+, HER2-</b>, sin crisis visceral.</p>
+        <div class="callout warn">Progresión metastásica tras terapia endocrina adyuvante. Definir primera línea.</div>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 4 · Primera línea metastásica", vitalsUpdate:{"Estadio":"Metastásico (óseo + hepático)"},
+        prompt:"RE+/HER2- metastásico, sin crisis visceral, posmenopáusica. ¿Esquema de primera línea preferido?",
+        options:[
+          {label:"Inhibidor de aromatasa + inhibidor de CDK4/6 (ribociclib)", points:2,
+            feedback:"Correcto. Estándar preferido en RE+/HER2- metastásico sin crisis visceral.",
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"Ribociclib + letrozol mejoró la supervivencia libre de progresión y global."},
+          {label:"Quimioterapia (taxano)", points:0,
+            feedback:"Reservada para crisis visceral o progresión tras agotar líneas endocrinas.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda terapia endocrina-based como preferida sin crisis visceral."},
+          {label:"Fulvestrant en monoterapia", points:1,
+            feedback:"Válido, pero inferior a inhibidor de aromatasa + CDK4/6i en primera línea.",
+            paper:"PALOMA-3 / FALCON", finding:"Los estudios con CDK4/6i combinado mostraron mayor beneficio en primera línea."},
+          {label:"Continuar el mismo inhibidor de aromatasa sin cambios", points:0,
+            feedback:"La progresión indica resistencia endocrina; hay que agregar CDK4/6i.",
+            paper:"MONALEESA-2 / MONARCH-3", finding:"Agregar CDK4/6i revierte parcialmente la resistencia."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Evento de toxicidad · 6 meses en primera línea", vitalsUpdate:{"Tratamiento":"IA + ribociclib — evento de toxicidad"}, html:`
+        <p>Laboratorio de rutina: <b>neutropenia grado 3 (ANC 900)</b>, asintomática. ECG: <b>QTc 468 ms</b> (basal 410 ms).</p>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:5, eyebrow:"Decisión de toxicidad · Neutropenia y QT prolongado por ribociclib",
+        prompt:"Neutropenia grado 3 asintomática y QTc prolongado bajo ribociclib. ¿Conducta más apropiada?",
+        options:[
+          {label:"Suspender temporalmente, corregir electrolitos, repetir ECG, reiniciar a dosis reducida al normalizarse", points:2,
+            feedback:"Correcto. Ambas toxicidades son habitualmente reversibles y manejables con interrupción temporal y reducción de dosis.",
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"Neutropenia y QT prolongado fueron los eventos de alto grado más frecuentes, manejados con interrupción y reducción de dosis según algoritmo escalonado."},
+          {label:"Continuar sin cambios porque está asintomática", points:0,
+            feedback:"Ambos hallazgos requieren acción aunque esté asintomática (riesgo de infección grave y arritmia).",
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"El protocolo exigía modificación de dosis ante neutropenia grado 3-4 o QTc prolongado."},
+          {label:"Suspender ribociclib de forma definitiva", points:1,
+            feedback:"Razonable si la toxicidad recurre, pero como primera medida se prefiere reducir dosis.",
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"El algoritmo contemplaba reducción de dosis antes de discontinuación definitiva."},
+          {label:"Internar de urgencia para observación monitorizada", points:0,
+            feedback:"Excesivo: cuadro asintomático y afebril se maneja ambulatoriamente.",
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"El manejo fue predominantemente ambulatorio, reservando hospitalización para inestabilidad clínica."}
+        ]},
+      {type:"info", phase:6, eyebrow:"Progresión — 24 meses de primera línea", vitalsUpdate:{"Tratamiento":"Progresión bajo IA + CDK4/6i"}, html:`
+        <p>A los 24 meses, progresión hepática y ósea. ctDNA: <b>ESR1</b> mutado (D538G), <b>PIK3CA</b> y <b>AKT1/PTEN</b> sin alteraciones.</p>`, buttonLabel:"Definir segunda línea →"},
+      {type:"decision", phase:6, eyebrow:"Decisión 5 · Segunda línea metastásica",
+        prompt:"Progresión bajo IA + CDK4/6i, ESR1 mutado. ¿Conducta más apropiada?",
+        options:[
+          {label:"Cambiar a elacestrant (SERD oral)", points:2,
+            feedback:"Correcto. Beneficio específico en ESR1 mutado tras progresión a IA + CDK4/6i.",
+            paper:"EMERALD — Bidard et al., J Clin Oncol 2022", finding:"Elacestrant mejoró la supervivencia libre de progresión, con mayor beneficio en ESR1 mutado."},
+          {label:"Continuar el mismo IA con el mismo CDK4/6i", points:0,
+            feedback:"ESR1 mutado confiere resistencia específica al IA.",
+            paper:"EMERALD — Bidard et al., J Clin Oncol 2022", finding:"Incluyó pacientes con progresión documentada bajo IA + CDK4/6i."},
+          {label:"Fulvestrant + alpelisib", points:0,
+            feedback:"Alpelisib requiere mutación de PIK3CA, negativa aquí.",
+            paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"Beneficio exclusivo en el subgrupo con mutación de PIK3CA."},
+          {label:"Iniciar quimioterapia de inmediato", points:0,
+            feedback:"Sin crisis visceral, hay opciones endocrinas dirigidas preferibles.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda agotar opciones endocrina-based antes de quimioterapia."}
+        ]}
+    ]},
+
+  { key:"elderly", label:"Caso 2 · Paciente añosa con comorbilidades — sin progresión",
+    cardDesc:"76 años, frágil, múltiples comorbilidades. Terapia endocrina neoadyuvante, toxicidad musculoesquelética por inhibidor de aromatasa, remisión sostenida.",
+    patient:"C.A., 76 años · posmenopáusica, ICC compensada, deterioro cognitivo leve<br>Motivo: nódulo palpable, mama derecha",
+    vitals:{"RE / RP":"98% / 90%","HER2":"negativo (IHQ 0)","Ki67":"5%","Subtipo":"Luminal A","Estadio":"cT1cN0","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Cirugía y adyuvancia","Manejo de toxicidad","Duración de tratamiento","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>C.A., 76 años, con insuficiencia cardíaca compensada y deterioro cognitivo leve, vive con su hija. Nódulo palpable de 1.8 cm en mama derecha, hallado en control de rutina.</p>
+        <p>Biopsia: carcinoma ductal infiltrante grado 1. Perfil: <b>RE 98%, RP 90%, HER2 negativo (IHQ 0), Ki67 5%</b>. cT1cN0.</p>
+        <div class="callout">Luminal A de bajo grado en una paciente frágil con comorbilidades relevantes. La fragilidad y las comorbilidades, no solo la biología tumoral, deben pesar en la secuencia de tratamiento.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Paciente frágil con comorbilidad cardíaca, cirugía programable pero no urgente, tumor pequeño RE muy positivo. ¿Cuál es la conducta inicial más razonable?",
+        options:[
+          {label:"Terapia endocrina neoadyuvante (inhibidor de aromatasa) mientras se optimizan las comorbilidades antes de la cirugía", points:2,
+            feedback:"Correcto en este contexto específico. A diferencia de una paciente sin comorbilidades relevantes, aquí la terapia endocrina neoadyuvante permite iniciar tratamiento oncológico sin demora mientras se optimiza el riesgo cardíaco y cognitivo para la cirugía, sin perder control de la enfermedad dado el perfil de muy baja agresividad.",
+            paper:"ACOSOG Z1031 — Ellis et al., J Clin Oncol 2011; guías de manejo geriátrico oncológico (SIOG)", finding:"La terapia endocrina neoadyuvante es una estrategia validada en RE+ posmenopáusicas para diferir la cirugía sin comprometer el control oncológico, especialmente útil cuando hay que optimizar comorbilidades antes de una cirugía electiva."},
+          {label:"Cirugía inmediata, igual que en una paciente sin comorbilidades", points:1,
+            feedback:"No es incorrecto de por sí, pero ignora la oportunidad de optimizar antes el riesgo cardíaco y cognitivo sin perder control oncológico, dado lo indolente del tumor.",
+            paper:"Guías SIOG (International Society of Geriatric Oncology)", finding:"Recomiendan individualizar la secuencia de tratamiento en pacientes mayores frágiles, considerando diferir intervenciones no urgentes cuando el perfil tumoral lo permite."},
+          {label:"Quimioterapia neoadyuvante estándar", points:0,
+            feedback:"Doblemente inapropiado: la baja proliferación no predice respuesta relevante, y la toxicidad de la quimioterapia en una paciente frágil con comorbilidad cardíaca es especialmente riesgosa.",
+            paper:"Rouzier et al., Clin Cancer Res 2005", finding:"Los tumores luminales de baja proliferación tienen tasas mínimas de respuesta patológica completa a quimioterapia."},
+          {label:"No ofrecer ningún tratamiento oncológico dada la edad y comorbilidad", points:0,
+            feedback:"La edad y la comorbilidad no son por sí solas motivo para negar tratamiento; existen estrategias de baja toxicidad (terapia endocrina) perfectamente aplicables en esta paciente.",
+            paper:"Guías SIOG (International Society of Geriatric Oncology)", finding:"Desaconsejan negar tratamiento oncológico basándose únicamente en la edad cronológica, recomendando evaluación geriátrica integral para individualizar la conducta."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Resultado tras 5 meses de terapia endocrina neoadyuvante", vitalsUpdate:{"Tratamiento":"Cirugía realizada tras neoadyuvancia endocrina","Estadio":"ypT1aN0"}, html:`
+        <p>Tras optimización cardiológica y 5 meses de letrozol neoadyuvante, el tumor se redujo a 0.9 cm. Se realiza <b>tumorectomía + ganglio centinela</b> bajo anestesia local con sedación. Patología: <b>ypT1aN0, márgenes negativos</b>.</p>
+        <div class="callout good">Dado el perfil de bajísimo riesgo (tumor <1cm, grado 1, N0, Ki67 5%), no se solicita test genómico: el riesgo basal ya es suficientemente bajo como para no cambiar la conducta de adyuvancia.</div>`, buttonLabel:"Definir adyuvancia →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Adyuvancia y duración inicial",
+        prompt:"Paciente de 76 años, ypT1aN0, grado 1, Ki67 5%, con comorbilidad cardíaca y deterioro cognitivo leve que vive acompañada. ¿Qué adyuvancia corresponde?",
+        options:[
+          {label:"Continuar el mismo inhibidor de aromatasa como terapia endocrina adyuvante, sin quimioterapia ni CDK4/6i", points:2,
+            feedback:"Correcto. El riesgo basal es mínimo (tumor pequeño, grado 1, N0, Ki67 bajo), por lo que ni la quimioterapia ni un inhibidor de CDK4/6 aportan beneficio esperado; se continúa la terapia endocrina que ya venía tolerando bien.",
+            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"La terapia endocrina adyuvante sola es suficiente en tumores RE+ de bajo riesgo, sin necesidad de intensificación adicional."},
+          {label:"Agregar quimioterapia adyuvante dado que ya tiene 76 años y hay que ser agresivo", points:0,
+            feedback:"Es un razonamiento inverso al correcto: la edad avanzada con comorbilidad cardíaca aumenta el riesgo de toxicidad de la quimioterapia sin que el perfil tumoral justifique su uso.",
+            paper:"Guías SIOG (International Society of Geriatric Oncology)", finding:"Recomiendan que la decisión de quimioterapia se base en el riesgo tumoral y la expectativa de vida funcional, no en la edad cronológica por sí sola."},
+          {label:"Agregar un inhibidor de CDK4/6 adyuvante por seguridad adicional", points:0,
+            feedback:"No cumple criterios de alto riesgo (N0, grado 1, Ki67 bajo); agregarlo solo añade toxicidad sin beneficio esperado.",
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"El beneficio se limita a la población de alto riesgo definida por el estudio, no a tumores de bajo riesgo como este."},
+          {label:"Suspender toda terapia endocrina dado que ya se operó", points:0,
+            feedback:"La terapia endocrina adyuvante continúa siendo necesaria tras la cirugía en un tumor RE+, independientemente de haberla recibido en forma neoadyuvante.",
+            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"La terapia endocrina adyuvante prolongada reduce el riesgo de recurrencia incluso en tumores de bajo riesgo."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · 4 meses de inhibidor de aromatasa adyuvante", vitalsUpdate:{"Tratamiento":"Letrozol — evento de toxicidad musculoesquelética"}, html:`
+        <p>La hija de la paciente consulta porque C.A. presenta <b>dolor articular generalizado en manos, rodillas y hombros</b>, con dificultad creciente para levantarse de la silla y un episodio de <b>caída sin lesión grave</b>. Refiere que "no quiere seguir tomando la pastilla".</p>
+        <div class="callout warn">Las artralgias asociadas a inhibidores de aromatasa son muy frecuentes y una causa común de abandono del tratamiento; en una paciente frágil con riesgo de caídas, el impacto funcional es especialmente relevante.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Artralgia por inhibidor de aromatasa con riesgo de caídas",
+        prompt:"Artralgia significativa con impacto funcional y una caída, bajo letrozol adyuvante, en paciente frágil que expresa deseo de discontinuar. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Suspender temporalmente el inhibidor de aromatasa, indicar analgesia y actividad física adaptada, y al reiniciar considerar rotar a otro inhibidor de aromatasa o cambiar a tamoxifeno si persiste el síntoma", points:2,
+            feedback:"Correcto. La artralgia por inhibidores de aromatasa suele responder a pausas breves, analgesia y ejercicio; si persiste o compromete la seguridad (como el riesgo de caídas aquí), rotar a otro inhibidor de aromatasa o cambiar a tamoxifeno es una estrategia validada antes de abandonar la terapia endocrina por completo.",
+            paper:"Niravath, Ann Oncol 2013 (revisión de artralgia por inhibidores de aromatasa)", finding:"Documenta que la artralgia asociada a inhibidores de aromatasa afecta hasta a un tercio de las pacientes y es causa frecuente de abandono; recomienda manejo escalonado con pausa, analgesia, ejercicio, y rotación de agente o cambio a tamoxifeno si no mejora."},
+          {label:"Continuar el mismo esquema sin cambios, insistiendo en la importancia del tratamiento", points:0,
+            feedback:"Ignorar el impacto funcional y el riesgo de caídas en una paciente frágil puede llevar a una lesión grave (por ejemplo, fractura de cadera) y, paradójicamente, a que la paciente abandone el tratamiento por su cuenta sin supervisión médica.",
+            paper:"Niravath, Ann Oncol 2013", finding:"El manejo no dirigido de la artralgia es la principal causa de discontinuación no supervisada de la terapia endocrina."},
+          {label:"Suspender la terapia endocrina de forma definitiva sin intentar rotar de agente", points:1,
+            feedback:"Puede terminar siendo necesario si ninguna alternativa es tolerada, pero como primera conducta se prefiere intentar pausa, analgesia y rotación de agente antes de discontinuar definitivamente un tratamiento con beneficio demostrado.",
+            paper:"Niravath, Ann Oncol 2013", finding:"El manejo escalonado antes de la discontinución definitiva mejora la adherencia sin perder el beneficio oncológico en la mayoría de los casos."},
+          {label:"Aumentar la dosis de letrozol para compensar una eventual pérdida de eficacia por el dolor", points:0,
+            feedback:"No tiene sentido farmacológico: la dosis de letrozol no se ajusta por síntomas articulares, y aumentarla solo empeoraría la tolerancia sin beneficio oncológico adicional.",
+            paper:"—", finding:"La dosis estándar de inhibidores de aromatasa ya produce supresión estrogénica máxima; no existe relación dosis-respuesta que justifique aumentarla."}
+        ]},
+      {type:"decision", phase:4, eyebrow:"Decisión 3 · Duración de la terapia endocrina",
+        prompt:"Tras rotar a un inhibidor de aromatasa mejor tolerado, la paciente completa 5 años de terapia endocrina sin evidencia de enfermedad, ahora con 81 años, con deterioro cognitivo leve-moderado y buena funcionalidad general. ¿Qué conducta corresponde respecto a extender el tratamiento a 10 años?",
+        options:[
+          {label:"No extender la terapia endocrina más allá de los 5 años dado el perfil de bajo riesgo basal y la edad avanzada", points:2,
+            feedback:"Correcto. El beneficio de extender la terapia endocrina más allá de 5 años es mayor en tumores de riesgo más alto; en un tumor de bajo riesgo como este, sumado a la edad avanzada y el riesgo de toxicidad prolongada (ósea, cognitiva, funcional), el balance riesgo-beneficio no favorece la extensión.",
+            paper:"EBCTCG meta-analysis extended endocrine therapy, Lancet Oncol 2020", finding:"El beneficio de extender la terapia endocrina más allá de 5 años es proporcional al riesgo basal de recurrencia; en tumores de bajo riesgo, el beneficio absoluto adicional es pequeño y debe balancearse contra la toxicidad acumulada."},
+          {label:"Extender automáticamente a 10 años porque es lo recomendado en todas las pacientes RE+", points:0,
+            feedback:"No es una recomendación universal: la decisión de extender debe individualizarse según el riesgo basal, la tolerancia y la expectativa de vida funcional, no aplicarse de forma automática.",
+            paper:"EBCTCG meta-analysis extended endocrine therapy, Lancet Oncol 2020", finding:"El beneficio de la extensión varía sustancialmente según el riesgo basal; no todas las pacientes se benefician igual de prolongar el tratamiento."},
+          {label:"Suspender toda terapia endocrina de inmediato sin haber completado los 5 años planificados", points:0,
+            feedback:"No corresponde interrumpir antes de completar el curso planificado de 5 años sin una razón de toxicidad activa; en este momento la paciente ya está tolerando bien el agente rotado.",
+            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"Completar al menos 5 años de terapia endocrina adyuvante reduce sustancialmente el riesgo de recurrencia en tumores RE+."},
+          {label:"Cambiar a quimioterapia de mantenimiento en lugar de continuar terapia endocrina", points:0,
+            feedback:"No tiene ningún sustento: no existe indicación de quimioterapia de mantenimiento en enfermedad libre tras cirugía, y sería sustituir un tratamiento eficaz y bien tolerado por uno de mayor toxicidad sin beneficio.",
+            paper:"—", finding:"No existe evidencia que sustente la quimioterapia de mantenimiento en el escenario adyuvante libre de enfermedad."}
+        ]}
+    ]},
+
+  { key:"denovo-akt", label:"Caso 3 · Riesgo genómico intermedio y mutación de AKT1",
+    cardDesc:"45 años, perimenopáusica, RS 22, neutropenia febril con quimioterapia, progresión metastásica con mutación de AKT1.",
+    patient:"P.G., 45 años · perimenopáusica<br>Motivo: nódulo palpable, mama derecha",
+    vitals:{"RE / RP":"90% / 60%","HER2":"negativo (IHQ 0)","Ki67":"12%","Subtipo":"Luminal A (RS intermedio)","Estadio":"cT2N0","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia sistémica","Manejo de toxicidad","Terapia endocrina","1ª línea metastásica","2ª línea metastásica","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>P.G., 45 años, perimenopáusica (ciclos irregulares en los últimos 8 meses), consulta por nódulo palpable de 2.8 cm en mama derecha. <b>Biopsia core</b>: carcinoma ductal infiltrante grado 2.</p>
+        <p>Perfil: <b>RE 90%, RP 60%, HER2 negativo (IHQ 0), Ki67 12%</b>. Axila clínicamente negativa. cT2N0.</p>
+        <div class="callout">Ki67 en el rango más alto de lo habitual para Luminal A. Este perfil "borderline" es justamente donde el test genómico aporta más información que la inmunohistoquímica sola.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Tumor de 2.8 cm, cN0, perfil luminal en el límite superior de proliferación. ¿Cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Cirugía primero (tumorectomía + biopsia de ganglio centinela)", points:2,
+            feedback:"Correcto. Aun en el extremo superior de Ki67 para Luminal A, sigue sin haber indicación clara de reducción tumoral neoadyuvante; la cirugía primero permite además obtener el test genómico sobre la pieza definitiva.",
+            paper:"Rouzier et al., Clin Cancer Res 2005", finding:"Los tumores luminales, incluso con proliferación en el rango medio-alto, tienen menor respuesta patológica a quimioterapia que los subtipos basal o HER2+."},
+          {label:"Quimioterapia neoadyuvante de entrada", points:0,
+            feedback:"Prematuro: sin conocer aún el resultado del test genómico, no hay indicación establecida de quimioterapia, y el tumor es perfectamente operable de entrada.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda reservar la decisión de quimioterapia a la información genómica y patológica completa cuando la cirugía inicial es factible."},
+          {label:"Terapia endocrina neoadyuvante dado que es RE positivo", points:0,
+            feedback:"No es la primera opción: el tumor es operable de entrada y la respuesta a terapia endocrina neoadyuvante es menos predecible en perfiles de proliferación más alta.",
+            paper:"ACOSOG Z1031 — Ellis et al., J Clin Oncol 2011", finding:"El mayor beneficio de la terapia endocrina neoadyuvante se observó en tumores de proliferación más baja."},
+          {label:"Solicitar el test genómico antes de decidir cualquier conducta, incluso la cirugía", points:0,
+            feedback:"No es necesario ni estándar retrasar la cirugía para solicitar el test genómico: este se realiza sobre la pieza quirúrgica definitiva, no antes de operar.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"El test genómico estándar (Oncotype DX) se realiza sobre la muestra quirúrgica, no como estudio prequirúrgico."}
+        ]},
+      {type:"info", phase:1, eyebrow:"Resultado quirúrgico", vitalsUpdate:{"Tratamiento":"Cirugía realizada"}, html:`
+        <p><b>Tumorectomía + ganglio centinela</b>: carcinoma ductal infiltrante 2.9 cm, márgenes negativos, <b>0/3 ganglios positivos (pN0)</b>. Oncotype DX sobre la pieza: <b>Recurrence Score 22</b> (intermedio).</p>`, buttonLabel:"Definir adyuvancia sistémica →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Adyuvancia sistémica",
+        prompt:"Paciente de 45 años (menor de 50), pN0, Recurrence Score 22. ¿Qué adyuvancia sistémica corresponde?",
+        options:[
+          {label:"Quimioterapia adyuvante (esquema con antraciclina/taxano) seguida de terapia endocrina", points:2,
+            feedback:"Correcto. A diferencia de una paciente mayor de 50 años con el mismo RS, en el subgrupo de 50 años o menos con RS 16-25, TAILORx sí mostró un beneficio modesto pero real de agregar quimioterapia, por lo que aquí sí corresponde intensificar el tratamiento.",
+            paper:"TAILORx — Sparano et al., N Engl J Med 2018 (análisis por edad)", finding:"En el subgrupo de 50 años o menos con RS 16-25, se observó un beneficio absoluto modesto de agregar quimioterapia en la tasa de recurrencia a distancia, a diferencia de las pacientes mayores de 50 con el mismo rango de RS."},
+          {label:"Terapia endocrina sola, sin quimioterapia, igual que con un RS bajo", points:0,
+            feedback:"No es correcto extrapolar la conducta de un RS bajo (como en otros casos) a un RS 22 en una paciente de 45 años: en ese subgrupo etario específico, TAILORx mostró beneficio de agregar quimioterapia.",
+            paper:"TAILORx — Sparano et al., N Engl J Med 2018", finding:"El beneficio de la quimioterapia en RS 16-25 se concentró específicamente en pacientes de 50 años o menos, no en toda la población con ese rango de RS."},
+          {label:"Terapia endocrina + inhibidor de CDK4/6, sin quimioterapia", points:0,
+            feedback:"No cumple los criterios de alto riesgo que definen la indicación de CDK4/6i adyuvante (nodal extenso o factores de agresividad mayores); la evidencia aplicable aquí es la de TAILORx sobre quimioterapia, no la de CDK4/6i.",
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"El beneficio de CDK4/6i adyuvante se demostró en población de alto riesgo nodal o con factores de agresividad mayores, no en N0 con RS intermedio."},
+          {label:"Doble esquema: quimioterapia y CDK4/6i simultáneos", points:0,
+            feedback:"No existe evidencia que sustente combinar ambas intensificaciones en este perfil de riesgo; sería sobretratamiento significativo.",
+            paper:"TAILORx / monarchE", finding:"Cada estudio evaluó su intervención en poblaciones y criterios de riesgo distintos; no se ha validado la combinación simultánea en riesgo intermedio N0."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · ciclo 2 de quimioterapia adyuvante", vitalsUpdate:{"Tratamiento":"AC-T adyuvante — evento de toxicidad"}, html:`
+        <p>Ocho días después del segundo ciclo de quimioterapia (esquema con antraciclina), la paciente consulta a guardia por <b>fiebre de 38.9°C</b>. Laboratorio: <b>recuento absoluto de neutrófilos 380/mm³</b> (neutropenia grado 4). Buen estado general, sin foco infeccioso evidente al examen.</p>
+        <div class="callout warn">Fiebre en el contexto de neutropenia grado 4 post-quimioterapia es una urgencia oncológica que requiere manejo hospitalario inmediato, independientemente del buen estado general aparente.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Neutropenia febril post-quimioterapia",
+        prompt:"Fiebre 38.9°C con ANC 380/mm³ a los 8 días del segundo ciclo de AC-T. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Internar de inmediato, tomar hemocultivos y cultivos según foco, e iniciar antibióticos empíricos de amplio espectro sin demora, junto con soporte con factor estimulante de colonias en los ciclos siguientes", points:2,
+            feedback:"Correcto. La neutropenia febril es una urgencia oncológica: requiere hospitalización, cultivos y antibióticos empíricos de amplio espectro iniciados dentro de la primera hora, sin esperar el resultado de los cultivos. En los ciclos posteriores se agrega profilaxis con factor estimulante de colonias de granulocitos.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia in Patients With Cancer", finding:"Establece que la fiebre con ANC menor a 500/mm³ requiere hospitalización y antibióticos empíricos de amplio espectro de forma inmediata, independientemente del estado general aparente, dado el riesgo de deterioro rápido y sepsis."},
+          {label:"Manejo ambulatorio con antibióticos orales y control en 48 horas", points:0,
+            feedback:"Es una conducta insuficiente para el grado de neutropenia (ANC 380, grado 4): el manejo ambulatorio se reserva para pacientes de bajo riesgo cuidadosamente seleccionados, no para neutropenia profunda con fiebre.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia", finding:"El manejo ambulatorio solo se considera en pacientes de bajo riesgo (según escalas validadas como MASCC), lo que generalmente excluye neutropenia grado 4."},
+          {label:"Esperar el resultado de los cultivos antes de iniciar antibióticos", points:0,
+            feedback:"Retrasar el inicio de antibióticos hasta tener cultivos puede ser fatal en este contexto; el estándar es iniciar tratamiento empírico inmediato y ajustar según resultados posteriores.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia", finding:"Recomienda iniciar antibióticos empíricos dentro de la primera hora de la evaluación, sin esperar los resultados microbiológicos."},
+          {label:"Suspender la quimioterapia de forma definitiva sin planear reanudarla", points:0,
+            feedback:"No corresponde discontinuar definitivamente por un episodio de neutropenia febril tratable; una vez resuelto, se puede continuar con soporte de factor estimulante de colonias o ajuste de dosis en los ciclos siguientes.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia", finding:"Recomienda profilaxis con factor estimulante de colonias en ciclos posteriores tras un episodio de neutropenia febril, permitiendo continuar el tratamiento planificado."}
+        ]},
+      {type:"decision", phase:4, eyebrow:"Decisión 3 · Terapia endocrina adyuvante y estado menopáusico",
+        prompt:"Completada la quimioterapia, la paciente ya no menstrúa desde hace 4 meses. Antes de definir si requiere supresión ovárica, ¿qué conducta corresponde?",
+        options:[
+          {label:"Solicitar FSH y estradiol para confirmar el estado menopáusico antes de decidir, ya que la amenorrea inducida por quimioterapia no equivale necesariamente a menopausia definitiva", points:2,
+            feedback:"Correcto. La amenorrea post-quimioterapia en una mujer de 45 años puede ser transitoria; asumir menopausia definitiva sin confirmación hormonal puede llevar a indicar un inhibidor de aromatasa sin supresión ovárica adecuada, dejando a la paciente sin protección real si la función ovárica se recupera.",
+            paper:"Guías de práctica clínica en función ovárica post-quimioterapia (ASCO/NCCN, manejo de menopausia inducida por quimioterapia)", finding:"Recomiendan confirmar el estado menopáusico con niveles hormonales (FSH, estradiol) antes de indicar un inhibidor de aromatasa sin supresión ovárica en mujeres con amenorrea post-quimioterapia menores de 50 años, dado el riesgo de recuperación de la función ovárica."},
+          {label:"Asumir menopausia definitiva por la amenorrea de 4 meses e iniciar inhibidor de aromatasa sin supresión ovárica", points:0,
+            feedback:"Es un supuesto riesgoso: la amenorrea inducida por quimioterapia a los 45 años puede revertir, y un inhibidor de aromatasa sin supresión ovárica en una paciente que recupera la función ovárica pierde eficacia.",
+            paper:"Guías de manejo de menopausia inducida por quimioterapia", finding:"La recuperación de la función ovárica tras quimioterapia es frecuente en mujeres menores de 45-50 años, lo que hace necesaria la confirmación hormonal antes de asumir menopausia definitiva."},
+          {label:"Iniciar directamente supresión ovárica + inhibidor de aromatasa sin necesidad de estudios adicionales", points:1,
+            feedback:"Es una conducta segura desde el punto de vista oncológico (evita el riesgo de asumir menopausia falsa), pero omite un paso diagnóstico simple que ayuda a planificar mejor la duración de la supresión ovárica y el seguimiento.",
+            paper:"Guías de manejo de menopausia inducida por quimioterapia", finding:"Confirmar el estado hormonal, aunque se opte por supresión ovárica de todas formas, ayuda a documentar la trayectoria de la función ovárica a lo largo del seguimiento."},
+          {label:"Iniciar tamoxifeno solo, evitando cualquier discusión sobre inhibidores de aromatasa", points:0,
+            feedback:"Tamoxifeno es una opción válida en premenopáusicas, pero descartar de plano la opción de inhibidor de aromatasa con supresión ovárica sin siquiera confirmar el estado hormonal deja de lado una alternativa potencialmente más efectiva en el riesgo de esta paciente.",
+            paper:"SOFT/TEXT — Francis et al., N Engl J Med 2018", finding:"En premenopáusicas de mayor riesgo, la supresión ovárica combinada con inhibidor de aromatasa mostró mayor reducción de recurrencia que tamoxifeno solo."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Seguimiento — recurrencia a los 4 años", vitalsUpdate:{"Tratamiento":"OFS + IA adyuvante completado","Estadio":"Metastásico (óseo)"}, html:`
+        <p>Confirmada la menopausia por laboratorio hormonal, completa 5 años de supresión ovárica + inhibidor de aromatasa. A los 4 años del diagnóstico, un control de rutina detecta <b>lesiones óseas múltiples</b> en centellograma solicitado por dolor lumbar. Biopsia de una lesión: <b>metastásico, RE+, HER2-</b>, sin crisis visceral (enfermedad exclusivamente ósea).</p>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 4 · Primera línea metastásica",
+        prompt:"Enfermedad ósea exclusiva, RE+/HER2-, progresó tras terapia endocrina adyuvante completa. Ahora posmenopáusica confirmada. ¿Esquema de primera línea preferido?",
+        options:[
+          {label:"Inhibidor de aromatasa + inhibidor de CDK4/6", points:2,
+            feedback:"Correcto. Estándar de primera línea en RE+/HER2- metastásico, incluyendo enfermedad exclusivamente ósea, que no constituye crisis visceral.",
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"Beneficio consistente en supervivencia libre de progresión y global, independientemente de la localización metastásica evaluada en el estudio."},
+          {label:"Radioterapia paliativa exclusiva, sin tratamiento sistémico", points:0,
+            feedback:"La radioterapia tiene un rol para el control local del dolor, pero no reemplaza al tratamiento sistémico, que es lo que controla la enfermedad a nivel general.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda tratamiento sistémico como pilar en enfermedad metastásica, con radioterapia como complemento para control local de síntomas."},
+          {label:"Quimioterapia de entrada", points:0,
+            feedback:"Sin crisis visceral, la terapia endocrina-based con CDK4/6i es preferida sobre quimioterapia.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Reserva la quimioterapia para crisis visceral o progresión tras agotar líneas endocrinas."},
+          {label:"Ácido zoledrónico o denosumab como único tratamiento", points:0,
+            feedback:"Los agentes modificadores óseos son un complemento importante en enfermedad ósea metastásica, pero no sustituyen al tratamiento sistémico dirigido contra el tumor.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda agentes modificadores óseos como terapia complementaria, no como tratamiento único de la enfermedad metastásica."}
+        ]},
+      {type:"info", phase:6, eyebrow:"Progresión — 20 meses de primera línea", vitalsUpdate:{"Tratamiento":"Progresión bajo IA + CDK4/6i"}, html:`
+        <p>A los 20 meses, nuevas lesiones óseas y aparición de una lesión hepática pequeña. ctDNA: <b>AKT1</b> mutación E17K detectada; <b>ESR1</b> y <b>PIK3CA</b> sin alteraciones.</p>
+        <div class="callout">La vía PI3K/AKT/mTOR puede activarse por mutaciones en distintos nodos —PIK3CA, AKT1 o pérdida de PTEN— cada uno con implicancias terapéuticas específicas.</div>`, buttonLabel:"Definir segunda línea →"},
+      {type:"decision", phase:6, eyebrow:"Decisión 5 · Segunda línea metastásica",
+        prompt:"Progresión bajo IA + CDK4/6i, con mutación de AKT1 confirmada (ESR1 y PIK3CA wild-type). ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Fulvestrant + capivasertib (inhibidor de AKT)", points:2,
+            feedback:"Correcto. Capivasertib está dirigido a la vía AKT y demostró beneficio en pacientes con alteraciones de esta vía (incluyendo mutaciones de AKT1), que es justamente el hallazgo en esta paciente.",
+            paper:"CAPItello-291 — Turner et al., N Engl J Med 2023", finding:"Fulvestrant + capivasertib mejoró la supervivencia libre de progresión frente a fulvestrant solo, con el mayor beneficio en el subgrupo con alteraciones en la vía AKT (PIK3CA, AKT1 o PTEN)."},
+          {label:"Fulvestrant + alpelisib", points:0,
+            feedback:"Alpelisib está validado específicamente para mutación de PIK3CA, que en este caso es wild-type; no es la elección dirigida por biomarcador aquí.",
+            paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"El beneficio de alpelisib se demostró exclusivamente en tumores con mutación de PIK3CA, no evaluó específicamente mutaciones aisladas de AKT1."},
+          {label:"Cambiar a elacestrant", points:0,
+            feedback:"Elacestrant está dirigido a mutaciones de ESR1, que en este caso es wild-type.",
+            paper:"EMERALD — Bidard et al., J Clin Oncol 2022", finding:"El mayor beneficio se observó específicamente en el subgrupo con mutación de ESR1 detectable."},
+          {label:"Continuar el mismo esquema de primera línea sin cambios", points:0,
+            feedback:"La progresión documentada junto con un biomarcador accionable hacen que continuar sin cambios no tenga sustento.",
+            paper:"CAPItello-291 — Turner et al., N Engl J Med 2023", finding:"Incluyó pacientes con progresión documentada a terapia endocrina previa (con o sin CDK4/6i), mostrando beneficio de un cambio de esquema dirigido por biomarcador."}
+        ]}
+    ]}
+
+  ]
+},
+
+/* ============================================================ LUMINAL B */
+lumB: {
+  tag:"lumB", tagLabel:"Luminal B", title:"Luminal B",
+  moduleDesc:"RE/RP positivos pero con alta proliferación (Ki67 alto, grado 3). Mayor riesgo que Luminal A y decisiones de adyuvancia distintas.",
+  cases:[
+
+  { key:"classic", label:"Caso 1 · Alto riesgo, sin pCR, progresión con PIK3CA mutado",
+    cardDesc:"47 años, premenopáusica. Neoadyuvancia sin respuesta patológica completa, CDK4/6i adyuvante, progresión con PIK3CA mutado.",
+    patient:"L.F., 47 años · premenopáusica<br>Motivo: nódulo palpable, mama derecha",
+    vitals:{"RE / RP":"60% / 10%","HER2":"negativo (IHQ 0)","Ki67":"35%","Subtipo":"Luminal B","Estadio":"cT3N1","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia sistémica","Manejo de toxicidad","Terapia endocrina","1ª línea metastásica","2ª línea metastásica","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>L.F., 47 años, premenopáusica, consulta por nódulo de crecimiento rápido en mama derecha, con adenopatía axilar palpable.</p>
+        <p><b>Biopsia core</b>: carcinoma ductal infiltrante grado 3. <b>Biopsia del ganglio axilar</b>: metastásico. Perfil: <b>RE 60%, RP 10%, HER2 negativo (IHQ 0), Ki67 35%</b>. cT3N1.</p>
+        <div class="callout">Receptores hormonales positivos pero heterogéneos, HER2 negativo, <b>Ki67 alto (35%)</b> con grado 3: perfil <b>Luminal B</b>. Aquí la alta proliferación sí predice mayor sensibilidad relativa a quimioterapia.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Tumor de 3.5 cm, axila positiva, grado 3, Ki67 35%. ¿Cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Quimioterapia neoadyuvante (antraciclina/taxano) seguida de cirugía", points:2,
+            feedback:"Correcto. La alta proliferación y el compromiso axilar hacen razonable la quimioterapia neoadyuvante.",
+            paper:"NSABP B-18/B-27 y consenso NCCN", finding:"La quimioterapia neoadyuvante en tumores de alto riesgo permite reducción tumoral y axilar equivalente en eficacia a largo plazo respecto a darla en forma adyuvante."},
+          {label:"Cirugía primero, igual que en Luminal A", points:0,
+            feedback:"No aplica el mismo razonamiento: el Ki67 alto y grado 3 predicen respuesta a quimioterapia mucho más relevante.",
+            paper:"Rouzier et al., Clin Cancer Res 2005", finding:"Los tumores luminales de alta proliferación tienen tasas de respuesta patológica claramente superiores a los de baja proliferación."},
+          {label:"Terapia endocrina neoadyuvante sola", points:0,
+            feedback:"Se reserva típicamente para tumores luminales de baja proliferación; no es la estrategia de elección aquí.",
+            paper:"ACOSOG Z1031 — Ellis et al., J Clin Oncol 2011", finding:"El beneficio de terapia endocrina neoadyuvante fue mayor en tumores de baja proliferación."},
+          {label:"Mastectomía radical inmediata sin estudios adicionales", points:0,
+            feedback:"Pierde información pronóstica y terapéutica valiosa que aporta la neoadyuvancia.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda considerar neoadyuvancia en tumores de alto riesgo antes de definir el tipo de cirugía."}
+        ]},
+      {type:"info", phase:1, eyebrow:"Resultado tras neoadyuvancia y cirugía", vitalsUpdate:{"Tratamiento":"NACT + cirugía realizada","Estadio":"ypT1N1 (enfermedad residual)"}, html:`
+        <p>Completa 6 ciclos de quimioterapia neoadyuvante. <b>Tumorectomía + disección axilar</b>. Patología: <b>enfermedad residual de 1.2 cm, 1/14 ganglios positivos (ypT1N1)</b>. No hubo respuesta patológica completa.</p>`, buttonLabel:"Definir adyuvancia sistémica →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Adyuvancia sistémica",
+        prompt:"Enfermedad residual ypT1N1, grado 3, Ki67 basal 35%: alto riesgo. ¿Qué adyuvancia corresponde además de terapia endocrina?",
+        options:[
+          {label:"Agregar abemaciclib por 2 años", points:2,
+            feedback:"Correcto. Cumple criterios de alto riesgo (ganglio positivo con grado 3) para intensificación con CDK4/6i.",
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020; Rastogi et al., 2024", finding:"Abemaciclib + terapia endocrina redujo significativamente el riesgo de recurrencia en pacientes de alto riesgo."},
+          {label:"Solo terapia endocrina, sin terapia dirigida adicional", points:0,
+            feedback:"Sería infratratamiento en este perfil de alto riesgo.",
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"El beneficio se concentró en la población de alto riesgo definida por el estudio."},
+          {label:"Trastuzumab adyuvante", points:0,
+            feedback:"Solo indicado en HER2-positivo; esta paciente es HER2 negativo.",
+            paper:"—", finding:"El beneficio de trastuzumab se limita a tumores HER2 positivos."},
+          {label:"Repetir el mismo esquema de quimioterapia ya recibido", points:0,
+            feedback:"No hay evidencia de beneficio; el foco es intensificar la terapia dirigida.",
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"El diseño evaluaba agregar terapia dirigida tras completar quimioterapia, no reforzarla."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · 3 semanas de abemaciclib adyuvante", vitalsUpdate:{"Tratamiento":"Abemaciclib — evento de toxicidad"}, html:`
+        <p>A las 3 semanas, <b>8-10 deposiciones líquidas por día</b>, mareos posturales. Guardia: <b>PA 88/56, FC 118, K 2.9</b>, injuria renal leve.</p>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Diarrea grado 3 por abemaciclib",
+        prompt:"Diarrea grado 3 con deshidratación, hipotensión e hipokalemia bajo abemaciclib. ¿Conducta más apropiada?",
+        options:[
+          {label:"Internar para hidratación EV y corrección electrolítica, suspender abemaciclib, loperamida en dosis alta, reiniciar a dosis reducida al resolver", points:2,
+            feedback:"Correcto. Diarrea grado 3 con compromiso hemodinámico requiere hospitalización.",
+            paper:"monarchE — análisis de seguridad de abemaciclib adyuvante", finding:"Los casos grado 3 se manejaron con antidiarreicos en dosis alta, interrupción y reinicio a dosis reducida."},
+          {label:"Continuar a la misma dosis con loperamida ambulatoria", points:0,
+            feedback:"Insuficiente y riesgoso dado el compromiso hemodinámico.",
+            paper:"monarchE — análisis de seguridad de abemaciclib", finding:"El algoritmo indica interrupción del fármaco en diarrea grado 3."},
+          {label:"No requiere ninguna conducta especial, es esperado", points:0,
+            feedback:"Minimiza una complicación grave con compromiso hemodinámico.",
+            paper:"monarchE — análisis de seguridad de abemaciclib", finding:"Los grados 3 requieren manejo activo específico."},
+          {label:"Suspender definitivamente sin intentar dosis reducida", points:1,
+            feedback:"Puede ser el desenlace final si recurre, pero primero se intenta reducción de dosis.",
+            paper:"monarchE — análisis de seguridad de abemaciclib", finding:"El algoritmo contempla reinicio a dosis reducida antes de discontinuación definitiva."}
+        ]},
+      {type:"decision", phase:4, eyebrow:"Decisión 3 · Elección de terapia endocrina adyuvante",
+        prompt:"Paciente premenopáusica de 47 años, alto riesgo. ¿Cuál es el esquema endocrino adyuvante más apropiado?",
+        options:[
+          {label:"Supresión ovárica + inhibidor de aromatasa", points:2,
+            feedback:"Correcto. En premenopáusicas de alto riesgo, superior a tamoxifeno solo.",
+            paper:"SOFT y TEXT — Francis et al., N Engl J Med 2018", finding:"La supresión ovárica combinada con exemestano redujo significativamente la recurrencia frente a tamoxifeno."},
+          {label:"Tamoxifeno solo, sin supresión ovárica", points:1,
+            feedback:"Válida en riesgo más bajo; en alto riesgo se favorece agregar supresión ovárica.",
+            paper:"SOFT — Francis et al., N Engl J Med 2018", finding:"El subgrupo de mayor riesgo fue el que más se benefició de agregar supresión ovárica."},
+          {label:"Inhibidor de aromatasa solo, sin supresión ovárica", points:0,
+            feedback:"Puede ser dañino: sin supresión ovárica el inhibidor de aromatasa pierde su mecanismo de acción.",
+            paper:"SOFT/TEXT — Francis et al., N Engl J Med 2018", finding:"Los inhibidores de aromatasa se evaluaron siempre junto con supresión ovárica en premenopáusicas."},
+          {label:"Ninguna terapia endocrina", points:0,
+            feedback:"La quimioterapia no reemplaza a la terapia endocrina en tumores RE+.",
+            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"El beneficio de la terapia endocrina es independiente del uso de quimioterapia."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Seguimiento — 30 meses después", vitalsUpdate:{"Tratamiento":"OFS + IA + abemaciclib completado","Estadio":"Sin evidencia de enfermedad"}, html:`
+        <p>A los 30 meses consulta por <b>disnea progresiva</b>. TC de tórax: <b>nódulos pulmonares bilaterales y derrame pleural</b>. Biopsia pleural: <b>metastásico, RE+, HER2-</b>.</p>
+        <div class="callout warn">Compromiso pulmonar sintomático pero sin crisis visceral franca. Definir primera línea metastásica.</div>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 4 · Primera línea metastásica", vitalsUpdate:{"Estadio":"Metastásico (pulmonar + pleural)"},
+        prompt:"Premenopáusica, RE+/HER2- metastásico, progresó a CDK4/6i adyuvante reciente, sin crisis visceral. ¿Conducta de primera línea más apropiada?",
+        options:[
+          {label:"Supresión ovárica + inhibidor de aromatasa + inhibidor de CDK4/6", points:2,
+            feedback:"Correcto. Estándar de primera línea en premenopáusicas.",
+            paper:"MONALEESA-7 — Im et al., N Engl J Med 2019", finding:"Primer estudio de CDK4/6i específicamente en premenopáusicas con supresión ovárica, con mejora en supervivencia."},
+          {label:"IA + CDK4/6i sin supresión ovárica", points:0,
+            feedback:"Sin supresión ovárica, el IA no es efectivo en premenopáusica.",
+            paper:"MONALEESA-7 — Im et al., N Engl J Med 2019", finding:"Incluyó supresión ovárica obligatoria en todas las pacientes premenopáusicas."},
+          {label:"Quimioterapia con antraciclina o taxano", points:0,
+            feedback:"Sin crisis visceral franca, la terapia endocrina-based con CDK4/6i sigue siendo preferida.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Reserva la quimioterapia para crisis visceral."},
+          {label:"Fulvestrant solo, sin supresión ovárica ni CDK4/6i", points:0,
+            feedback:"Incompleto: falta la supresión ovárica y el CDK4/6i.",
+            paper:"MONALEESA-7 — Im et al., N Engl J Med 2019", finding:"Agregar CDK4/6i mejora sustancialmente los resultados."}
+        ]},
+      {type:"info", phase:6, eyebrow:"Progresión — 14 meses de primera línea", vitalsUpdate:{"Tratamiento":"Progresión bajo OFS+IA+CDK4/6i"}, html:`
+        <p>Progresión pulmonar y nueva lesión hepática. ctDNA: <b>PIK3CA</b> mutado (H1047R); <b>ESR1</b> wild-type.</p>`, buttonLabel:"Definir segunda línea →"},
+      {type:"decision", phase:6, eyebrow:"Decisión 5 · Segunda línea metastásica",
+        prompt:"Progresión bajo terapia endocrina + CDK4/6i, PIK3CA mutado (ESR1 wild-type). ¿Conducta más apropiada?",
+        options:[
+          {label:"Fulvestrant + alpelisib", points:2,
+            feedback:"Correcto. Dirigida específicamente a PIK3CA mutado.",
+            paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"Casi duplicó la supervivencia libre de progresión frente a fulvestrant solo en PIK3CA mutado."},
+          {label:"Cambiar a elacestrant", points:0,
+            feedback:"Beneficio en ESR1 mutado, negativo aquí.",
+            paper:"EMERALD — Bidard et al., J Clin Oncol 2022", finding:"Mayor beneficio en el subgrupo con mutación de ESR1."},
+          {label:"Continuar el mismo esquema sin cambios", points:0,
+            feedback:"No tiene sustento tras progresión documentada con biomarcador accionable.",
+            paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"Mostró beneficio de cambiar de esquema dirigido por biomarcador."},
+          {label:"Iniciar quimioterapia de inmediato", points:0,
+            feedback:"Con biomarcador accionable y sin crisis visceral, se prefiere la opción endocrina dirigida.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda agotar opciones endocrina-based antes de quimioterapia."}
+        ]}
+    ]},
+
+  { key:"pcr", label:"Caso 2 · Respuesta patológica completa — remisión sostenida",
+    cardDesc:"52 años, perimenopáusica. Logra respuesta patológica completa con neoadyuvancia; el pCR no cambia la indicación de CDK4/6i basada en riesgo basal.",
+    patient:"V.M., 52 años · perimenopáusica<br>Motivo: nódulo palpable, mama izquierda",
+    vitals:{"RE / RP":"70% / 40%","HER2":"negativo (IHQ 0)","Ki67":"40%","Subtipo":"Luminal B","Estadio":"cT2N1","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>V.M., 52 años, con último período menstrual hace 5 meses (perimenopáusica), consulta por nódulo palpable de 3.2 cm en mama izquierda con adenopatía axilar sospechosa.</p>
+        <p>Biopsia: carcinoma ductal infiltrante grado 3. Perfil: <b>RE 70%, RP 40%, HER2 negativo (IHQ 0), Ki67 40%</b>. cT2N1.</p>
+        <div class="callout">Luminal B de alto grado con compromiso axilar: perfil de alta proliferación donde la neoadyuvancia es razonable y donde, a diferencia de HER2+ o triple negativo, lograr respuesta patológica completa no cambia por sí solo la estrategia de adyuvancia dirigida.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Tumor 3.2 cm, axila clínicamente positiva, grado 3, Ki67 40%. ¿Cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Quimioterapia neoadyuvante (antraciclina/taxano) seguida de cirugía", points:2,
+            feedback:"Correcto. La alta proliferación y compromiso axilar justifican neoadyuvancia, que además permite evaluar respuesta real del tumor.",
+            paper:"NSABP B-18/B-27 y consenso NCCN", finding:"La quimioterapia neoadyuvante en tumores de alto riesgo es equivalente en eficacia a darla en forma adyuvante, con la ventaja de evaluar respuesta in vivo."},
+          {label:"Cirugía primero sin tratamiento sistémico previo", points:0,
+            feedback:"El Ki67 alto y grado 3 predicen buena respuesta a quimioterapia; operar de entrada pierde esa oportunidad.",
+            paper:"Rouzier et al., Clin Cancer Res 2005", finding:"Los tumores luminales de alta proliferación tienen mayor tasa de respuesta patológica a quimioterapia."},
+          {label:"Terapia endocrina neoadyuvante sola", points:0,
+            feedback:"Reservada para perfiles de menor proliferación; no es la estrategia de elección en Ki67 40%.",
+            paper:"ACOSOG Z1031 — Ellis et al., J Clin Oncol 2011", finding:"El beneficio fue mayor en tumores de baja proliferación."},
+          {label:"Doble bloqueo anti-HER2 junto con quimioterapia", points:0,
+            feedback:"No corresponde: el tumor es HER2 negativo (IHQ 0), sin indicación de terapia anti-HER2.",
+            paper:"—", finding:"El bloqueo anti-HER2 solo está indicado en tumores con sobreexpresión o amplificación de HER2."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Resultado tras neoadyuvancia y cirugía", vitalsUpdate:{"Tratamiento":"NACT + cirugía realizada","Estadio":"ypT0N0 (respuesta patológica completa)"}, html:`
+        <p>Completa 6 ciclos de quimioterapia neoadyuvante con excelente respuesta clínica. <b>Tumorectomía + disección axilar</b>. Patología: <b>sin tumor invasivo residual en la mama ni en los ganglios (ypT0N0) — respuesta patológica completa</b>.</p>
+        <div class="callout good">Logró respuesta patológica completa. A diferencia de HER2+ (donde el pCR permite de-escalar a trastuzumab solo) o triple negativo (donde no cambia el uso de pembrolizumab pero sí influye en agregar otros agentes), en Luminal B el pCR es un buen factor pronóstico pero <b>no reemplaza</b> la evaluación del riesgo basal para decidir la intensificación adyuvante.</div>`, buttonLabel:"Definir adyuvancia dirigida →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Adyuvancia dirigida pese a la respuesta patológica completa",
+        prompt:"Paciente con respuesta patológica completa tras neoadyuvancia, pero con riesgo basal alto (cT2N1, grado 3, Ki67 40% antes del tratamiento). ¿Qué adyuvancia corresponde?",
+        options:[
+          {label:"Terapia endocrina + abemaciclib, a pesar de la respuesta patológica completa", points:2,
+            feedback:"Correcto. La indicación de CDK4/6i adyuvante en monarchE se basa en las características clínico-patológicas de riesgo previas al tratamiento (estadio clínico inicial, grado, Ki67), no en si se logró o no respuesta patológica completa; esta paciente cumple criterios de alto riesgo basal.",
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"Los criterios de elegibilidad para abemaciclib adyuvante se basan en el estadio y las características de riesgo al momento del diagnóstico, incluyendo a pacientes que reciben quimioterapia neoadyuvante, independientemente de la respuesta patológica alcanzada."},
+          {label:"Solo terapia endocrina, sin CDK4/6i, dado que logró respuesta patológica completa", points:0,
+            feedback:"Es un error conceptual frecuente: a diferencia de HER2+ o triple negativo, en Luminal B el pCR no es el criterio que determina la intensificación adyuvante; el riesgo basal sigue siendo alto.",
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"La población del estudio se definió por el riesgo clínico-patológico inicial, no por la respuesta a la neoadyuvancia."},
+          {label:"Suspender toda terapia sistémica dado el excelente resultado quirúrgico", points:0,
+            feedback:"Sería un error grave: el riesgo basal de recurrencia en un tumor cT2N1 grado 3 sigue siendo relevante pese al buen resultado patológico.",
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"Pacientes de alto riesgo basal se benefician de la intensificación adyuvante independientemente del resultado quirúrgico."},
+          {label:"Agregar trastuzumab por seguridad adicional", points:0,
+            feedback:"No corresponde: el tumor es HER2 negativo, sin ningún beneficio esperado de terapia anti-HER2.",
+            paper:"—", finding:"El beneficio de trastuzumab se limita exclusivamente a tumores HER2 positivos."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · 2 meses de terapia endocrina adyuvante", vitalsUpdate:{"Tratamiento":"Tamoxifeno — evaluación de función ovárica pendiente"}, html:`
+        <p>Al iniciar terapia endocrina, persiste la duda sobre su estado menopáusico (última menstruación hace 5 meses antes de iniciar quimioterapia, que puede inducir amenorrea adicional). Se inició tamoxifeno de forma provisional mientras se aclaraba el estado hormonal. A los 2 meses, refiere <b>sofocos intensos, alteraciones del sueño y dolor articular generalizado</b> que están afectando su desempeño laboral, y pregunta si puede abandonar el tratamiento.</p>
+        <div class="callout warn">Los síntomas vasomotores y articulares son la causa más frecuente de mala adherencia a la terapia endocrina; requieren manejo activo, no solo indicar que "hay que aguantar".</div>`, buttonLabel:"Decidir conducta →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Síntomas vasomotores y adherencia a terapia endocrina",
+        prompt:"Síntomas vasomotores y articulares intensos con riesgo de abandono del tratamiento, y estado hormonal aún no confirmado tras quimioterapia reciente. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Confirmar el estado menopáusico con FSH/estradiol para definir el esquema definitivo (IA + supresión ovárica si persiste premenopáusica, o IA solo si posmenopáusica), y ofrecer manejo activo de los síntomas (medidas no hormonales, optimización del esquema) para sostener la adherencia", points:2,
+            feedback:"Correcto. Antes de sostener un esquema provisional es clave confirmar el estado hormonal definitivo para elegir el esquema endocrino más efectivo, y en paralelo abordar activamente los síntomas que amenazan la adherencia, ya que el abandono del tratamiento anula por completo su beneficio.",
+            paper:"Guías de manejo de menopausia inducida por quimioterapia; consenso de manejo de síntomas de terapia endocrina (NCCN Survivorship)", finding:"Recomiendan confirmar el estado hormonal antes de definir el esquema endocrino definitivo en mujeres perimenopáusicas que reciben quimioterapia, y abordar activamente los síntomas vasomotores y articulares como estrategia central para sostener la adherencia, dado que el abandono no supervisado es frecuente y anula el beneficio del tratamiento."},
+          {label:"Decirle que debe tolerar los síntomas porque no hay alternativa al tratamiento", points:0,
+            feedback:"Ignorar el impacto de los síntomas en la calidad de vida y la adherencia es una conducta inadecuada: existen estrategias activas de manejo sintomático y ajuste de esquema que pueden sostener el tratamiento sin que la paciente deba simplemente resignarse.",
+            paper:"NCCN Survivorship Guidelines", finding:"El manejo activo de los síntomas asociados a terapia endocrina mejora la adherencia a largo plazo frente a no ofrecer ninguna intervención."},
+          {label:"Suspender la terapia endocrina de inmediato ante la solicitud de la paciente", points:0,
+            feedback:"Suspender sin antes intentar manejo activo de síntomas ni confirmar el esquema óptimo priva a la paciente de un tratamiento con beneficio demostrado en su perfil de riesgo, cuando existen alternativas antes de llegar a esa decisión.",
+            paper:"NCCN Survivorship Guidelines", finding:"Recomienda intentar manejo sintomático activo y ajuste de esquema antes de la discontinuación completa de la terapia endocrina."},
+          {label:"Cambiar directamente a quimioterapia de mantenimiento en lugar de terapia endocrina", points:0,
+            feedback:"No tiene sustento: la quimioterapia de mantenimiento no está indicada en el escenario adyuvante y tiene un perfil de toxicidad considerablemente mayor que la terapia endocrina.",
+            paper:"—", finding:"No existe evidencia que sustente reemplazar la terapia endocrina adyuvante por quimioterapia de mantenimiento por intolerancia sintomática."}
+        ]}
+    ]},
+
+  { key:"crisis", label:"Caso 3 · Mala respuesta a neoadyuvancia y crisis visceral",
+    cardDesc:"61 años, postmenopáusica, alto riesgo con respuesta patológica mínima. Hepatotoxicidad por ribociclib y recaída con crisis visceral.",
+    patient:"E.R., 61 años · posmenopáusica<br>Motivo: nódulo palpable, mama izquierda",
+    vitals:{"RE / RP":"55% / 5%","HER2":"negativo (IHQ 0)","Ki67":"45%","Subtipo":"Luminal B","Estadio":"cT3N2","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia sistémica","Manejo de toxicidad","Primera línea y crisis visceral","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>E.R., 61 años, posmenopáusica, consulta por nódulo palpable de crecimiento progresivo en mama izquierda de 3 meses de evolución, con múltiples adenopatías axilares palpables.</p>
+        <p>Biopsia: carcinoma ductal infiltrante grado 3. Perfil: <b>RE 55%, RP 5%, HER2 negativo (IHQ 0), Ki67 45%</b>. Estadio clínico: <b>cT3N2</b> (múltiples ganglios axilares comprometidos).</p>
+        <div class="callout">Luminal B de alto grado, RP muy bajo (5%) y compromiso ganglionar extenso: perfil de mayor agresividad biológica dentro del espectro Luminal B, con expresión hormonal más débil.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Tumor 3T3N2, grado 3, Ki67 45%, RP muy bajo. ¿Cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Quimioterapia neoadyuvante (antraciclina/taxano) seguida de cirugía", points:2,
+            feedback:"Correcto. El compromiso ganglionar extenso y la alta proliferación hacen prioritaria la neoadyuvancia, tanto para intentar reducir la extensión de la cirugía como para evaluar la quimiosensibilidad real del tumor.",
+            paper:"NSABP B-18/B-27 y consenso NCCN", finding:"La neoadyuvancia es preferida en tumores de alto riesgo con compromiso ganglionar extenso."},
+          {label:"Cirugía primero", points:0,
+            feedback:"En un tumor cT3N2 de alto grado, operar de entrada no permite evaluar la respuesta a tratamiento sistémico ni facilita la cirugía.",
+            paper:"Rouzier et al., Clin Cancer Res 2005", finding:"Los tumores de alta proliferación tienen mayor tasa de respuesta a quimioterapia neoadyuvante."},
+          {label:"Terapia endocrina neoadyuvante sola", points:0,
+            feedback:"El RP muy bajo (5%) y el Ki67 45% sugieren menor dependencia hormonal y mayor proliferación; no es la estrategia de elección.",
+            paper:"ACOSOG Z1031 — Ellis et al., J Clin Oncol 2011", finding:"El beneficio de terapia endocrina neoadyuvante es menor en tumores de mayor proliferación y menor expresión de RP."},
+          {label:"Radioterapia primaria sin tratamiento sistémico", points:0,
+            feedback:"No corresponde como tratamiento inicial en enfermedad con compromiso ganglionar extenso operable.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"La radioterapia no reemplaza al tratamiento sistémico ni a la cirugía como abordaje inicial en esta presentación."}
+        ]},
+      {type:"info", phase:1, eyebrow:"Resultado tras neoadyuvancia y cirugía", vitalsUpdate:{"Tratamiento":"NACT + cirugía realizada — respuesta mínima","Estadio":"ypT3N2 (enfermedad residual extensa)"}, html:`
+        <p>Completa la quimioterapia neoadyuvante con <b>respuesta clínica mínima</b>. Se realiza <b>mastectomía + disección axilar</b>. Patología: <b>enfermedad residual extensa de 4.5 cm, 6/18 ganglios positivos (ypT3N2)</b>.</p>
+        <div class="callout warn">Respuesta patológica mínima a la quimioterapia neoadyuvante: un tumor de alto riesgo que además se comporta como relativamente quimio-resistente, lo que ensombrece el pronóstico y obliga a intensificar la terapia dirigida disponible.</div>`, buttonLabel:"Definir adyuvancia sistémica →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Adyuvancia sistémica ante respuesta mínima y alto riesgo",
+        prompt:"Enfermedad residual extensa (ypT3N2) tras neoadyuvancia con respuesta mínima. ¿Qué adyuvancia corresponde?",
+        options:[
+          {label:"Agregar ribociclib adyuvante junto con terapia endocrina", points:2,
+            feedback:"Correcto. A diferencia de abemaciclib (monarchE), ribociclib fue evaluado en NATALEE con criterios de elegibilidad más amplios, incluyendo pacientes con compromiso ganglionar extenso como esta, y es una opción de intensificación adyuvante validada en este perfil de alto riesgo.",
+            paper:"NATALEE — Slamon et al., N Engl J Med 2024", finding:"Ribociclib adyuvante junto con inhibidor de aromatasa redujo el riesgo de recurrencia en pacientes con cáncer de mama en estadio II-III de alto riesgo, incluyendo compromiso ganglionar extenso, con un perfil de toxicidad distinto al de abemaciclib."},
+          {label:"Solo terapia endocrina, sin CDK4/6i, dado que ya respondió mal a la quimioterapia", points:0,
+            feedback:"La respuesta pobre a quimioterapia no descarta el beneficio de un CDK4/6i, que actúa por un mecanismo completamente distinto (bloqueo del ciclo celular vía RE), y esta paciente es justamente de alto riesgo, la población que más se beneficia.",
+            paper:"NATALEE — Slamon et al., N Engl J Med 2024", finding:"El beneficio del CDK4/6i adyuvante fue independiente de la respuesta previa a la quimioterapia neoadyuvante."},
+          {label:"Repetir un segundo esquema de quimioterapia distinto de inmediato", points:0,
+            feedback:"No hay evidencia de beneficio de una segunda línea de quimioterapia adyuvante inmediata en este contexto; el estándar es intensificar con terapia dirigida (CDK4/6i) sobre la base endocrina.",
+            paper:"NATALEE / monarchE", finding:"Ambos estudios evalúan agregar terapia dirigida tras completar (no repetir) la quimioterapia neoadyuvante/adyuvante estándar."},
+          {label:"Indicar únicamente radioterapia adyuvante, sin terapia sistémica adicional", points:0,
+            feedback:"La radioterapia adyuvante es necesaria por el compromiso ganglionar extenso, pero no reemplaza a la terapia sistémica dirigida contra la enfermedad micrometastásica.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda radioterapia y terapia sistémica adyuvante como componentes complementarios, no sustitutivos, en enfermedad de alto riesgo."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · 8 semanas de ribociclib adyuvante", vitalsUpdate:{"Tratamiento":"Ribociclib — evento de toxicidad hepática"}, html:`
+        <p>Laboratorio de control a las 8 semanas: <b>ALT 210 U/L, AST 180 U/L</b> (elevación grado 3, más de 5 veces el límite superior normal), bilirrubina normal. La paciente está asintomática, sin ictericia ni dolor abdominal.</p>
+        <div class="callout warn">La hepatotoxicidad es una toxicidad característica de ribociclib que requiere monitoreo periódico de enzimas hepáticas, distinta del perfil predominante de diarrea de abemaciclib o de neutropenia/QT de otros CDK4/6i.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Hepatotoxicidad grado 3 por ribociclib",
+        prompt:"Elevación asintomática de transaminasas grado 3 (más de 5 veces el límite superior normal) bajo ribociclib adyuvante. ¿Conducta más apropiada?",
+        options:[
+          {label:"Suspender temporalmente ribociclib, repetir función hepática en 1-2 semanas, y reiniciar a dosis reducida cuando las transaminasas mejoren a grado ≤1", points:2,
+            feedback:"Correcto. La hepatotoxicidad grado 3 asintomática por ribociclib se maneja con interrupción temporal, seguimiento estrecho de laboratorio, y reinicio a dosis reducida una vez que mejora, según el algoritmo de manejo del fármaco.",
+            paper:"NATALEE / MONALEESA — perfil de seguridad de ribociclib", finding:"La elevación de transaminasas es un evento adverso característico de ribociclib; los protocolos de estos estudios especifican interrupción del fármaco ante elevaciones grado 3, con reinicio a dosis reducida tras la normalización o mejoría a grado 1."},
+          {label:"Continuar ribociclib a la misma dosis dado que está asintomática", points:0,
+            feedback:"Una elevación grado 3 de transaminasas, aunque asintomática, requiere interrupción del fármaco por riesgo de progresión a daño hepático más severo si se continúa sin ajuste.",
+            paper:"perfil de seguridad de ribociclib (NATALEE/MONALEESA)", finding:"El protocolo de manejo de seguridad exige interrupción del fármaco ante elevaciones grado 3 de transaminasas, independientemente de los síntomas."},
+          {label:"Suspender ribociclib de forma definitiva sin reintentar a dosis reducida", points:1,
+            feedback:"Puede ser necesario si la toxicidad recurre o empeora, pero como primera conducta se prefiere la interrupción temporal con reinicio a dosis reducida.",
+            paper:"perfil de seguridad de ribociclib", finding:"El algoritmo de manejo contempla varios niveles de reducción de dosis antes de la discontinuación definitiva."},
+          {label:"Solicitar una biopsia hepática de inmediato antes de decidir cualquier conducta", points:0,
+            feedback:"No es necesaria como primer paso: la hepatotoxicidad asintomática por CDK4/6i se maneja habitualmente con interrupción del fármaco y seguimiento de laboratorio, reservando estudios invasivos para casos que no mejoran o generan dudas diagnósticas.",
+            paper:"perfil de seguridad de ribociclib", finding:"El manejo estándar de la hepatotoxicidad por CDK4/6i es no invasivo en la mayoría de los casos, basado en interrupción y seguimiento bioquímico."}
+        ]},
+      {type:"info", phase:4, eyebrow:"Recaída — 8 meses tras finalizar la adyuvancia", vitalsUpdate:{"Tratamiento":"Recaída temprana con crisis visceral","Estadio":"Metastásico hepático extenso — crisis visceral"}, html:`
+        <p>Tras completar la adyuvancia (con ribociclib a dosis reducida, sin nueva toxicidad relevante), a los 8 meses de finalizado el tratamiento la paciente consulta por <b>ictericia progresiva y dolor en hipocondrio derecho</b>. TC: <b>reemplazo hepático extenso por metástasis</b>, con <b>bilirrubina 4.2 mg/dL y transaminasas marcadamente elevadas</b>, deterioro clínico rápido.</p>
+        <div class="callout warn">Recaída temprana (menos de 12 meses de finalizada la adyuvancia) con compromiso hepático extenso y disfunción hepática: esto constituye una <b>crisis visceral</b>, una situación clínica distinta a la de un compromiso metastásico estable, que cambia la estrategia de primera línea.</div>`, buttonLabel:"Definir conducta ante la crisis visceral →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 4 · Primera línea metastásica en crisis visceral",
+        prompt:"Recaída temprana (menos de 12 meses de la adyuvancia) con compromiso hepático extenso, disfunción hepática y deterioro clínico rápido: crisis visceral. ¿Cuál es la conducta más apropiada de primera línea?",
+        options:[
+          {label:"Quimioterapia citotóxica (por ejemplo, un taxano), priorizando una respuesta rápida antes que terapia endocrina-based", points:2,
+            feedback:"Correcto. La crisis visceral —definida por disfunción orgánica grave que amenaza la vida o requiere una respuesta rápida y de alta probabilidad, como en este caso de insuficiencia hepática por reemplazo tumoral extenso— es la indicación clásica para iniciar quimioterapia citotóxica en primera línea, incluso en enfermedad RE positiva, priorizando la velocidad y probabilidad de respuesta sobre la terapia endocrina-based.",
+            paper:"NCCN Guidelines Breast Cancer, versión vigente; ESMO Metastatic Breast Cancer Guidelines", finding:"Definen la crisis visceral como una indicación específica para preferir quimioterapia citotóxica sobre terapia endocrina-based en primera línea, incluso en tumores RE positivos, debido a la necesidad de una respuesta más rápida y con mayor probabilidad de control inmediato de la enfermedad."},
+          {label:"Inhibidor de aromatasa + inhibidor de CDK4/6, igual que en un caso sin crisis visceral", points:0,
+            feedback:"No corresponde en este escenario: la crisis visceral requiere la respuesta más rápida posible, que la terapia endocrina-based, de inicio de acción más lento, no garantiza con la urgencia necesaria.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Reserva la terapia endocrina-based de primera línea para pacientes sin crisis visceral."},
+          {label:"Fulvestrant en monoterapia, dado que es menos tóxico que la quimioterapia", points:0,
+            feedback:"Menor toxicidad no compensa la necesidad de una respuesta rápida y de alta probabilidad que requiere esta situación clínica de riesgo vital inminente.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"La crisis visceral requiere priorizar la probabilidad y velocidad de respuesta por sobre el perfil de toxicidad más favorable de la terapia endocrina."},
+          {label:"Manejo exclusivamente paliativo sin tratamiento oncológico activo, dado el mal pronóstico aparente", points:0,
+            feedback:"Es prematuro: una crisis visceral es una urgencia oncológica tratable en muchos casos con quimioterapia de inicio rápido, que puede revertir el deterioro clínico; los cuidados paliativos se integran en paralelo, no reemplazan el intento de tratamiento activo de entrada.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda tratamiento sistémico activo urgente ante crisis visceral potencialmente reversible, integrando cuidados de soporte en paralelo."}
+        ]}
+    ]}
+
+  ]
+},
+
+/* ============================================================ HER2 POSITIVO */
+her2: {
+  tag:"her2", tagLabel:"HER2 positivo", title:"HER2 positivo",
+  moduleDesc:"HER2 sobreexpresado o amplificado. Alta sensibilidad a quimioterapia y bloqueo anti-HER2 dirigido, con conjugados anticuerpo-fármaco cada vez más centrales.",
+  cases:[
+
+  { key:"classic", label:"Caso 1 · Enfermedad residual tras neoadyuvancia y cardiotoxicidad",
+    cardDesc:"45 años, RE negativo. Sin pCR tras THP neoadyuvante, cambio a T-DM1, cardiotoxicidad, progresión a T-DXd.",
+    patient:"S.V., 45 años · premenopáusica<br>Motivo: nódulo de crecimiento rápido, mama derecha",
+    vitals:{"RE / RP":"negativo / negativo","HER2":"positivo (IHQ 3+)","Ki67":"48%","Subtipo":"HER2 positivo","Estadio":"cT3N1","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Vigilancia de toxicidad","1ª línea metastásica","2ª línea metastásica","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>S.V., 45 años, premenopáusica, consulta por nódulo de crecimiento rápido en mama derecha, con adenopatía axilar palpable.</p>
+        <p>Biopsia: carcinoma ductal infiltrante grado 3. Perfil: <b>RE negativo, RP negativo, HER2 positivo (IHQ 3+), Ki67 48%</b>. cT3N1 (localmente avanzado).</p>
+        <div class="callout">Tumor <b>HER2 positivo puro</b>, alto grado y alta proliferación. Alta sensibilidad a quimioterapia y a bloqueo anti-HER2 dirigido desde el inicio.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Tumor HER2+ localmente avanzado (cT3N1). ¿Cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Quimioterapia neoadyuvante + bloqueo dual anti-HER2 (trastuzumab + pertuzumab)", points:2,
+            feedback:"Correcto. Logra las tasas más altas de respuesta patológica completa entre todos los subtipos, y esa respuesta guía la adyuvancia posterior.",
+            paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"Agregar pertuzumab a trastuzumab + docetaxel casi duplicó la tasa de respuesta patológica completa."},
+          {label:"Cirugía primero, sin tratamiento sistémico previo", points:0,
+            feedback:"Los tumores HER2+ tienen alta sensibilidad a la neoadyuvancia; operar primero pierde esa oportunidad.",
+            paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"HER2+ es de los subtipos con mayor capacidad de respuesta patológica completa."},
+          {label:"Trastuzumab en monoterapia con quimioterapia, sin pertuzumab", points:1,
+            feedback:"Efectivo, pero el bloqueo dual con pertuzumab logra mayor tasa de respuesta patológica completa.",
+            paper:"NeoSphere / TRYPHAENA", finding:"El bloqueo dual mostró consistentemente mayor tasa de respuesta patológica completa que trastuzumab solo."},
+          {label:"Terapia endocrina neoadyuvante", points:0,
+            feedback:"No tiene rol: el tumor es RE negativo.",
+            paper:"—", finding:"La terapia endocrina solo tiene indicación con expresión de receptores hormonales."}
+        ]},
+      {type:"info", phase:1, eyebrow:"Resultado tras neoadyuvancia y cirugía", vitalsUpdate:{"Tratamiento":"THP neoadyuvante + cirugía","Estadio":"ypT1N0 (enfermedad residual mínima)"}, html:`
+        <p>Completa 6 ciclos con bloqueo dual + docetaxel/carboplatino. <b>Mastectomía + disección axilar</b>. Patología: <b>enfermedad residual invasiva de 0.8 cm, 0/16 ganglios positivos (ypT1N0)</b>. No hubo respuesta patológica completa.</p>`, buttonLabel:"Definir adyuvancia dirigida →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Adyuvancia dirigida por respuesta patológica",
+        prompt:"Enfermedad residual invasiva tras neoadyuvancia HER2+. ¿Qué adyuvancia anti-HER2 corresponde?",
+        options:[
+          {label:"Cambiar a T-DM1 adyuvante por 14 ciclos", points:2,
+            feedback:"Correcto. Ante enfermedad residual invasiva, el estándar es cambiar a T-DM1.",
+            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019", finding:"T-DM1 redujo el riesgo de recurrencia o muerte en un 50% frente a continuar trastuzumab."},
+          {label:"Continuar trastuzumab + pertuzumab hasta completar un año", points:0,
+            feedback:"Es la conducta si hubiera respuesta patológica completa; con enfermedad residual es inferior a T-DM1.",
+            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019", finding:"Mostró superioridad clara de T-DM1 sobre continuar trastuzumab en enfermedad residual."},
+          {label:"Agregar más ciclos de quimioterapia con antraciclina", points:0,
+            feedback:"No es la estrategia respaldada por evidencia en este escenario.",
+            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019", finding:"Evaluó T-DM1 frente a trastuzumab, no la adición de más ciclos de quimioterapia."},
+          {label:"Suspender todo tratamiento y pasar a observación", points:0,
+            feedback:"La enfermedad residual es marcador de mayor riesgo de recurrencia.",
+            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019", finding:"Confirmó mayor riesgo de recurrencia con enfermedad residual, justificando intensificar el tratamiento."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · control durante T-DM1 adyuvante", vitalsUpdate:{"Tratamiento":"T-DM1 — evento de toxicidad cardíaca"}, html:`
+        <p>Ecocardiograma a los 4 meses de T-DM1: <b>FEVI de 62% a 40%</b>. Refiere <b>disnea leve al subir dos pisos</b> (NYHA II).</p>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Cardiotoxicidad por T-DM1",
+        prompt:"Caída de FEVI de 62% a 40% con disnea leve, bajo T-DM1 adyuvante. ¿Conducta más apropiada?",
+        options:[
+          {label:"Suspender temporalmente T-DM1, IECA/betabloqueante, cardiología, reevaluar FEVI en 3-4 semanas", points:2,
+            feedback:"Correcto. La disfunción ventricular anti-HER2 es habitualmente reversible con manejo cardioprotector.",
+            paper:"HERA trial — Piccart-Gebhart et al., N Engl J Med 2005", finding:"La disfunción ventricular fue en la mayoría de los casos reversible con suspensión y manejo cardioprotector."},
+          {label:"Continuar T-DM1 sin cambios", points:0,
+            feedback:"Una caída de más de 20 puntos con síntomas nuevos requiere suspender y evaluar.",
+            paper:"HERA trial — Piccart-Gebhart et al., N Engl J Med 2005", finding:"El protocolo definía umbrales de caída de FEVI que obligaban a suspender el tratamiento."},
+          {label:"Discontinuar T-DM1 de forma permanente sin reevaluación", points:1,
+            feedback:"Puede ser el desenlace final si no se recupera, pero primero se intenta manejo cardioprotector y reevaluación.",
+            paper:"HERA trial — Piccart-Gebhart et al., N Engl J Med 2005", finding:"Muchas pacientes pudieron reiniciar terapia anti-HER2 tras recuperación de la FEVI."},
+          {label:"No requiere ninguna conducta especial", points:0,
+            feedback:"Subestima un hallazgo relevante que exige acción activa.",
+            paper:"HERA trial — Piccart-Gebhart et al., N Engl J Med 2005", finding:"Estableció el estándar de vigilancia cardíaca activa para actuar tempranamente."}
+        ]},
+      {type:"info", phase:4, eyebrow:"Seguimiento — 3 años después", vitalsUpdate:{"Tratamiento":"T-DM1 reiniciado tras recuperación de FEVI","Estadio":"Sin evidencia de enfermedad"}, html:`
+        <p>FEVI se recupera a 54%, se reinicia T-DM1 hasta completar el esquema. Tres años después, <b>cefalea persistente y visión borrosa</b>. RM cerebral: <b>2 lesiones metastásicas cerebrales</b>. PET-TC: <b>lesión hepática única</b>.</p>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 3 · Primera línea metastásica", vitalsUpdate:{"Estadio":"Metastásico (cerebral + hepático)"},
+        prompt:"Enfermedad HER2+ metastásica de novo tras recaída tardía. ¿Esquema de primera línea preferido?",
+        options:[
+          {label:"Trastuzumab + pertuzumab + docetaxel (THP)", points:2,
+            feedback:"Correcto. Estándar preferido para primera línea metastásica.",
+            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"Mejoró significativamente la supervivencia global frente a trastuzumab + docetaxel solo."},
+          {label:"T-DXd en primera línea", points:1,
+            feedback:"Gran actividad, pero la evidencia más robusta es en líneas posteriores.",
+            paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Evaluó T-DXd en pacientes ya tratadas con trastuzumab y taxano, no en primera línea de novo."},
+          {label:"T-DM1 en primera línea", points:0,
+            feedback:"Indicado tras progresión al esquema con taxano y bloqueo dual.",
+            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"Estableció el esquema con pertuzumab como estándar de primera línea."},
+          {label:"Terapia endocrina", points:0,
+            feedback:"No corresponde: tumor RE negativo desde el diagnóstico inicial.",
+            paper:"—", finding:"La ausencia de receptores hormonales descarta cualquier rol de la terapia endocrina."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Progresión — 16 meses de primera línea", vitalsUpdate:{"Tratamiento":"Progresión bajo THP"}, html:`
+        <p>A los 16 meses, progresión hepática y nuevas lesiones pulmonares. ECOG 1. HER2 confirmado positivo en la lesión progresiva.</p>`, buttonLabel:"Definir segunda línea →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 4 · Segunda línea metastásica",
+        prompt:"Progresión tras THP, HER2 persistentemente positivo. ¿Conducta preferida de segunda línea?",
+        options:[
+          {label:"Trastuzumab deruxtecan (T-DXd)", points:2,
+            feedback:"Correcto. Estándar preferido tras progresión a THP.",
+            paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Mejora dramática en supervivencia libre de progresión frente a T-DM1, y también en supervivencia global."},
+          {label:"T-DM1", points:1,
+            feedback:"Estándar histórico, razonable si T-DXd no está disponible, pero inferior según evidencia actual.",
+            paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Comparó directamente T-DXd contra T-DM1 y demostró superioridad de T-DXd."},
+          {label:"Continuar el mismo esquema THP sin cambios", points:0,
+            feedback:"La progresión documentada indica cambiar a terapia anti-HER2 de mayor potencia.",
+            paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Incluyó pacientes que progresaron tras trastuzumab y taxano."},
+          {label:"Quimioterapia sola, sin terapia anti-HER2", points:0,
+            feedback:"Suspender el bloqueo anti-HER2 en un tumor confirmado positivo sería un error.",
+            paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Mantener y optimizar el bloqueo anti-HER2 sigue siendo superior en cada línea."}
+        ]}
+    ]},
+
+  { key:"pcr", label:"Caso 2 · HER2/HR doble positivo con respuesta patológica completa",
+    cardDesc:"50 años, postmenopáusica, HER2+/RE+. Logra pCR, continúa bloqueo dual (no T-DM1), reacción de infusión aguda, remisión sostenida.",
+    patient:"A.D., 50 años · posmenopáusica<br>Motivo: nódulo palpable, mama izquierda",
+    vitals:{"RE / RP":"80% / 60%","HER2":"positivo (IHQ 3+)","Ki67":"30%","Subtipo":"HER2+ / RE+ (doble positivo)","Estadio":"cT2N1","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>A.D., 50 años, posmenopáusica, consulta por nódulo palpable de 2.5 cm en mama izquierda con adenopatía axilar sospechosa.</p>
+        <p>Biopsia: carcinoma ductal infiltrante grado 2. Perfil: <b>RE 80%, RP 60%, HER2 positivo (IHQ 3+), Ki67 30%</b>. cT2N1.</p>
+        <div class="callout">Tumor <b>HER2 positivo y receptores hormonales positivos</b> ("doble positivo"): el tratamiento anti-HER2 sigue siendo la prioridad, pero la terapia endocrina también tendrá un rol en la adyuvancia.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Tumor HER2+/RE+ cT2N1. ¿Cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Quimioterapia neoadyuvante + bloqueo dual anti-HER2 (trastuzumab + pertuzumab)", points:2,
+            feedback:"Correcto. Aun siendo también RE positivo, el HER2 positivo determina la estrategia inicial: la neoadyuvancia con bloqueo dual sigue siendo el estándar, priorizando el tratamiento del impulsor HER2 sobre el hormonal en esta etapa.",
+            paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"El bloqueo dual neoadyuvante mostró alta tasa de respuesta patológica completa, con beneficio consistente independientemente del estado de receptores hormonales."},
+          {label:"Terapia endocrina neoadyuvante, dado que también es RE positivo", points:0,
+            feedback:"No es la prioridad: en un tumor HER2 positivo, el impulsor dominante y de mayor sensibilidad a tratamiento dirigido es HER2, no el componente hormonal.",
+            paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"La respuesta patológica completa fue consistentemente mayor con esquemas dirigidos a HER2 que los basados solo en terapia endocrina en tumores HER2 positivos."},
+          {label:"Cirugía primero, sin tratamiento sistémico previo", points:0,
+            feedback:"Los tumores HER2+ tienen alta sensibilidad a la neoadyuvancia, incluso siendo también RE positivos.",
+            paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"HER2+ es de los subtipos con mayor capacidad de respuesta patológica completa a neoadyuvancia."},
+          {label:"Trastuzumab en monoterapia sin quimioterapia ni pertuzumab", points:0,
+            feedback:"Insuficiente: el estándar en enfermedad operable de este tamaño y compromiso ganglionar incluye quimioterapia y bloqueo dual.",
+            paper:"NeoSphere / TRYPHAENA", finding:"El bloqueo dual con quimioterapia mostró consistentemente mayor eficacia que trastuzumab en monoterapia."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Resultado tras neoadyuvancia y cirugía", vitalsUpdate:{"Tratamiento":"THP neoadyuvante + cirugía","Estadio":"ypT0N0 (respuesta patológica completa)"}, html:`
+        <p>Completa 6 ciclos con bloqueo dual + quimioterapia. <b>Tumorectomía + disección axilar</b>. Patología: <b>sin tumor invasivo residual (ypT0N0) — respuesta patológica completa</b>.</p>
+        <div class="callout good">A diferencia del caso con enfermedad residual, aquí la respuesta patológica completa sí cambia la estrategia adyuvante: se continúa el mismo bloqueo anti-HER2 en lugar de cambiar a T-DM1.</div>`, buttonLabel:"Definir adyuvancia dirigida →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Adyuvancia dirigida tras respuesta patológica completa",
+        prompt:"Respuesta patológica completa tras neoadyuvancia HER2+, tumor también RE positivo. ¿Qué adyuvancia corresponde?",
+        options:[
+          {label:"Continuar trastuzumab + pertuzumab hasta completar un año, y agregar terapia endocrina adyuvante (inhibidor de aromatasa)", points:2,
+            feedback:"Correcto. Con respuesta patológica completa, se continúa el mismo bloqueo dual (no se cambia a T-DM1, que se reserva para enfermedad residual) hasta completar un año, y se agrega terapia endocrina adyuvante por el componente RE positivo del tumor.",
+            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019; APHINITY — von Minckwitz et al., N Engl J Med 2017", finding:"KATHERINE definió el cambio a T-DM1 específicamente para enfermedad residual, no para respuesta patológica completa. APHINITY mostró beneficio de pertuzumab adyuvante particularmente en pacientes con compromiso ganglionar, respaldando continuar el bloqueo dual completo en este perfil."},
+          {label:"Cambiar a T-DM1 adyuvante, igual que ante enfermedad residual", points:0,
+            feedback:"No corresponde: el cambio a T-DM1 en KATHERINE se definió específicamente para pacientes con enfermedad residual invasiva, no para quienes lograron respuesta patológica completa.",
+            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019", finding:"La población de beneficio de T-DM1 adyuvante fueron pacientes con enfermedad residual tras neoadyuvancia, no aquellas con respuesta patológica completa."},
+          {label:"Continuar el bloqueo dual, pero omitir la terapia endocrina porque ya recibió quimioterapia", points:0,
+            feedback:"La terapia endocrina no debe omitirse en un tumor con expresión relevante de receptores hormonales, independientemente de haber recibido quimioterapia y tratamiento anti-HER2.",
+            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"El beneficio de la terapia endocrina en tumores RE+ es independiente de otros tratamientos recibidos."},
+          {label:"Suspender todo tratamiento sistémico dado el excelente resultado patológico", points:0,
+            feedback:"Sería un error: incluso con respuesta patológica completa, completar un año de terapia anti-HER2 y la terapia endocrina adyuvante reduce el riesgo de recurrencia.",
+            paper:"APHINITY — von Minckwitz et al., N Engl J Med 2017", finding:"El beneficio de completar el año de terapia anti-HER2 adyuvante se mantuvo relevante incluso en pacientes con buena respuesta al tratamiento neoadyuvante."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · segunda infusión de pertuzumab adyuvante", vitalsUpdate:{"Tratamiento":"THP adyuvante — evento de toxicidad aguda"}, html:`
+        <p>Durante la segunda infusión de pertuzumab adyuvante, a los 15 minutos de iniciada, la paciente presenta <b>rubefacción facial, urticaria generalizada, opresión torácica leve y caída de la presión arterial a 90/60 mmHg</b>. La infusión se detiene de inmediato.</p>
+        <div class="callout warn">Las reacciones relacionadas con la infusión son un tipo de toxicidad aguda distinto a la cardiotoxicidad diferida de los anti-HER2, y requieren un manejo inmediato específico durante la propia infusión.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Reacción aguda a la infusión de pertuzumab",
+        prompt:"Reacción aguda durante la infusión (urticaria, hipotensión, opresión torácica) con pertuzumab. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Detener la infusión de inmediato, administrar antihistamínicos y corticoides, monitorizar signos vitales, y si se estabiliza reintentar en una infusión posterior con premedicación reforzada e infusión más lenta", points:2,
+            feedback:"Correcto. Ante una reacción aguda a la infusión, se detiene de inmediato, se trata con antihistamínicos/corticoides y soporte hemodinámico según la severidad, y en la mayoría de los casos leves a moderados se puede reintentar en infusiones posteriores con premedicación reforzada y velocidad de infusión reducida.",
+            paper:"Perfil de seguridad de pertuzumab en NeoSphere/TRYPHAENA/APHINITY", finding:"Las reacciones relacionadas con la infusión fueron infrecuentes pero descritas con pertuzumab y trastuzumab; el manejo estándar incluye interrupción inmediata, tratamiento sintomático, y reintento con premedicación e infusión más lenta en la mayoría de los casos no anafilácticos graves."},
+          {label:"Discontinuar pertuzumab de forma permanente ante cualquier reacción a la infusión", points:1,
+            feedback:"Puede ser necesario en reacciones anafilácticas graves o recurrentes, pero en una reacción moderada que responde a tratamiento sintomático, la práctica habitual es intentar un reinicio controlado antes de discontinuar definitivamente un fármaco con beneficio adyuvante demostrado.",
+            paper:"Perfil de seguridad de pertuzumab", finding:"La mayoría de las reacciones a la infusión no anafilácticas graves permiten reintento exitoso con medidas preventivas reforzadas."},
+          {label:"Disminuir la velocidad de infusión sin detenerla, ya que los síntomas parecen leves", points:0,
+            feedback:"Ante signos de hipotensión y compromiso respiratorio leve durante la infusión, la conducta correcta es detenerla por completo de inmediato, no simplemente enlentecerla mientras continúa el compromiso hemodinámico.",
+            paper:"Perfil de seguridad de pertuzumab", finding:"El manejo estándar ante signos de reacción moderada a severa durante la infusión es la interrupción inmediata, no la sola reducción de velocidad."},
+          {label:"No es necesaria ninguna intervención específica, los síntomas se resolverán solos", points:0,
+            feedback:"Subestima una reacción aguda con compromiso hemodinámico (hipotensión) que requiere tratamiento activo inmediato, no solo observación pasiva.",
+            paper:"Perfil de seguridad de pertuzumab", finding:"Las reacciones a la infusión con compromiso hemodinámico requieren tratamiento sintomático activo e inmediato."}
+        ]}
+    ]},
+
+  { key:"denovo", label:"Caso 3 · Metastásico de novo con compromiso leptomeníngeo",
+    cardDesc:"38 años, HER2+/RE negativo, estadio IV al diagnóstico. Toxicidad gastrointestinal por THP y progresión leptomeníngea tratada con tucatinib.",
+    patient:"F.N., 38 años · premenopáusica<br>Motivo: nódulo mamario y síntomas sistémicos",
+    vitals:{"RE / RP":"negativo / negativo","HER2":"positivo (IHQ 3+)","Ki67":"55%","Subtipo":"HER2 positivo","Estadio":"metastásico de novo (hepático)","Tratamiento":"—"},
+    timeline:["Diagnóstico metastásico","Rol de la cirugía local","1ª línea sistémica","Manejo de toxicidad","Progresión leptomeníngea","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>F.N., 38 años, consulta por un nódulo mamario de 6 cm de varios meses de evolución que no había consultado antes, asociado a pérdida de peso y dolor en hipocondrio derecho.</p>
+        <p>Biopsia de la mama: carcinoma ductal infiltrante grado 3, <b>RE negativo, RP negativo, HER2 positivo (IHQ 3+), Ki67 55%</b>. TC de estadificación: <b>múltiples lesiones hepáticas</b>, sin otros sitios de enfermedad a distancia. <b>Enfermedad metastásica de novo (estadio IV) al momento del diagnóstico</b>.</p>
+        <div class="callout warn">A diferencia de los otros casos del módulo, aquí la enfermedad ya es metastásica desde el diagnóstico inicial: no hay una secuencia de neoadyuvancia-cirugía-adyuvancia, sino que la decisión inicial es sobre el tratamiento sistémico y el rol —si lo hay— de la cirugía de la mama.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Rol de la cirugía en enfermedad metastásica de novo",
+        prompt:"Enfermedad HER2+ metastásica de novo (mama + hígado) al momento del diagnóstico, sin tratamiento previo. ¿Cuál es la conducta inicial más apropiada respecto al tumor primario de mama?",
+        options:[
+          {label:"Iniciar tratamiento sistémico de primera línea sin cirugía de la mama en este momento", points:2,
+            feedback:"Correcto. En enfermedad metastásica de novo, el tratamiento sistémico es la prioridad inicial; la cirugía del tumor primario no ha demostrado mejorar la supervivencia de forma consistente en este contexto y se reserva para indicaciones específicas de control local (por ejemplo, sangrado, ulceración) o se reevalúa según la respuesta al tratamiento sistémico.",
+            paper:"NCCN Guidelines Breast Cancer, versión vigente", finding:"En enfermedad metastásica de novo, recomienda iniciar tratamiento sistémico como prioridad; la cirugía del tumor primario se considera de forma individualizada, no como estándar sistemático de entrada, dado que no ha mostrado un beneficio consistente en supervivencia en los ensayos aleatorizados disponibles."},
+          {label:"Mastectomía inmediata seguida de tratamiento sistémico, igual que en enfermedad no metastásica", points:0,
+            feedback:"No corresponde aplicar la misma secuencia que en enfermedad localizada: en estadio IV de novo, el estándar es iniciar con tratamiento sistémico, no con cirugía de entrada.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"La secuencia estándar de cirugía primero se aplica a enfermedad no metastásica; en estadio IV de novo el tratamiento sistémico es la prioridad inicial."},
+          {label:"No indicar ningún tratamiento sistémico hasta definir la conducta quirúrgica", points:0,
+            feedback:"Retrasar el inicio del tratamiento sistémico en enfermedad metastásica HER2+ de alta agresividad no tiene sustento y puede permitir progresión evitable.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda iniciar tratamiento sistémico sin demora en enfermedad metastásica."},
+          {label:"Radioterapia sobre la mama como tratamiento inicial prioritario", points:0,
+            feedback:"No es la prioridad inicial en enfermedad metastásica de novo sin síntomas locales urgentes (sangrado, ulceración); el tratamiento sistémico es lo prioritario.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Reserva la radioterapia local para indicaciones específicas de control de síntomas, no como tratamiento sistémico inicial."}
+        ]},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Primera línea sistémica",
+        prompt:"Enfermedad HER2+ metastásica de novo, RE negativo, sin tratamiento previo. ¿Cuál es el esquema de primera línea preferido?",
+        options:[
+          {label:"Trastuzumab + pertuzumab + docetaxel (THP)", points:2,
+            feedback:"Correcto. Es el estándar de primera línea en enfermedad HER2+ metastásica, incluyendo presentaciones de novo.",
+            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"Mejoró significativamente la supervivencia global frente a trastuzumab + docetaxel solo en primera línea metastásica."},
+          {label:"T-DXd de entrada en primera línea", points:1,
+            feedback:"Fármaco de gran actividad, pero la evidencia más robusta y el estándar histórico de primera línea siguen siendo THP.",
+            paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Evaluó T-DXd en pacientes ya tratadas previamente, no como primera línea de novo sin tratamiento previo."},
+          {label:"Quimioterapia sola, sin bloqueo anti-HER2, dado que la enfermedad es de novo", points:0,
+            feedback:"Omitir el bloqueo anti-HER2 en un tumor HER2 positivo, sea de novo o recurrente, prescinde del componente más efectivo del tratamiento.",
+            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"El beneficio del bloqueo dual anti-HER2 fue independiente de si la presentación era de novo o recurrente."},
+          {label:"Terapia endocrina, dado que hay que evitar la toxicidad de la quimioterapia en una paciente joven", points:0,
+            feedback:"No corresponde: el tumor es RE negativo, sin ningún impulsor hormonal que bloquear.",
+            paper:"—", finding:"La ausencia de expresión de receptores hormonales descarta cualquier rol de la terapia endocrina."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · ciclo 3 de THP", vitalsUpdate:{"Tratamiento":"THP — evento de toxicidad gastrointestinal"}, html:`
+        <p>Durante el ciclo 3, presenta <b>diarrea grado 3 (7 episodios/día)</b> asociada al esquema con docetaxel y pertuzumab, con signos de deshidratación leve-moderada.</p>
+        <div class="callout warn">La diarrea es una toxicidad gastrointestinal frecuente con regímenes que incluyen pertuzumab y taxanos, distinta en mecanismo a la diarrea de los CDK4/6i, pero que también requiere manejo activo y ajuste de dosis si es severa.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Diarrea grado 3 por THP",
+        prompt:"Diarrea grado 3 con deshidratación leve-moderada durante THP. ¿Conducta más apropiada?",
+        options:[
+          {label:"Hidratación (oral o endovenosa según severidad), loperamida en dosis alta, sostener temporalmente el ciclo hasta la resolución a grado ≤1, y reiniciar con reducción de dosis del componente responsable si recurre", points:2,
+            feedback:"Correcto. La diarrea grado 3 requiere manejo activo de soporte, sostener el ciclo hasta la mejoría, y considerar reducción de dosis en ciclos posteriores para prevenir recurrencia, sin necesidad de discontinuar todo el esquema de entrada.",
+            paper:"Perfil de seguridad de esquemas con pertuzumab (NeoSphere/CLEOPATRA/TRYPHAENA)", finding:"La diarrea fue uno de los eventos adversos gastrointestinales más frecuentes con esquemas que incluyen pertuzumab; el manejo estándar es soporte con antidiarreicos e hidratación, con ajuste de dosis según severidad y recurrencia."},
+          {label:"Continuar el ciclo sin ajustes ni tratamiento de soporte específico", points:0,
+            feedback:"Una diarrea grado 3 con deshidratación requiere manejo activo antes de continuar, no proseguir sin intervención.",
+            paper:"Perfil de seguridad de esquemas con pertuzumab", finding:"Los eventos gastrointestinales grado 3 requieren manejo de soporte activo según los protocolos de seguridad de estos ensayos."},
+          {label:"Discontinuar de forma permanente todo el esquema THP por este evento", points:0,
+            feedback:"Es una conducta excesiva para una diarrea grado 3 manejable con soporte; el esquema completo (incluyendo el bloqueo anti-HER2, que es el componente de mayor beneficio oncológico) no debería discontinuarse por un evento gastrointestinal tratable.",
+            paper:"Perfil de seguridad de esquemas con pertuzumab", finding:"Los eventos gastrointestinales se manejan habitualmente con ajuste de dosis del componente responsable (generalmente quimioterapia), no discontinuando todo el esquema."},
+          {label:"Indicar antibióticos empíricos sin evaluar causa", points:0,
+            feedback:"La diarrea asociada a THP es de mecanismo farmacológico, no infeccioso en la mayoría de los casos; el manejo antibiótico empírico no es la primera conducta sin evidencia de causa infecciosa.",
+            paper:"Perfil de seguridad de esquemas con pertuzumab", finding:"La diarrea asociada a estos esquemas es predominantemente de mecanismo no infeccioso, manejada con antidiarreicos y soporte."}
+        ]},
+      {type:"info", phase:4, eyebrow:"Progresión leptomeníngea — 11 meses de primera línea", vitalsUpdate:{"Tratamiento":"Progresión con compromiso leptomeníngeo","Estadio":"Metastásico con compromiso leptomeníngeo"}, html:`
+        <p>Buena respuesta hepática inicial. A los 11 meses, la paciente presenta <b>cefalea intensa, diplopía y náuseas persistentes</b>. RM cerebral con contraste y punción lumbar confirman <b>carcinomatosis leptomeníngea</b>, sin lesiones parenquimatosas cerebrales grandes asociadas.</p>
+        <div class="callout warn">El compromiso leptomeníngeo es una complicación grave con mal pronóstico relativo; el tratamiento sistémico elegido debe tener capacidad demostrada de penetración y actividad en el sistema nervioso central.</div>`, buttonLabel:"Definir conducta ante la progresión leptomeníngea →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 3 · Tratamiento tras progresión con compromiso leptomeníngeo",
+        prompt:"Progresión tras THP con carcinomatosis leptomeníngea confirmada, sin grandes lesiones parenquimatosas. ¿Cuál es la conducta sistémica más apropiada?",
+        options:[
+          {label:"Tucatinib + trastuzumab + capecitabina", points:2,
+            feedback:"Correcto. Este esquema demostró beneficio específico en supervivencia libre de progresión y global en pacientes HER2+ con metástasis cerebrales, incluyendo compromiso activo del sistema nervioso central, por lo que es la elección preferida ante progresión con compromiso leptomeníngeo.",
+            paper:"HER2CLIMB — Murthy et al., N Engl J Med 2020", finding:"Tucatinib + trastuzumab + capecitabina mejoró significativamente la supervivencia libre de progresión y la supervivencia global frente a trastuzumab + capecitabina solo, con beneficio específico y consistente en el subgrupo de pacientes con metástasis cerebrales activas al momento de la inclusión."},
+          {label:"Trastuzumab deruxtecan (T-DXd)", points:1,
+            feedback:"Tiene actividad demostrada también en metástasis cerebrales y es una alternativa razonable, pero la evidencia específica más robusta en compromiso activo del sistema nervioso central, incluyendo componente leptomeníngeo, corresponde al esquema con tucatinib.",
+            paper:"HER2CLIMB — Murthy et al., N Engl J Med 2020", finding:"El diseño de HER2CLIMB incluyó específicamente y de forma prospectiva a pacientes con metástasis cerebrales activas, con un beneficio de supervivencia central en ese subgrupo."},
+          {label:"Continuar el mismo esquema THP, ya que la enfermedad extracraneal está controlada", points:0,
+            feedback:"La progresión leptomeníngea documentada, incluso con buen control extracraneal, requiere cambiar a un esquema con mejor penetración al sistema nervioso central.",
+            paper:"HER2CLIMB — Murthy et al., N Engl J Med 2020", finding:"Se diseñó específicamente para pacientes que progresaban con compromiso del sistema nervioso central pese a tratamiento anti-HER2 previo."},
+          {label:"Radioterapia holocraneal exclusiva, sin cambio de tratamiento sistémico", points:0,
+            feedback:"La radioterapia puede tener un rol complementario según el caso, pero no reemplaza la necesidad de un tratamiento sistémico con capacidad de penetración al sistema nervioso central ante progresión leptomeníngea documentada.",
+            paper:"HER2CLIMB — Murthy et al., N Engl J Med 2020", finding:"Estableció el beneficio de un esquema sistémico específico para el control de la enfermedad del sistema nervioso central, más allá de las medidas locales de radioterapia."}
+        ]}
+    ]}
+
+  ]
+},
+
+/* ============================================================ TRIPLE NEGATIVO */
+tnbc: {
+  tag:"tnbc", tagLabel:"Triple negativo", title:"Triple negativo",
+  moduleDesc:"Sin receptores hormonales ni sobreexpresión de HER2. El subtipo más transformado por la inmunoterapia y las terapias dirigidas por biomarcador.",
+  cases:[
+
+  { key:"classic", label:"Caso 1 · BRCA1 positivo con colitis inmunomediada",
+    cardDesc:"39 años, BRCA1 germinal positivo. Colitis grado 3 por pembrolizumab que condiciona el resto del tratamiento, incluyendo la línea metastásica.",
+    patient:"N.T., 39 años · premenopáusica<br>Motivo: nódulo palpable, mama izquierda",
+    vitals:{"RE / RP":"negativo / negativo","HER2":"negativo (IHQ 1+)","Ki67":"60%","Subtipo":"Triple negativo","Estadio":"cT2N1","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Manejo de toxicidad","Adyuvancia dirigida","Riesgo hereditario","1ª línea metastásica","2ª línea metastásica","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>N.T., 39 años, con <b>madre diagnosticada de cáncer de ovario a los 52 años</b>, consulta por nódulo palpable en mama izquierda.</p>
+        <p>Biopsia: carcinoma ductal infiltrante grado 3. Perfil: <b>RE negativo, RP negativo, HER2 negativo (IHQ 1+), Ki67 60%</b>. cT2N1. Se solicita <b>PD-L1 (CPS)</b> y <b>panel germinal</b>.</p>
+        <div class="callout">Perfil <b>triple negativo</b>: sin receptores hormonales ni sobreexpresión de HER2, alta proliferación.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Triple negativo, estadio II con ganglio positivo (cT2N1), de alto riesgo. ¿Cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Quimioterapia neoadyuvante (carboplatino + paclitaxel, luego antraciclina/ciclofosfamida) + pembrolizumab", points:2,
+            feedback:"Correcto. Estándar actual en triple negativo estadio II-III de alto riesgo.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"Agregar pembrolizumab mejoró la respuesta patológica completa y la supervivencia libre de eventos, independiente del estado de PD-L1."},
+          {label:"Quimioterapia neoadyuvante estándar, sin inmunoterapia", points:1,
+            feedback:"Estándar antes de 2021; hoy subóptimo.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"Mostró superioridad de agregar pembrolizumab como nuevo estándar."},
+          {label:"Cirugía primero, sin tratamiento sistémico previo", points:0,
+            feedback:"En triple negativo de alto riesgo, la neoadyuvancia es preferida.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El estándar de cuidado actual parte de tratar primero de forma sistémica en esta población."},
+          {label:"Terapia endocrina neoadyuvante", points:0,
+            feedback:"No tiene rol: el tumor es RE/RP negativo.",
+            paper:"—", finding:"La ausencia de receptores hormonales descarta cualquier beneficio de la terapia endocrina."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Evento de toxicidad · ciclo 3 de neoadyuvancia", vitalsUpdate:{"Tratamiento":"Quimio+pembro — evento de toxicidad"}, html:`
+        <p>Ciclo 3: <b>7-9 deposiciones líquidas/día, dolor abdominal, sangre en materia fecal</b>. Estudios negativos para infección. Colonoscopía: <b>colitis difusa</b>.</p>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:2, eyebrow:"Decisión de toxicidad · Colitis inmunomediada por pembrolizumab",
+        prompt:"Colitis grado 3 con sangrado, sin causa infecciosa, bajo pembrolizumab. ¿Conducta más apropiada?",
+        options:[
+          {label:"Internar, suspender pembrolizumab, corticoides EV en dosis alta, gastroenterología, considerar infliximab si no responde", points:2,
+            feedback:"Correcto. Un irAE grado 3 requiere hospitalización e inmunosupresión sistémica.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021; KEYNOTE-522 (perfil de seguridad)", finding:"KEYNOTE-522 documentó ~13% de irAE grado 3-5. La guía de ASCO indica hospitalización, suspensión y corticoides en dosis alta, escalando a infliximab si no hay respuesta."},
+          {label:"Continuar pembrolizumab y manejar con loperamida ambulatoria", points:0,
+            feedback:"Peligroso: un irAE grado 3 no se maneja con antidiarreicos comunes.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Contraindica continuar el inhibidor de checkpoint durante un irAE grado 3 activo."},
+          {label:"Suspender pembrolizumab sin iniciar corticoides", points:0,
+            feedback:"Omitir la inmunosupresión activa puede derivar en complicaciones graves.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Recomienda corticoides sistémicos en dosis alta como pilar del tratamiento."},
+          {label:"Antibióticos empíricos de amplio espectro asumiendo causa infecciosa", points:0,
+            feedback:"Los estudios ya descartaron infección; retrasa la inmunosupresión necesaria.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Una vez descartada infección, el tratamiento es inmunosupresor, no antibiótico."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Resultado tras neoadyuvancia y cirugía", vitalsUpdate:{"Tratamiento":"Colitis resuelta con corticoides — cirugía realizada","Estadio":"ypT1N1 (enfermedad residual)"}, html:`
+        <p>Colitis resuelta con corticoides e infliximab; no se reexpone a pembrolizumab en la fase neoadyuvante. <b>Tumorectomía + disección axilar</b>: <b>enfermedad residual de 1.1 cm, 1/15 ganglios positivos (ypT1N1)</b>. Panel germinal: <b>mutación patogénica en BRCA1</b>.</p>`, buttonLabel:"Definir adyuvancia dirigida →"},
+      {type:"decision", phase:3, eyebrow:"Decisión 2 · Adyuvancia dirigida",
+        prompt:"Enfermedad residual, BRCA1 positivo, antecedente de colitis grado 3 con infliximab. ¿Qué adyuvancia corresponde?",
+        options:[
+          {label:"No reexponer a pembrolizumab dado el irAE grave, y agregar olaparib adyuvante por 1 año (BRCA1 positivo)", points:2,
+            feedback:"Correcto. Un irAE grado 3 que requirió infliximab contraindica en general reexponer al inhibidor de checkpoint; olaparib sigue indicado por mecanismo distinto.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021; OlympiA — Tutt et al., N Engl J Med 2021", finding:"ASCO desaconseja reexposición tras irAE grado 3 tratado con infliximab. OlympiA mostró beneficio de olaparib adyuvante en BRCA1/2 mutadas de alto riesgo, independiente del uso de pembrolizumab."},
+          {label:"Reiniciar pembrolizumab de todas formas, y agregar olaparib", points:0,
+            feedback:"Alto riesgo de recurrencia del irAE, potencialmente más grave.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Mayor riesgo de recurrencia y gravedad al reexponer tras irAE grado 3 tratado con inmunosupresores biológicos."},
+          {label:"No agregar olaparib por la toxicidad previa con pembrolizumab", points:0,
+            feedback:"Mecanismos distintos; la toxicidad de uno no predice la del otro.",
+            paper:"OlympiA — Tutt et al., N Engl J Med 2021", finding:"El beneficio de olaparib fue independiente de las terapias previas, incluyendo uso de inmunoterapia."},
+          {label:"Solo observación, sin adyuvancia adicional", points:0,
+            feedback:"Pierde la indicación clara de olaparib por BRCA1 y enfermedad residual de alto riesgo.",
+            paper:"OlympiA — Tutt et al., N Engl J Med 2021", finding:"Redujo el riesgo de recurrencia frente a observación en esta población de alto riesgo."}
+        ]},
+      {type:"decision", phase:4, eyebrow:"Decisión 3 · Manejo del riesgo hereditario",
+        prompt:"Confirmada la mutación BRCA1, ¿qué conducta adicional corresponde?",
+        options:[
+          {label:"Evaluar salpingooforectomía bilateral de reducción de riesgo y estudio genético en cascada a familiares", points:2,
+            feedback:"Correcto. Reduce el riesgo de cáncer de ovario y la mortalidad global; implicancias para familiares.",
+            paper:"Domchek et al., JAMA 2010 (PROSE Study Group)", finding:"La salpingooforectomía bilateral se asoció a reducción significativa de mortalidad por cáncer de ovario, de mama y por todas las causas."},
+          {label:"No se requiere ninguna conducta adicional", points:0,
+            feedback:"Ignora el riesgo elevado de cáncer de ovario y la posibilidad de identificar familiares portadores.",
+            paper:"Domchek et al., JAMA 2010", finding:"Documentó el beneficio en mortalidad de intervenir activamente."},
+          {label:"Mastectomía contralateral profiláctica obligatoria e inmediata", points:0,
+            feedback:"Opción a discutir, no obligatoria; el riesgo de ovario suele priorizarse.",
+            paper:"NCCN Guidelines — Genetic/Familial High-Risk Assessment", finding:"Presenta la mastectomía contralateral como opción a discutir, no indicación obligatoria."},
+          {label:"Solo mamografía anual, sin otras medidas", points:0,
+            feedback:"Insuficiente: no aborda el riesgo de cáncer de ovario.",
+            paper:"Domchek et al., JAMA 2010", finding:"El seguimiento pasivo no ofrece el mismo beneficio en mortalidad."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Seguimiento — 20 meses después", vitalsUpdate:{"Tratamiento":"Olaparib completado + SOB realizada","Estadio":"Sin evidencia de enfermedad"}, html:`
+        <p>Completa olaparib y SOB de reducción de riesgo. A los 20 meses, <b>metástasis hepáticas y óseas</b>. Biopsia: <b>triple negativo</b>. PD-L1 (CPS) en la metástasis: <b>CPS 15 (positivo)</b>.</p>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 4 · Primera línea metastásica", vitalsUpdate:{"Estadio":"Metastásico (hepático + óseo)"},
+        prompt:"Triple negativo metastásico, PD-L1 CPS 15, con antecedente de colitis grado 3 por pembrolizumab (infliximab). ¿Conducta más apropiada?",
+        options:[
+          {label:"Quimioterapia sola, sin reexponer a inhibidores de checkpoint", points:2,
+            feedback:"Correcto. El antecedente de irAE grave contraindica en general reexponer, pese al PD-L1 positivo.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Los irAE grado 3-4 tratados con inmunosupresión biológica son, en general, contraindicación para reintentar cualquier inhibidor de checkpoint."},
+          {label:"Pembrolizumab + quimioterapia, priorizando el PD-L1 positivo", points:0,
+            feedback:"El PD-L1 positivo no debe hacer ignorar el antecedente de irAE grave.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Mayor riesgo de recurrencia y gravedad al reexponer tras irAE tratado con inmunosupresores biológicos."},
+          {label:"Sacituzumab govitecan en primera línea", points:0,
+            feedback:"Indicación validada en líneas posteriores, no como primera elección.",
+            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Evaluó sacituzumab en pacientes con al menos dos líneas previas."},
+          {label:"Solo cuidados paliativos, sin opciones sistémicas", points:0,
+            feedback:"La quimioterapia sola sigue siendo estándar y efectiva de primera línea.",
+            paper:"KEYNOTE-355 — Cortés et al., Lancet 2020", finding:"El grupo de quimioterapia sola mostró actividad clínica relevante como primera línea."}
+        ]},
+      {type:"info", phase:6, eyebrow:"Progresión — 9 meses de primera línea", vitalsUpdate:{"Tratamiento":"Progresión bajo quimioterapia"}, html:`
+        <p>Progresión a los 9 meses; segunda línea de quimioterapia con progresión adicional a los 5 meses. Re-biopsia: <b>triple negativo persistente, HER2 IHQ 1+ (HER2-low)</b>. ECOG 1.</p>`, buttonLabel:"Definir siguiente línea →"},
+      {type:"decision", phase:6, eyebrow:"Decisión 5 · Tratamiento tras progresión a múltiples líneas",
+        prompt:"Progresión tras dos líneas de quimioterapia, HER2-low confirmado. ¿Conducta más apropiada?",
+        options:[
+          {label:"Sacituzumab govitecan", points:2,
+            feedback:"Correcto. Estándar preferido tras al menos dos líneas previas.",
+            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Casi triplicó la supervivencia libre de progresión y mejoró la supervivencia global frente a quimioterapia de elección del médico."},
+          {label:"Trastuzumab deruxtecan (T-DXd), dado el HER2-low", points:1,
+            feedback:"Alternativa válida en HER2-low pretratado; en esta secuencia puntual sacituzumab suele priorizarse.",
+            paper:"DESTINY-Breast04 — Modi et al., N Engl J Med 2022", finding:"Mejoró supervivencia libre de progresión y global en HER2-low pretratado, incluyendo subgrupo hormono-negativo."},
+          {label:"Repetir el mismo tipo de quimioterapia ya utilizada", points:0,
+            feedback:"Baja probabilidad de beneficio tras progresión documentada en dos líneas previas.",
+            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Diseñado para esta población pretratada, demostrando superioridad del conjugado anticuerpo-fármaco."},
+          {label:"Suspender tratamiento activo, solo paliativos", points:0,
+            feedback:"Con buen estado funcional y opciones activas disponibles, no corresponde suspender.",
+            paper:"ASCENT / DESTINY-Breast04", finding:"Ambos estudios demostraron beneficio de continuar tratamiento activo en pacientes con buen estado funcional."}
+        ]}
+    ]},
+
+  { key:"pcr", label:"Caso 2 · Respuesta patológica completa y tiroiditis por pembrolizumab",
+    cardDesc:"44 años, BRCA negativo. Logra pCR, hipotiroidismo inmunomediado manejado sin discontinuar la inmunoterapia, remisión sostenida.",
+    patient:"R.O., 44 años · premenopáusica<br>Motivo: nódulo palpable, mama derecha",
+    vitals:{"RE / RP":"negativo / negativo","HER2":"negativo (IHQ 0)","Ki67":"70%","Subtipo":"Triple negativo","Estadio":"cT2N0","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>R.O., 44 años, sin antecedentes familiares relevantes, consulta por nódulo palpable de 2.2 cm en mama derecha, axila clínicamente negativa.</p>
+        <p>Biopsia: carcinoma ductal infiltrante grado 3. Perfil: <b>RE negativo, RP negativo, HER2 negativo (IHQ 0), Ki67 70%</b>. cT2N0. Panel germinal: <b>sin mutaciones patogénicas identificadas</b> (BRCA1/2 y otros genes negativos).</p>
+        <div class="callout">Triple negativo de alta proliferación, sin mutación germinal identificada. La ausencia de mutación BRCA no cambia la indicación de inmunoterapia neoadyuvante, pero sí descarta la opción de olaparib adyuvante más adelante.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Triple negativo cT2N0, alto riesgo por tamaño y grado, sin mutación germinal. ¿Cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Quimioterapia neoadyuvante (carboplatino + paclitaxel, luego antraciclina/ciclofosfamida) + pembrolizumab", points:2,
+            feedback:"Correcto. El estadio II-III de alto riesgo es indicación de pembrolizumab neoadyuvante/adyuvante independientemente del estado germinal de BRCA o del PD-L1.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El beneficio de agregar pembrolizumab fue independiente del estado de PD-L1 y no requiere estratificación por mutación germinal para esta indicación neoadyuvante/adyuvante."},
+          {label:"Quimioterapia neoadyuvante sin pembrolizumab, dado que no tiene mutación BRCA", points:0,
+            feedback:"El estado de BRCA no es criterio para decidir el uso de pembrolizumab en este contexto; ambas intervenciones actúan por mecanismos independientes.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"La indicación de pembrolizumab en esta población no depende del estado germinal de BRCA."},
+          {label:"Cirugía primero, sin tratamiento sistémico previo", points:0,
+            feedback:"En triple negativo de alto riesgo, la neoadyuvancia es preferida.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El estándar actual parte de tratar primero de forma sistémica en esta población de alto riesgo."},
+          {label:"Solicitar estudio de PIK3CA antes de decidir el esquema neoadyuvante", points:0,
+            feedback:"No es relevante para esta decisión: PIK3CA no determina el esquema neoadyuvante de triple negativo, es relevante en la vía hormonal de tumores RE positivos.",
+            paper:"—", finding:"Las alteraciones de PIK3CA guían decisiones terapéuticas específicamente en el contexto de enfermedad RE positiva, no en triple negativo."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Resultado tras neoadyuvancia y cirugía", vitalsUpdate:{"Tratamiento":"Quimio+pembro neoadyuvante + cirugía","Estadio":"ypT0N0 (respuesta patológica completa)"}, html:`
+        <p>Completa el esquema con excelente respuesta clínica. <b>Tumorectomía + ganglio centinela</b>: <b>sin tumor invasivo residual (ypT0N0) — respuesta patológica completa</b>.</p>
+        <div class="callout good">Respuesta patológica completa en triple negativo, sin mutación BRCA. El pronóstico es excelente; queda definir la adyuvancia con pembrolizumab.</div>`, buttonLabel:"Definir adyuvancia dirigida →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Adyuvancia dirigida tras respuesta patológica completa",
+        prompt:"Respuesta patológica completa tras neoadyuvancia con pembrolizumab, sin mutación germinal BRCA. ¿Qué adyuvancia corresponde?",
+        options:[
+          {label:"Continuar pembrolizumab adyuvante hasta completar el año de tratamiento, sin agregar olaparib", points:2,
+            feedback:"Correcto. Pembrolizumab se continúa independientemente de la respuesta patológica; sin mutación BRCA, no hay indicación de olaparib.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022; OlympiA — Tutt et al., N Engl J Med 2021", finding:"KEYNOTE-522 mostró beneficio de continuar pembrolizumab adyuvante independientemente de la respuesta patológica alcanzada. OlympiA restringió su beneficio demostrado a pacientes con mutación germinal BRCA1/2, ausente en esta paciente."},
+          {label:"Suspender pembrolizumab dado que logró respuesta patológica completa", points:0,
+            feedback:"El beneficio de continuar pembrolizumab adyuvante en KEYNOTE-522 no dependía de haber logrado o no respuesta patológica completa.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El diseño del estudio incluía continuar pembrolizumab adyuvante en todas las pacientes, independientemente del grado de respuesta patológica."},
+          {label:"Agregar olaparib adyuvante de todas formas, por seguridad adicional", points:0,
+            feedback:"No corresponde: el beneficio de olaparib está validado específicamente en mutación germinal BRCA1/2, ausente en esta paciente.",
+            paper:"OlympiA — Tutt et al., N Engl J Med 2021", finding:"La población de beneficio del estudio fueron pacientes con mutación germinal BRCA1/2 confirmada."},
+          {label:"Solicitar un nuevo panel genético ampliado antes de definir cualquier adyuvancia", points:0,
+            feedback:"No es necesario retrasar la adyuvancia: el panel germinal estándar ya fue negativo, y la conducta de continuar pembrolizumab no depende de estudios genéticos adicionales.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"La indicación de pembrolizumab adyuvante no depende del resultado de un panel genético ampliado."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · 5 meses de pembrolizumab adyuvante", vitalsUpdate:{"Tratamiento":"Pembrolizumab — evento de toxicidad endocrina"}, html:`
+        <p>A los 5 meses de pembrolizumab adyuvante, refiere <b>fatiga marcada, intolerancia al frío y aumento de peso leve</b>. Laboratorio: <b>TSH 18 mUI/L, T4 libre baja</b>, compatible con <b>hipotiroidismo primario</b> de causa inmunomediada.</p>
+        <div class="callout">Las endocrinopatías inmunomediadas (tiroiditis, hipofisitis, diabetes) son eventos adversos frecuentes de los inhibidores de checkpoint, con un manejo característicamente distinto al de eventos como la colitis: en general no requieren suspender la inmunoterapia.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Hipotiroidismo inmunomediado por pembrolizumab",
+        prompt:"Hipotiroidismo primario sintomático confirmado por laboratorio, bajo pembrolizumab adyuvante. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Iniciar reemplazo con levotiroxina y continuar pembrolizumab sin suspenderlo", points:2,
+            feedback:"Correcto. A diferencia de eventos como la colitis grado 3, las endocrinopatías inmunomediadas como el hipotiroidismo se manejan habitualmente con reemplazo hormonal sin necesidad de suspender el inhibidor de checkpoint, ya que no representan riesgo vital inmediato y son controlables de forma crónica.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021 (manejo de eventos adversos inmunomediados)", finding:"Establece que las endocrinopatías inmunomediadas grado 1-2, como el hipotiroidismo, se manejan con reemplazo hormonal apropiado sin necesidad de interrumpir el inhibidor de checkpoint, a diferencia de eventos gastrointestinales o pulmonares de igual grado que sí suelen requerir suspensión."},
+          {label:"Suspender pembrolizumab de inmediato, igual que se haría ante una colitis grado 3", points:0,
+            feedback:"Aplica de forma incorrecta el manejo de un irAE distinto: las endocrinopatías, a diferencia de la colitis o la neumonitis, generalmente no requieren suspender el inhibidor de checkpoint.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"El manejo de irAE es específico por órgano y severidad; las endocrinopatías tienen un umbral de suspensión distinto al de eventos gastrointestinales o pulmonares."},
+          {label:"No tratar el hipotiroidismo, ya que se espera que se resuelva solo al finalizar el tratamiento", points:0,
+            feedback:"Las endocrinopatías inmunomediadas son con frecuencia permanentes (a diferencia de otros irAE) y requieren reemplazo hormonal activo, no solo observación expectante.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Las endocrinopatías inmunomediadas, a diferencia de otros irAE, suelen ser permanentes y requieren tratamiento de reemplazo hormonal continuo."},
+          {label:"Iniciar corticoides sistémicos en dosis alta, igual que en la colitis", points:0,
+            feedback:"No es el tratamiento indicado para el hipotiroidismo establecido: los corticoides no revierten el daño tiroideo ya instalado, y el manejo correcto es el reemplazo hormonal con levotiroxina.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"El tratamiento del hipotiroidismo inmunomediado establecido es el reemplazo hormonal, no la inmunosupresión con corticoides."}
+        ]}
+    ]},
+
+  { key:"inflammatory", label:"Caso 3 · Carcinoma inflamatorio, PD-L1 negativo, HER2-null",
+    cardDesc:"56 años, carcinoma inflamatorio. Neumonitis por pembrolizumab, PMRT obligatoria, y en metastásico HER2-null excluye T-DXd.",
+    patient:"M.J., 56 años · posmenopáusica<br>Motivo: eritema y edema mamario de rápida evolución",
+    vitals:{"RE / RP":"negativo / negativo","HER2":"negativo (IHQ 0 — HER2-null)","Ki67":"65%","Subtipo":"Triple negativo (inflamatorio)","Estadio":"cT4dN2","Tratamiento":"—"},
+    timeline:["Diagnóstico","Abordaje inicial","Manejo de toxicidad","Cirugía y radioterapia","1ª línea metastásica","2ª línea metastásica","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>M.J., 56 años, consulta por <b>eritema, edema y aspecto de "piel de naranja"</b> en la mama izquierda de 3 semanas de evolución, con crecimiento mamario notorio y calor local, sin nódulo palpable claramente delimitado. Adenopatías axilares y supraclaviculares palpables.</p>
+        <p>Biopsia de piel y de la mama: carcinoma ductal infiltrante grado 3, con <b>émbolos linfáticos dérmicos</b> (confirmando carcinoma inflamatorio). Perfil: <b>RE negativo, RP negativo, HER2 negativo (IHQ 0 — HER2-null), Ki67 65%</b>. <b>PD-L1 (CPS) negativo (CPS &lt;1)</b>. Estadio clínico: <b>cT4dN2</b>.</p>
+        <div class="callout warn">El carcinoma inflamatorio es una presentación clínica agresiva de por sí, definida por hallazgos clínicos (no solo por tamaño tumoral), y siempre se considera localmente avanzado al diagnóstico, con implicancias específicas en el tratamiento local posterior.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
+        prompt:"Carcinoma inflamatorio triple negativo, cT4dN2, PD-L1 negativo. ¿Cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Quimioterapia neoadyuvante + pembrolizumab, a pesar del PD-L1 negativo", points:2,
+            feedback:"Correcto. A diferencia de la indicación en enfermedad metastásica (donde el beneficio de pembrolizumab requiere PD-L1 positivo), en el contexto neoadyuvante/adyuvante de KEYNOTE-522 el beneficio fue independiente del estado de PD-L1, por lo que se agrega igual pese a ser negativo.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El beneficio de pembrolizumab neoadyuvante/adyuvante fue consistente independientemente del estado de PD-L1, a diferencia de la indicación en enfermedad metastásica de primera línea, que sí requiere PD-L1 positivo (CPS ≥10) según KEYNOTE-355."},
+          {label:"Quimioterapia neoadyuvante sin pembrolizumab, dado que el PD-L1 es negativo", points:0,
+            feedback:"Confunde el criterio de PD-L1 aplicable a metastásico (KEYNOTE-355) con el de neoadyuvante (KEYNOTE-522), que no requiere PD-L1 positivo.",
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El beneficio en el contexto neoadyuvante/adyuvante no dependió del estado de PD-L1, a diferencia de la indicación metastásica."},
+          {label:"Mastectomía inmediata sin tratamiento sistémico previo", points:0,
+            feedback:"El carcinoma inflamatorio nunca se opera de entrada: siempre se trata primero con terapia sistémica neoadyuvante dado su comportamiento agresivo y su definición como enfermedad localmente avanzada.",
+            paper:"NCCN Guidelines — Inflammatory Breast Cancer", finding:"El carcinoma inflamatorio se trata siempre con terapia sistémica neoadyuvante antes de cualquier cirugía, dada su naturaleza clínicamente agresiva."},
+          {label:"Radioterapia como tratamiento local inicial, antes de cualquier terapia sistémica", points:0,
+            feedback:"La radioterapia en carcinoma inflamatorio se reserva para después de la cirugía (tras la neoadyuvancia), no como tratamiento local inicial.",
+            paper:"NCCN Guidelines — Inflammatory Breast Cancer", finding:"La secuencia estándar es terapia sistémica neoadyuvante, luego cirugía, luego radioterapia."}
+        ]},
+      {type:"info", phase:2, eyebrow:"Evento de toxicidad · ciclo 5 de neoadyuvancia", vitalsUpdate:{"Tratamiento":"Quimio+pembro — evento de toxicidad pulmonar"}, html:`
+        <p>Durante el ciclo 5, presenta <b>tos seca progresiva y disnea de esfuerzo leve-moderada</b>. TC de tórax: <b>opacidades en vidrio esmerilado bilaterales</b>. Saturación de oxígeno 94% al aire ambiente. Se interpreta como <b>neumonitis inmunomediada grado 2</b>.</p>
+        <div class="callout warn">La neumonitis es un evento adverso inmunomediado potencialmente grave, con un espectro de severidad y manejo distinto al de la colitis: los casos grado 2 pueden manejarse sin necesidad de inmunosupresión biológica escalada.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:2, eyebrow:"Decisión de toxicidad · Neumonitis inmunomediada grado 2 por pembrolizumab",
+        prompt:"Neumonitis grado 2 (síntomas leves-moderados, saturación 94%) bajo pembrolizumab neoadyuvante. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Suspender temporalmente pembrolizumab, iniciar corticoides orales, reevaluar en 48-72 horas, y considerar reanudar con precaución si mejora a grado ≤1", points:2,
+            feedback:"Correcto. La neumonitis grado 2 se maneja con suspensión temporal y corticoides orales (sin necesidad de hospitalización ni corticoides endovenosos salvo progresión), con reevaluación estrecha y posibilidad de reanudar el inhibidor de checkpoint con precaución si el cuadro mejora.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021 (manejo de neumonitis inmunomediada)", finding:"Para neumonitis grado 2, recomienda suspensión del inhibidor de checkpoint, corticoides orales, y reevaluación en 48-72 horas, reservando la hospitalización y los corticoides endovenosos para grados 3-4; permite considerar reanudar el tratamiento si el cuadro mejora a grado ≤1."},
+          {label:"Continuar pembrolizumab sin cambios, dado que los síntomas son leves-moderados", points:0,
+            feedback:"La neumonitis inmunomediada, incluso grado 2, requiere suspender el fármaco e iniciar corticoides; continuar sin cambios puede progresar a un cuadro respiratorio más severo.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Recomienda suspensión del inhibidor de checkpoint incluso en neumonitis grado 2."},
+          {label:"Internar de urgencia e iniciar corticoides endovenosos en dosis alta, igual que en un grado 3-4", points:1,
+            feedback:"No es incorrecto por exceso de precaución, pero para un grado 2 sin insuficiencia respiratoria significativa, el manejo estándar es ambulatorio con corticoides orales; reservar la hospitalización y corticoides EV para grados más severos evita una escalada innecesaria de recursos.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Diferencia claramente el manejo ambulatorio con corticoides orales para grado 2 del manejo hospitalario con corticoides EV reservado para grado 3-4."},
+          {label:"Discontinuar pembrolizumab de forma permanente sin posibilidad de reanudarlo", points:0,
+            feedback:"Es una conducta excesiva para un primer evento grado 2 que responde a manejo estándar; la guía permite considerar reanudar el tratamiento con precaución si el cuadro mejora adecuadamente.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Permite considerar la reanudación del inhibidor de checkpoint tras la resolución de un evento grado 2, a diferencia de eventos grado 3-4 recurrentes."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Resultado tras neoadyuvancia, cirugía y radioterapia", vitalsUpdate:{"Tratamiento":"Mastectomía + PMRT + pembrolizumab adyuvante","Estadio":"ypT2N1 (enfermedad residual)"}, html:`
+        <p>La neumonitis se resuelve con corticoides orales y se reanuda pembrolizumab con precaución, sin recurrencia del evento. Completa la neoadyuvancia con respuesta parcial. Se realiza <b>mastectomía + disección axilar</b>: <b>enfermedad residual, ypT2N1</b>.</p>
+        <div class="callout">Por tratarse de un carcinoma inflamatorio (independientemente del grado de respuesta a la neoadyuvancia), la <b>radioterapia post-mastectomía es obligatoria</b>, a diferencia de otros escenarios donde puede evaluarse según el riesgo residual.</div>`, buttonLabel:"Continuar seguimiento →"},
+      {type:"info", phase:4, eyebrow:"Recaída metastásica — 22 meses después", vitalsUpdate:{"Tratamiento":"Recaída metastásica","Estadio":"Metastásico (pulmonar + hepático)"}, html:`
+        <p>Completa pembrolizumab adyuvante y radioterapia post-mastectomía sin nuevos eventos inmunomediados relevantes. A los 22 meses, aparecen <b>nódulos pulmonares y una lesión hepática</b>. Biopsia: <b>triple negativo persistente</b>, <b>PD-L1 (CPS) nuevamente negativo</b>, <b>HER2 confirmado IHQ 0 (HER2-null)</b> en la muestra metastásica.</p>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 2 · Primera línea metastásica",
+        prompt:"Triple negativo metastásico, PD-L1 CPS negativo, sin tratamiento sistémico metastásico previo. ¿Esquema de primera línea preferido?",
+        options:[
+          {label:"Quimioterapia sola, sin pembrolizumab", points:2,
+            feedback:"Correcto. En enfermedad metastásica de primera línea, el beneficio de pembrolizumab requiere PD-L1 positivo (CPS ≥10); con PD-L1 negativo, la quimioterapia sola es el estándar.",
+            paper:"KEYNOTE-355 — Cortés et al., Lancet 2020", finding:"El beneficio de agregar pembrolizumab a la quimioterapia de primera línea se limitó a pacientes con CPS ≥10; en PD-L1 negativo no se demostró beneficio significativo."},
+          {label:"Pembrolizumab + quimioterapia, igual que se hizo en la neoadyuvancia", points:0,
+            feedback:"Aplica incorrectamente el criterio neoadyuvante (que no requiere PD-L1 positivo) al escenario metastásico, que sí lo requiere.",
+            paper:"KEYNOTE-355 — Cortés et al., Lancet 2020", finding:"A diferencia de KEYNOTE-522 en neoadyuvancia, el beneficio de pembrolizumab en metastásico de primera línea depende del estado de PD-L1."},
+          {label:"Sacituzumab govitecan en primera línea", points:0,
+            feedback:"Indicación validada en líneas posteriores, no en primera línea sin tratamiento metastásico previo.",
+            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Evaluó sacituzumab en pacientes con al menos dos líneas metastásicas previas."},
+          {label:"Trastuzumab deruxtecan en primera línea, dado que es triple negativo", points:0,
+            feedback:"No corresponde: el tumor es HER2-null (IHQ 0), y T-DXd no ha demostrado beneficio en ese grupo específico, a diferencia de HER2-low (IHQ 1+ o 2+ no amplificado).",
+            paper:"DESTINY-Breast04 — Modi et al., N Engl J Med 2022", finding:"Incluyó específicamente tumores HER2-low (IHC 1+ o 2+ no amplificado); los tumores HER2-null (IHC 0) no fueron parte de la población de beneficio demostrado."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Progresión — 7 meses de primera línea", vitalsUpdate:{"Tratamiento":"Progresión bajo quimioterapia"}, html:`
+        <p>Progresión pulmonar y hepática a los 7 meses. Buen estado general (ECOG 1). Se re-confirma <b>HER2 IHQ 0 (HER2-null)</b> en la lesión progresiva.</p>`, buttonLabel:"Definir segunda línea →"},
+      {type:"decision", phase:6, eyebrow:"Decisión 3 · Segunda línea metastásica",
+        prompt:"Progresión tras primera línea de quimioterapia, HER2-null (IHQ 0) confirmado nuevamente. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Sacituzumab govitecan (conjugado anti-Trop-2)", points:2,
+            feedback:"Correcto. Su eficacia no depende de la expresión de HER2, por lo que es una opción dirigida apropiada en este perfil HER2-null.",
+            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Mejoró significativamente la supervivencia frente a quimioterapia de elección del médico en triple negativo pretratado, con un mecanismo (dirigido a Trop-2) independiente de la expresión de HER2."},
+          {label:"Trastuzumab deruxtecan (T-DXd), extrapolando el beneficio de HER2-low", points:0,
+            feedback:"No corresponde: esta paciente es HER2-null (IHC 0), no HER2-low (IHC 1+/2+); la evidencia de beneficio de T-DXd no incluye al grupo HER2-null.",
+            paper:"DESTINY-Breast04 — Modi et al., N Engl J Med 2022", finding:"La población de beneficio se definió específicamente como HER2-low (IHC 1+ o 2+ no amplificado), excluyendo a los tumores HER2-null (IHC 0)."},
+          {label:"Repetir el mismo esquema de quimioterapia de primera línea", points:0,
+            feedback:"Baja probabilidad de beneficio tras progresión documentada.",
+            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Diseñado específicamente para población pretratada con progresión a quimioterapia previa."},
+          {label:"Reintentar pembrolizumab, dado que ya toleró bien la neumonitis previa", points:0,
+            feedback:"No corresponde: el PD-L1 sigue siendo negativo, por lo que no hay indicación de pembrolizumab en este escenario metastásico independientemente de la tolerancia previa.",
+            paper:"KEYNOTE-355 — Cortés et al., Lancet 2020", finding:"El beneficio de pembrolizumab en metastásico requiere PD-L1 positivo (CPS ≥10), ausente en esta paciente."}
+        ]}
+    ]}
+
+  ]
+}
+
+};
+
+/* ===================== ENGINE ===================== */
+
+let activeModule = null;
+let activeCaseKey = null;
+let stages = null;
+let state = { step:0, score:0, maxScore:0, answered:false, vitals:{} };
+let currentOptions = null;
+
+function renderHome(){
+  activeModule = null; activeCaseKey = null;
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <p class="intro">Elegí el módulo de la consulta oncológica que querés simular. Cada módulo tiene tres casos distintos —con presentaciones, respuestas al tratamiento y toxicidades diferentes— para practicar variedad de escenarios reales.</p>
+    <div class="modgrid" id="modgrid"></div>
+  `;
+  const grid = document.getElementById("modgrid");
+  Object.entries(MODULES).forEach(([key, m]) => {
+    const card = document.createElement("button");
+    card.className = "modcard";
+    card.innerHTML = `<span class="tag ${m.tag}">${m.tagLabel}</span><h3>${m.title}</h3><p>${m.moduleDesc}</p>`;
+    card.onclick = () => renderCaseSelect(key);
+    grid.appendChild(card);
+  });
+}
+
+function renderCaseSelect(moduleKey){
+  activeModule = moduleKey; activeCaseKey = null;
+  const m = MODULES[moduleKey];
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <div class="crumb"><span id="crumbHome">Módulos</span> / ${m.title}</div>
+    <p class="intro">${m.moduleDesc} Elegí uno de los tres casos para empezar la consulta.</p>
+    <div class="casegrid" id="casegrid"></div>
+  `;
+  document.getElementById("crumbHome").onclick = renderHome;
+  const grid = document.getElementById("casegrid");
+  m.cases.forEach((c, i) => {
+    const card = document.createElement("button");
+    card.className = "modcard casecard";
+    card.innerHTML = `<span class="casenum">${String(i+1).padStart(2,"0")}</span><div><h3>${c.label}</h3><p>${c.cardDesc}</p></div>`;
+    card.onclick = () => startCase(moduleKey, c.key);
+    grid.appendChild(card);
+  });
+}
+
+function startCase(moduleKey, caseKey){
+  activeModule = moduleKey; activeCaseKey = caseKey;
+  const c = MODULES[moduleKey].cases.find(x => x.key === caseKey);
+  stages = c.stages;
+  state = { step:0, score:0, maxScore:0, answered:false, vitals: Object.assign({}, c.vitals) };
+  renderGame();
+}
+
+function getActiveCase(){
+  return MODULES[activeModule].cases.find(x => x.key === activeCaseKey);
+}
+
+function renderVitals(){
+  const el = document.getElementById("vitals");
+  if(!el) return;
+  el.innerHTML = Object.entries(state.vitals).map(([k,v]) =>
+    `<div><span class="k">${k}</span><span class="v">${v}</span></div>`
+  ).join("");
+}
+
+function renderTimeline(activeIndex){
+  const el = document.getElementById("timeline");
+  if(!el) return;
+  const labels = getActiveCase().timeline;
+  el.innerHTML = labels.map((label,i) => {
+    const isToxLabel = label.toLowerCase().includes("toxicidad");
+    return `<div class="tl-item ${i < activeIndex ? "done":""} ${isToxLabel ? "tox":""}"><div class="tl-dot"></div><div>${label}</div></div>`;
+  }).join("");
+}
+
+function renderScore(){
+  const el = document.getElementById("scoreDisplay");
+  if(el) el.textContent = `${state.score} / ${state.maxScore}`;
+}
+
+function renderGame(){
+  const c = getActiveCase();
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <div class="layout">
+      <aside class="chart">
+        <div class="chart-head"><span>Historia clínica</span><span class="back" id="backBtn">← casos</span></div>
+        <div class="chart-body">
+          <div class="patient-row"><b>Paciente:</b> ${c.patient}</div>
+          <div class="vitals" id="vitals"></div>
+          <div class="timeline" id="timeline"></div>
+          <div class="score-box"><span>Puntaje clínico</span><b id="scoreDisplay">0 / 0</b></div>
+        </div>
+      </aside>
+      <main class="panel" id="panel"></main>
+    </div>
+  `;
+  document.getElementById("backBtn").onclick = () => renderCaseSelect(activeModule);
+  render();
+}
+
+function render(){
+  const s = stages[state.step];
+  if(s.vitalsUpdate) Object.assign(state.vitals, s.vitalsUpdate);
+  renderVitals();
+  renderTimeline(s.phase);
+  renderScore();
+
+  const panel = document.getElementById("panel");
+  const isTox = s.eyebrow && s.eyebrow.toLowerCase().includes("toxicidad");
+
+  if(s.type === "info"){
+    panel.innerHTML = `
+      <div class="eyebrow ${isTox ? "tox":""}">${s.eyebrow}</div>
+      <div class="narrative">${s.html}</div>
+      <button class="next-btn" id="nextBtn">${s.buttonLabel}</button>
+    `;
+    document.getElementById("nextBtn").onclick = () => { state.step++; render(); };
+    return;
+  }
+
+  if(s.type === "decision"){
+    currentOptions = s.options;
+    state.answered = false;
+    const letters = ["A","B","C","D"];
+    panel.innerHTML = `
+      <div class="eyebrow ${isTox ? "tox":""}">${s.eyebrow}</div>
+      <div class="narrative"><p>${s.prompt}</p></div>
+      <div class="options" id="optionsWrap">
+        ${s.options.map((o,i) => `
+          <button class="opt" data-i="${i}">
+            <span class="letter">${letters[i]}</span>
+            <span>${o.label}</span>
+          </button>
+        `).join("")}
+      </div>
+      <div id="feedbackWrap"></div>
+    `;
+    document.querySelectorAll(".opt").forEach(btn => {
+      btn.onclick = () => selectOption(parseInt(btn.dataset.i));
+    });
+    return;
+  }
+
+  if(s.type === "epicrisis"){
+    const c = getActiveCase();
+    const pct = Math.round((state.score/state.maxScore)*100);
+    let grade = "Manejo subóptimo — revisar guías";
+    if(pct >= 90) grade = "Manejo alineado con guías actuales";
+    else if(pct >= 70) grade = "Buen manejo, con oportunidades de ajuste";
+    panel.innerHTML = `
+      <div class="eyebrow">Epicrisis</div>
+      <div class="epicrisis">
+        <h2>${c.patient.split("·")[0].trim()} — ${MODULES[activeModule].title}</h2>
+        <p style="color:var(--ink-soft);font-size:14px;">${c.label}</p>
+        <div class="grade">${state.score} / ${state.maxScore}</div>
+        <p>${grade}</p>
+      </div>
+      <button class="next-btn" id="retryBtn">Repetir este caso</button>
+      <button class="ghost-btn" id="otherCaseBtn">Elegir otro caso</button>
+      <button class="ghost-btn" id="homeBtn">Elegir otro módulo</button>
+    `;
+    document.getElementById("retryBtn").onclick = () => startCase(activeModule, activeCaseKey);
+    document.getElementById("otherCaseBtn").onclick = () => renderCaseSelect(activeModule);
+    document.getElementById("homeBtn").onclick = renderHome;
+  }
+}
+
+function tierOf(points){
+  if(points >= 2) return "correct";
+  if(points === 1) return "partial";
+  return "incorrect";
+}
+function tierHeader(tier){
+  if(tier === "correct") return "Conducta óptima";
+  if(tier === "partial") return "Conducta aceptable, no la de primera elección";
+  return "Revisar conducta";
+}
+
+function selectOption(i){
+  if(state.answered) return;
+  state.answered = true;
+  const opts = currentOptions;
+  const chosen = opts[i];
+  const tier = tierOf(chosen.points);
+  state.score += chosen.points;
+  state.maxScore += 2;
+  renderScore();
+
+  document.querySelectorAll(".opt").forEach((btn,idx) => {
+    btn.disabled = true;
+    if(idx === i){
+      btn.classList.add(tier);
+    } else {
+      btn.classList.add("neutral-off");
+    }
+  });
+
+  const evidenceHtml = chosen.paper && chosen.paper !== "—" ? `
+    <div class="evidence">
+      <span class="ev-label">Fundamento científico</span>
+      <span class="ev-study">${chosen.paper}</span> — ${chosen.finding}
+    </div>` : "";
+
+  let bestRefHtml = "";
+  if(tier !== "correct"){
+    const bestIdx = opts.findIndex(o => o.points >= 2);
+    if(bestIdx !== -1){
+      const letters = ["A","B","C","D"];
+      bestRefHtml = `<div class="bestref">La opción con mayor respaldo en este escenario era <b>${letters[bestIdx]}. ${opts[bestIdx].label}</b>.</div>`;
+    }
+  }
+
+  const fb = document.getElementById("feedbackWrap");
+  fb.innerHTML = `
+    <div class="feedback ${tier}">
+      <span class="tag2">${tierHeader(tier)} · ${chosen.points}/2 pts</span>
+      ${chosen.feedback}
+    </div>
+    ${evidenceHtml}
+    ${bestRefHtml}
+    <button class="next-btn" id="nextBtn">Continuar →</button>
+  `;
+  document.getElementById("nextBtn").onclick = () => {
+    state.step++;
+    if(state.step >= stages.length){
+      stages.push({type:"epicrisis"});
+    }
+    render();
+  };
+}
+
+document.getElementById("titleHome").onclick = renderHome;
+renderHome();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
