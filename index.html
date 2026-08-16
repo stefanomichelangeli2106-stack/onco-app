@@ -139,17 +139,46 @@
   .epicrisis .grade{font-family:'IBM Plex Mono',monospace;font-size:34px;color:var(--teal);margin:10px 0;}
   .refs{margin-top:20px;font-size:12px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:14px;line-height:1.8;}
   .refs b{color:var(--ink);}
+
+  .masthead-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+  .userbar{font-size:11.5px;color:var(--ink-soft);display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+  .userbar .email{color:var(--ink-soft);}
+  .userbar button{background:none;border:none;padding:0;font:inherit;font-family:'IBM Plex Sans',sans-serif;color:var(--teal);text-decoration:underline;cursor:pointer;}
+
+  .auth-card{max-width:380px;margin:20px auto 0;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:30px 28px;}
+  .auth-card h2{font-family:'Lora',serif;font-size:21px;margin:0 0 6px;}
+  .auth-card .sub2{font-size:13px;color:var(--ink-soft);line-height:1.5;margin:0 0 22px;}
+  .auth-field{margin-bottom:14px;}
+  .auth-field label{display:block;font-size:12px;color:var(--ink-soft);margin-bottom:5px;}
+  .auth-field input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:5px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;background:var(--paper);color:var(--ink);}
+  .auth-field input:focus{outline:2px solid var(--teal);outline-offset:1px;}
+  .auth-error{background:var(--coral-tint);color:#7A2E19;border:1px solid var(--coral);border-radius:5px;padding:9px 12px;font-size:13px;margin-bottom:14px;}
+  .auth-toggle{text-align:center;font-size:13px;color:var(--ink-soft);margin-top:16px;}
+  .auth-toggle span{color:var(--teal);text-decoration:underline;cursor:pointer;}
+
+  .history-item{background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:14px;}
+  .history-item .hi-main{font-size:14px;}
+  .history-item .hi-main b{color:var(--ink);}
+  .history-item .hi-date{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+  .history-item .hi-score{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--teal);font-size:15px;flex-shrink:0;}
+  .history-empty{color:var(--ink-soft);font-size:14px;}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="masthead">
     <h1 id="titleHome">Consultorio Onco</h1>
-    <div class="sub">Simulador clínico oncológico</div>
+    <div class="masthead-right">
+      <div class="sub">Simulador clínico oncológico</div>
+      <div class="userbar" id="userBar"></div>
+    </div>
   </div>
-  <div id="app"></div>
+  <div id="app"><p class="intro">Cargando…</p></div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 <script>
 const MAMA_MODULES = {
 
@@ -1623,6 +1652,151 @@ const CANCER = {
   }
 };
 
+/* ===================== AUTH ===================== */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCtl2aUDyT2hVdDIm83KXHq41bOan2c_mk",
+  authDomain: "onco-app-a702a.firebaseapp.com",
+  projectId: "onco-app-a702a",
+  storageBucket: "onco-app-a702a.firebasestorage.app",
+  messagingSenderId: "797966226772",
+  appId: "1:797966226772:web:fe0686a0b24ef20dd024c1"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let currentUser = null;
+let authMode = "login";
+
+const AUTH_ERRORS = {
+  "auth/invalid-email": "El email no es válido.",
+  "auth/missing-password": "Ingresá una contraseña.",
+  "auth/weak-password": "La contraseña debe tener al menos 6 caracteres.",
+  "auth/email-already-in-use": "Ya existe una cuenta con ese email. Iniciá sesión en su lugar.",
+  "auth/user-not-found": "No existe una cuenta con ese email.",
+  "auth/wrong-password": "Contraseña incorrecta.",
+  "auth/invalid-credential": "Email o contraseña incorrectos.",
+  "auth/too-many-requests": "Demasiados intentos. Probá de nuevo en unos minutos."
+};
+
+function goHome(){
+  if(currentUser) renderHome();
+  else renderAuth();
+}
+
+function renderAuth(){
+  const app = document.getElementById("app");
+  const isLogin = authMode === "login";
+  app.innerHTML = `
+    <div class="auth-card">
+      <h2>${isLogin ? "Iniciar sesión" : "Crear cuenta"}</h2>
+      <p class="sub2">${isLogin ? "Ingresá con tu email y contraseña para acceder al simulador." : "Creá una cuenta para poder guardar tu historial de resultados."}</p>
+      <div id="authErrorWrap"></div>
+      <div class="auth-field">
+        <label>Email</label>
+        <input type="email" id="authEmail" autocomplete="email" placeholder="tu@email.com">
+      </div>
+      <div class="auth-field">
+        <label>Contraseña</label>
+        <input type="password" id="authPassword" autocomplete="${isLogin ? "current-password" : "new-password"}" placeholder="Mínimo 6 caracteres">
+      </div>
+      <button class="next-btn" id="authSubmit" style="width:100%;">${isLogin ? "Iniciar sesión" : "Crear cuenta"}</button>
+      <div class="auth-toggle">
+        ${isLogin ? "¿No tenés cuenta? " : "¿Ya tenés cuenta? "}<span id="authToggle">${isLogin ? "Creá una" : "Iniciá sesión"}</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("authToggle").onclick = () => { authMode = isLogin ? "signup" : "login"; renderAuth(); };
+  document.getElementById("authSubmit").onclick = submitAuth;
+  document.getElementById("authPassword").addEventListener("keydown", e => { if(e.key === "Enter") submitAuth(); });
+}
+
+function showAuthError(msg){
+  const wrap = document.getElementById("authErrorWrap");
+  if(wrap) wrap.innerHTML = `<div class="auth-error">${msg}</div>`;
+}
+
+function submitAuth(){
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const btn = document.getElementById("authSubmit");
+  if(!email || !password){ showAuthError("Completá email y contraseña."); return; }
+  btn.disabled = true;
+  const action = authMode === "login"
+    ? auth.signInWithEmailAndPassword(email, password)
+    : auth.createUserWithEmailAndPassword(email, password);
+  action.catch(err => {
+    showAuthError(AUTH_ERRORS[err.code] || "Ocurrió un error. Intentá de nuevo.");
+    btn.disabled = false;
+  });
+}
+
+function renderUserBar(){
+  const bar = document.getElementById("userBar");
+  if(!bar) return;
+  if(!currentUser){ bar.innerHTML = ""; return; }
+  bar.innerHTML = `
+    <span class="email">${currentUser.email}</span>
+    <button id="historyBtn">Mi historial</button>
+    <button id="logoutBtn">Cerrar sesión</button>
+  `;
+  document.getElementById("historyBtn").onclick = renderHistory;
+  document.getElementById("logoutBtn").onclick = () => auth.signOut();
+}
+
+function saveResult(){
+  if(!currentUser) return;
+  const c = getActiveCase();
+  db.collection("users").doc(currentUser.uid).collection("results").add({
+    cancer: CANCER[activeCancer].label,
+    module: CANCER[activeCancer].modules[activeModule].title,
+    caseLabel: c.label,
+    score: state.score,
+    maxScore: state.maxScore,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(() => {});
+}
+
+function renderHistory(){
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <div class="crumb"><span id="crumbHome">Inicio</span> / Mi historial</div>
+    <p class="intro">Tus resultados guardados de casos completados.</p>
+    <div id="historyList"><p class="history-empty">Cargando…</p></div>
+  `;
+  document.getElementById("crumbHome").onclick = goHome;
+  db.collection("users").doc(currentUser.uid).collection("results")
+    .orderBy("timestamp", "desc").limit(100).get()
+    .then(snap => {
+      const list = document.getElementById("historyList");
+      if(snap.empty){ list.innerHTML = `<p class="history-empty">Todavía no completaste ningún caso.</p>`; return; }
+      list.innerHTML = snap.docs.map(doc => {
+        const d = doc.data();
+        const date = d.timestamp ? d.timestamp.toDate().toLocaleDateString("es-AR", {day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit"}) : "—";
+        return `
+          <div class="history-item">
+            <div class="hi-main">
+              <div><b>${d.caseLabel}</b> — ${d.module}</div>
+              <div class="hi-date">${d.cancer} · ${date}</div>
+            </div>
+            <div class="hi-score">${d.score} / ${d.maxScore}</div>
+          </div>
+        `;
+      }).join("");
+    })
+    .catch(() => {
+      document.getElementById("historyList").innerHTML = `<p class="history-empty">No se pudo cargar el historial.</p>`;
+    });
+}
+
+auth.onAuthStateChanged(user => {
+  currentUser = user;
+  renderUserBar();
+  if(user) renderHome();
+  else { authMode = "login"; renderAuth(); }
+});
+
 /* ===================== ENGINE ===================== */
 
 let activeCancer = null;
@@ -1803,6 +1977,7 @@ function render(){
   }
 
   if(s.type === "epicrisis"){
+    saveResult();
     const c = getActiveCase();
     const pct = Math.round((state.score/state.maxScore)*100);
     let grade = "Manejo subóptimo — revisar guías";
@@ -1822,7 +1997,7 @@ function render(){
     `;
     document.getElementById("retryBtn").onclick = () => startCase(activeCancer, activeModule, activeCaseKey);
     document.getElementById("otherCaseBtn").onclick = () => renderCaseSelect(activeCancer, activeModule);
-    document.getElementById("homeBtn").onclick = renderHome;
+    document.getElementById("homeBtn").onclick = goHome;
   }
 }
 
@@ -1890,8 +2065,7 @@ function selectOption(i){
   };
 }
 
-document.getElementById("titleHome").onclick = renderHome;
-renderHome();
+document.getElementById("titleHome").onclick = goHome;
 
 if("serviceWorker" in navigator){
   window.addEventListener("load", () => {
