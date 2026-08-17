@@ -1,4 +1,4 @@
-const CACHE_NAME = "onco-sim-v6";
+const CACHE_NAME = "onco-sim-v7";
 const APP_SHELL = [
   "./",
   "./index.html",
