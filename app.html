@@ -69,6 +69,12 @@
   .casecard .casenum{font-family:'IBM Plex Mono',monospace;font-size:20px;color:var(--line);font-weight:500;flex-shrink:0;}
   .casecard:hover .casenum{color:var(--teal);}
 
+  .theory-link{display:flex;align-items:center;gap:14px;background:var(--gold-tint);border:1px solid var(--gold);border-radius:8px;padding:14px 18px;margin:0 0 20px;text-decoration:none;color:var(--ink);transition:border-color .12s,transform .12s;}
+  .theory-link:hover{transform:translateY(-1px);}
+  .theory-link .theory-icon{font-size:22px;flex-shrink:0;}
+  .theory-link b{display:block;font-size:14px;font-weight:600;color:var(--ink);}
+  .theory-link small{display:block;font-size:12px;color:var(--ink-soft);margin-top:2px;}
+
   .layout{display:grid;grid-template-columns:270px 1fr;gap:24px;align-items:start;}
   @media (max-width:760px){.layout{grid-template-columns:1fr;}}
 
@@ -1806,6 +1812,8 @@ let stages = null;
 let state = { step:0, score:0, maxScore:0, answered:false, vitals:{} };
 let currentOptions = null;
 
+const THEORY_PDFS = new Set(["lumA","lumB","tnbc","egfr","alk","nodriver","sclc"]);
+
 function renderHome(){
   activeCancer = null; activeModule = null; activeCaseKey = null;
   const app = document.getElementById("app");
@@ -1848,9 +1856,18 @@ function renderCaseSelect(cancerKey, moduleKey){
   const cancer = CANCER[cancerKey];
   const m = cancer.modules[moduleKey];
   const app = document.getElementById("app");
+  const theoryHtml = THEORY_PDFS.has(moduleKey) ? `
+    <a class="theory-link" href="teoria/${moduleKey}.pdf" target="_blank" rel="noopener">
+      <span class="theory-icon">📄</span>
+      <span>
+        <b>Marco teórico — ${m.title}</b>
+        <small>Descargá el resumen antes de resolver los casos</small>
+      </span>
+    </a>` : "";
   app.innerHTML = `
     <div class="crumb"><span id="crumbHome">Inicio</span> / <span id="crumbCancer">${cancer.label}</span> / ${m.title}</div>
     <p class="intro">${m.moduleDesc} Elegí uno de los casos para empezar la consulta.</p>
+    ${theoryHtml}
     <div class="casegrid" id="casegrid"></div>
   `;
   document.getElementById("crumbHome").onclick = renderHome;
