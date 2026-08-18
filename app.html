@@ -218,9 +218,9 @@ lumA: {
           {label:"Terapia endocrina neoadyuvante por varios meses", points:1,
             feedback:"Alternativa razonable en casos seleccionados, pero no la primera línea aquí: el tumor ya es operable de entrada.",
             paper:"ACOSOG Z1031 — Ellis et al., J Clin Oncol 2011", finding:"La terapia endocrina neoadyuvante puede reducir el tamaño tumoral en RE+ posmenopáusicas."},
-          {label:"Radioterapia como tratamiento inicial", points:0,
-            feedback:"No tiene rol como tratamiento inicial en enfermedad operable.",
-            paper:"—", finding:"No existe evidencia que sustente radioterapia como tratamiento primario en cáncer de mama operable."}
+          {label:"Mastectomía total de entrada, dado el tamaño del tumor (2.3 cm)", points:0,
+            feedback:"El tamaño por sí solo no indica mastectomía: un tumor de 2.3 cm en una mama de tamaño adecuado suele ser candidato a cirugía conservadora (tumorectomía) con buen resultado estético, reservando la mastectomía para relación tumor/mama desfavorable, multicentricidad u otras contraindicaciones específicas.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"La elección entre cirugía conservadora y mastectomía se basa en la relación tumor/mama y otros factores técnicos u oncológicos, no en un punto de corte de tamaño absoluto como 2-3 cm."}
         ]},
       {type:"info", phase:1, eyebrow:"Resultado quirúrgico", vitalsUpdate:{"Tratamiento":"Cirugía realizada"}, html:`
         <p><b>Tumorectomía + ganglio centinela</b>: carcinoma ductal infiltrante 2.4 cm, márgenes negativos, <b>0/2 ganglios positivos (pN0)</b>. pT2N0.</p>`, buttonLabel:"Evaluar riesgo de recurrencia →"},
@@ -236,9 +236,9 @@ lumA: {
           {label:"Terapia endocrina + inhibidor de CDK4/6", points:0,
             feedback:"Indicado en alto riesgo; esta paciente es pN0 con RS bajo, no cumple criterios.",
             paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"Beneficio únicamente en población de alto riesgo definida por el estudio."},
-          {label:"Quimioterapia sola, sin terapia endocrina", points:0,
-            feedback:"La terapia endocrina no debe omitirse en un tumor RE+.",
-            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"La terapia endocrina adyuvante reduce sustancialmente el riesgo de recurrencia en tumores RE+."}
+          {label:"Vigilancia activa con biopsia líquida (ctDNA) seriada, sin tratamiento sistémico mientras no se detecte enfermedad residual molecular", points:0,
+            feedback:"El monitoreo de ctDNA para guiar el inicio de tratamiento tras cirugía es un área de investigación activa, pero no reemplaza hoy a la terapia endocrina adyuvante estándar en la práctica clínica fuera de un ensayo clínico; omitirla en un tumor RE+ significativo dejaría a la paciente sin un tratamiento con beneficio demostrado.",
+            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"La terapia endocrina adyuvante reduce sustancialmente el riesgo de recurrencia en tumores RE+ y sigue siendo el estándar; las estrategias guiadas por ctDNA para diferir tratamiento aún no están validadas para reemplazarla en la práctica habitual."}
         ]},
       {type:"decision", phase:3, eyebrow:"Decisión 3 · Elección de terapia endocrina adyuvante",
         prompt:"¿Cuál es la elección más apropiada de terapia endocrina en esta paciente posmenopáusica?",
@@ -252,9 +252,9 @@ lumA: {
           {label:"Supresión ovárica + inhibidor de aromatasa", points:0,
             feedback:"Se reserva para premenopáusicas; esta paciente ya es posmenopáusica.",
             paper:"SOFT/TEXT — Francis et al., N Engl J Med 2018", finding:"El beneficio se demostró en premenopáusicas de riesgo alto."},
-          {label:"Ninguna terapia endocrina, solo seguimiento", points:0,
-            feedback:"Sería un error grave con RE 95%.",
-            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"La omisión de terapia endocrina en tumores RE+ se asocia a exceso de recurrencias."}
+          {label:"Fulvestrant en monoterapia como terapia endocrina adyuvante", points:0,
+            feedback:"Fulvestrant no está validado ni indicado en el escenario adyuvante de enfermedad temprana; su evidencia es exclusivamente en enfermedad metastásica. En adyuvancia, las opciones estándar son tamoxifeno o un inhibidor de aromatasa (según estado menopáusico), no fulvestrant.",
+            paper:"—", finding:"No existe evidencia que sustente el uso de fulvestrant como terapia endocrina adyuvante en enfermedad temprana; su desarrollo clínico se limita al escenario metastásico."}
         ]},
       {type:"info", phase:4, eyebrow:"Seguimiento — 18 meses después", vitalsUpdate:{"Tratamiento":"Letrozol adyuvante","Estadio":"Sin evidencia de enfermedad"}, html:`
         <p>Dieciocho meses después consulta por <b>dolor lumbar progresivo</b>. TC y centellograma: <b>lesiones líticas lumbares y lesión hepática de 1.8 cm</b>. Biopsia: <b>metastásico, RE+, HER2-</b>, sin crisis visceral.</p>
@@ -389,9 +389,9 @@ lumA: {
           {label:"Suspender toda terapia endocrina de inmediato sin haber completado los 5 años planificados", points:0,
             feedback:"No corresponde interrumpir antes de completar el curso planificado de 5 años sin una razón de toxicidad activa; en este momento la paciente ya está tolerando bien el agente rotado.",
             paper:"EBCTCG meta-analysis, Lancet 2011", finding:"Completar al menos 5 años de terapia endocrina adyuvante reduce sustancialmente el riesgo de recurrencia en tumores RE+."},
-          {label:"Cambiar a quimioterapia de mantenimiento en lugar de continuar terapia endocrina", points:0,
-            feedback:"No tiene ningún sustento: no existe indicación de quimioterapia de mantenimiento en enfermedad libre tras cirugía, y sería sustituir un tratamiento eficaz y bien tolerado por uno de mayor toxicidad sin beneficio.",
-            paper:"—", finding:"No existe evidencia que sustente la quimioterapia de mantenimiento en el escenario adyuvante libre de enfermedad."}
+          {label:"Cambiar de inhibidor de aromatasa a tamoxifeno para los años adicionales, en lugar de suspender", points:0,
+            feedback:"Cambiar de clase de agente es una estrategia real de terapia endocrina extendida en pacientes seleccionadas, pero en esta paciente de bajo riesgo basal y edad avanzada el problema de fondo no es qué droga usar, sino que la extensión en sí misma no está indicada: el beneficio esperado es pequeño y no compensa el riesgo de toxicidad prolongada.",
+            paper:"EBCTCG meta-analysis extended endocrine therapy, Lancet Oncol 2020", finding:"Los ensayos de terapia endocrina extendida evaluaron tanto continuar la misma clase como cambiar de agente; en ambos casos el beneficio esperado depende del riesgo basal, que en este perfil es bajo."}
         ]}
     ]},
 
@@ -596,9 +596,9 @@ lumB: {
           {label:"Inhibidor de aromatasa solo, sin supresión ovárica", points:0,
             feedback:"Puede ser dañino: sin supresión ovárica el inhibidor de aromatasa pierde su mecanismo de acción.",
             paper:"SOFT/TEXT — Francis et al., N Engl J Med 2018", finding:"Los inhibidores de aromatasa se evaluaron siempre junto con supresión ovárica en premenopáusicas."},
-          {label:"Ninguna terapia endocrina", points:0,
-            feedback:"La quimioterapia no reemplaza a la terapia endocrina en tumores RE+.",
-            paper:"EBCTCG meta-analysis, Lancet 2011", finding:"El beneficio de la terapia endocrina es independiente del uso de quimioterapia."}
+          {label:"Fulvestrant en lugar de inhibidor de aromatasa, por ser un antiestrógeno más potente", points:0,
+            feedback:"Fulvestrant no está aprobado ni estudiado en el escenario adyuvante: su evidencia es exclusivamente en enfermedad metastásica, y en premenopáusicas no se usa sin la supresión ovárica que el caso ya requiere.",
+            paper:"EBCTCG meta-analysis, Lancet 2011; FALCON — Robertson et al., Lancet 2016 (fulvestrant en metastásico)", finding:"La evidencia de fulvestrant proviene de estudios en enfermedad metastásica; no existe rol establecido para fulvestrant como terapia endocrina adyuvante."}
         ]},
       {type:"info", phase:5, eyebrow:"Seguimiento — 30 meses después", vitalsUpdate:{"Tratamiento":"OFS + IA + abemaciclib completado","Estadio":"Sin evidencia de enfermedad"}, html:`
         <p>A los 30 meses consulta por <b>disnea progresiva</b>. TC de tórax: <b>nódulos pulmonares bilaterales y derrame pleural</b>. Biopsia pleural: <b>metastásico, RE+, HER2-</b>.</p>
@@ -746,9 +746,9 @@ lumB: {
           {label:"Terapia endocrina neoadyuvante sola", points:0,
             feedback:"El RP muy bajo (5%) y el Ki67 45% sugieren menor dependencia hormonal y mayor proliferación; no es la estrategia de elección.",
             paper:"ACOSOG Z1031 — Ellis et al., J Clin Oncol 2011", finding:"El beneficio de terapia endocrina neoadyuvante es menor en tumores de mayor proliferación y menor expresión de RP."},
-          {label:"Radioterapia primaria sin tratamiento sistémico", points:0,
-            feedback:"No corresponde como tratamiento inicial en enfermedad con compromiso ganglionar extenso operable.",
-            paper:"NCCN Guidelines Breast Cancer", finding:"La radioterapia no reemplaza al tratamiento sistémico ni a la cirugía como abordaje inicial en esta presentación."}
+          {label:"AC-T neoadyuvante en su esquema convencional cada 3 semanas, evitando la variante en dosis densas por tratarse de una paciente posmenopáusica", points:0,
+            feedback:"La elegibilidad para dosis densas se basa en el estado funcional y la tolerancia esperada, no en la edad menopáusica: en enfermedad de alto riesgo como esta, con compromiso ganglionar extenso, la variante en dosis densas es preferible independientemente del estado hormonal de la paciente.",
+            paper:"CALGB 9741 — Citron et al., J Clin Oncol 2003", finding:"El beneficio en supervivencia libre de enfermedad de la quimioterapia en dosis densas se demostró en la población general del estudio, sin que el estado menopáusico fuera un criterio de selección."}
         ]},
       {type:"info", phase:1, eyebrow:"Resultado tras neoadyuvancia y cirugía", vitalsUpdate:{"Tratamiento":"NACT + cirugía realizada — respuesta mínima","Estadio":"ypT3N2 (enfermedad residual extensa)"}, html:`
         <p>Completa la quimioterapia neoadyuvante con <b>respuesta clínica mínima</b>. Se realiza <b>mastectomía + disección axilar</b>. Patología: <b>enfermedad residual extensa de 4.5 cm, 6/18 ganglios positivos (ypT3N2)</b>.</p>
@@ -1487,9 +1487,9 @@ egfr: {
           {label:"Continuar osimertinib en monoterapia sin cambios, dado que la mutación original de EGFR persiste", points:0,
             feedback:"La persistencia de la mutación original no significa que el fármaco siga siendo eficaz: la amplificación de MET es un mecanismo de escape que vuelve ineficaz a osimertinib en monoterapia, incluso si el objetivo original sigue presente.",
             paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"La progresión clínica documentada, independientemente de la persistencia de la mutación original, indica la necesidad de cambiar de estrategia terapéutica."},
-          {label:"Terapia endocrina, dado que es una paciente mujer", points:0,
-            feedback:"No tiene ningún sustento: el cáncer de pulmón no tiene un impulsor hormonal análogo al de cáncer de mama; esta opción no corresponde a ningún mecanismo biológico relevante en este contexto.",
-            paper:"—", finding:"No existe evidencia ni mecanismo biológico que sustente el uso de terapia endocrina en cáncer de pulmón."},
+          {label:"Iniciar un inhibidor de MET en monoterapia, suspendiendo por completo osimertinib", points:0,
+            feedback:"El error es abandonar el bloqueo de EGFR: cuando la resistencia es por amplificación de MET, la enfermedad sigue dependiendo también de la vía de EGFR original, por lo que la estrategia dirigida busca combinar ambos bloqueos (osimertinib + inhibidor de MET), no reemplazar uno por el otro.",
+            paper:"SAVANNAH — combinación osimertinib + savolitinib en amplificación de MET", finding:"La actividad observada en este mecanismo de resistencia correspondió a la combinación de osimertinib con un inhibidor de MET, no a la monoterapia con inhibidor de MET aislado, reflejando que el tumor mantiene doble dependencia de ambas vías."},
           {label:"Radioterapia sistémica como único tratamiento de la enfermedad hepática y mediastínica", points:0,
             feedback:"La radioterapia tiene un rol para el control local de lesiones específicas, pero no reemplaza al tratamiento sistémico ante enfermedad diseminada con progresión documentada.",
             paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda tratamiento sistémico como pilar en enfermedad metastásica diseminada, con radioterapia como complemento para control local."}
