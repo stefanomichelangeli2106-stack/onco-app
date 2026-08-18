@@ -426,9 +426,9 @@ lumA: {
       {type:"decision", phase:2, eyebrow:"Decisión 2 · Adyuvancia sistémica",
         prompt:"Paciente de 45 años (menor de 50), pN0, Recurrence Score 22. ¿Qué adyuvancia sistémica corresponde?",
         options:[
-          {label:"Quimioterapia adyuvante (esquema con antraciclina/taxano) seguida de terapia endocrina", points:2,
-            feedback:"Correcto. A diferencia de una paciente mayor de 50 años con el mismo RS, en el subgrupo de 50 años o menos con RS 16-25, TAILORx sí mostró un beneficio modesto pero real de agregar quimioterapia, por lo que aquí sí corresponde intensificar el tratamiento.",
-            paper:"TAILORx — Sparano et al., N Engl J Med 2018 (análisis por edad)", finding:"En el subgrupo de 50 años o menos con RS 16-25, se observó un beneficio absoluto modesto de agregar quimioterapia en la tasa de recurrencia a distancia, a diferencia de las pacientes mayores de 50 con el mismo rango de RS."},
+          {label:"Quimioterapia adyuvante con AC-T (doxorrubicina + ciclofosfamida por 4 ciclos, seguido de paclitaxel) seguida de terapia endocrina", points:2,
+            feedback:"Correcto. A diferencia de una paciente mayor de 50 años con el mismo RS, en el subgrupo de 50 años o menos con RS 16-25, TAILORx sí mostró un beneficio modesto pero real de agregar quimioterapia, por lo que aquí sí corresponde intensificar el tratamiento. AC-T (doxorrubicina + ciclofosfamida seguido de un taxano) es el esquema con antraciclina más utilizado en este contexto; en pacientes N0 de riesgo moderado, un esquema no antraciclínico como TC (docetaxel + ciclofosfamida x4) es una alternativa razonable con menor cardiotoxicidad.",
+            paper:"TAILORx — Sparano et al., N Engl J Med 2018 (análisis por edad)", finding:"En el subgrupo de 50 años o menos con RS 16-25, se observó un beneficio absoluto modesto de agregar quimioterapia en la tasa de recurrencia a distancia, a diferencia de las pacientes mayores de 50 con el mismo rango de RS. El estudio no impuso un esquema de quimioterapia específico; AC-T y TC son ambos esquemas aceptados en la práctica según el perfil de riesgo cardiovascular de la paciente."},
           {label:"Terapia endocrina sola, sin quimioterapia, igual que con un RS bajo", points:0,
             feedback:"No es correcto extrapolar la conducta de un RS bajo (como en otros casos) a un RS 22 en una paciente de 45 años: en ese subgrupo etario específico, TAILORx mostró beneficio de agregar quimioterapia.",
             paper:"TAILORx — Sparano et al., N Engl J Med 2018", finding:"El beneficio de la quimioterapia en RS 16-25 se concentró específicamente en pacientes de 50 años o menos, no en toda la población con ese rango de RS."},
@@ -535,9 +535,9 @@ lumB: {
       {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
         prompt:"Tumor de 3.5 cm, axila positiva, grado 3, Ki67 35%. ¿Cuál es la conducta inicial más apropiada?",
         options:[
-          {label:"Quimioterapia neoadyuvante (antraciclina/taxano) seguida de cirugía", points:2,
-            feedback:"Correcto. La alta proliferación y el compromiso axilar hacen razonable la quimioterapia neoadyuvante.",
-            paper:"NSABP B-18/B-27 y consenso NCCN", finding:"La quimioterapia neoadyuvante en tumores de alto riesgo permite reducción tumoral y axilar equivalente en eficacia a largo plazo respecto a darla en forma adyuvante."},
+          {label:"Quimioterapia neoadyuvante con AC-T (doxorrubicina + ciclofosfamida por 4 ciclos, seguido de paclitaxel semanal o docetaxel cada 3 semanas) seguida de cirugía", points:2,
+            feedback:"Correcto. La alta proliferación y el compromiso axilar hacen razonable la quimioterapia neoadyuvante. El esquema estándar es AC-T: doxorrubicina + ciclofosfamida por 4 ciclos, seguido de un taxano (paclitaxel semanal x12 o docetaxel cada 3 semanas x4); en pacientes con buen estado funcional también puede administrarse en dosis densas (cada 2 semanas con soporte de factor estimulante de colonias), lo que acorta la duración total del tratamiento.",
+            paper:"NSABP B-18/B-27 y consenso NCCN; CALGB 9741 (dosis densas) — Citron et al., J Clin Oncol 2003", finding:"La quimioterapia neoadyuvante en tumores de alto riesgo permite reducción tumoral y axilar equivalente en eficacia a largo plazo respecto a darla en forma adyuvante. El esquema con antraciclina y taxano (AC-T) es el más utilizado; administrado en dosis densas mostró beneficio en supervivencia libre de enfermedad frente al esquema convencional cada 3 semanas."},
           {label:"Cirugía primero, igual que en Luminal A", points:0,
             feedback:"No aplica el mismo razonamiento: el Ki67 alto y grado 3 predicen respuesta a quimioterapia mucho más relevante.",
             paper:"Rouzier et al., Clin Cancer Res 2005", finding:"Los tumores luminales de alta proliferación tienen tasas de respuesta patológica claramente superiores a los de baja proliferación."},
@@ -652,9 +652,9 @@ lumB: {
       {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
         prompt:"Tumor 3.2 cm, axila clínicamente positiva, grado 3, Ki67 40%. ¿Cuál es la conducta inicial más apropiada?",
         options:[
-          {label:"Quimioterapia neoadyuvante (antraciclina/taxano) seguida de cirugía", points:2,
-            feedback:"Correcto. La alta proliferación y compromiso axilar justifican neoadyuvancia, que además permite evaluar respuesta real del tumor.",
-            paper:"NSABP B-18/B-27 y consenso NCCN", finding:"La quimioterapia neoadyuvante en tumores de alto riesgo es equivalente en eficacia a darla en forma adyuvante, con la ventaja de evaluar respuesta in vivo."},
+          {label:"Quimioterapia neoadyuvante con AC-T (doxorrubicina + ciclofosfamida por 4 ciclos, seguido de un taxano) seguida de cirugía", points:2,
+            feedback:"Correcto. La alta proliferación y compromiso axilar justifican neoadyuvancia, que además permite evaluar respuesta real del tumor. El esquema estándar es AC-T: doxorrubicina + ciclofosfamida por 4 ciclos, seguido de paclitaxel (semanal x12 o dosis densa cada 2 semanas) o docetaxel cada 3 semanas.",
+            paper:"NSABP B-18/B-27 y consenso NCCN; CALGB 9741 (dosis densas) — Citron et al., J Clin Oncol 2003", finding:"La quimioterapia neoadyuvante en tumores de alto riesgo es equivalente en eficacia a darla en forma adyuvante, con la ventaja de evaluar respuesta in vivo. El esquema con antraciclina y taxano (AC-T), incluida su variante en dosis densas, es el más utilizado en este perfil de alto riesgo."},
           {label:"Cirugía primero sin tratamiento sistémico previo", points:0,
             feedback:"El Ki67 alto y grado 3 predicen buena respuesta a quimioterapia; operar de entrada pierde esa oportunidad.",
             paper:"Rouzier et al., Clin Cancer Res 2005", finding:"Los tumores luminales de alta proliferación tienen mayor tasa de respuesta patológica a quimioterapia."},
@@ -737,9 +737,9 @@ lumB: {
       {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
         prompt:"Tumor 3T3N2, grado 3, Ki67 45%, RP muy bajo. ¿Cuál es la conducta inicial más apropiada?",
         options:[
-          {label:"Quimioterapia neoadyuvante (antraciclina/taxano) seguida de cirugía", points:2,
-            feedback:"Correcto. El compromiso ganglionar extenso y la alta proliferación hacen prioritaria la neoadyuvancia, tanto para intentar reducir la extensión de la cirugía como para evaluar la quimiosensibilidad real del tumor.",
-            paper:"NSABP B-18/B-27 y consenso NCCN", finding:"La neoadyuvancia es preferida en tumores de alto riesgo con compromiso ganglionar extenso."},
+          {label:"Quimioterapia neoadyuvante con AC-T (doxorrubicina + ciclofosfamida por 4 ciclos, seguido de un taxano) seguida de cirugía", points:2,
+            feedback:"Correcto. El compromiso ganglionar extenso y la alta proliferación hacen prioritaria la neoadyuvancia, tanto para intentar reducir la extensión de la cirugía como para evaluar la quimiosensibilidad real del tumor. El esquema estándar es AC-T: doxorrubicina + ciclofosfamida por 4 ciclos, seguido de paclitaxel o docetaxel; en enfermedad de alto riesgo como esta, la variante en dosis densas (cada 2 semanas con soporte de G-CSF) es una opción preferida por su mayor eficacia.",
+            paper:"NSABP B-18/B-27 y consenso NCCN; CALGB 9741 (dosis densas) — Citron et al., J Clin Oncol 2003", finding:"La neoadyuvancia es preferida en tumores de alto riesgo con compromiso ganglionar extenso. El esquema con antraciclina y taxano (AC-T) en dosis densas mostró mejor supervivencia libre de enfermedad que el esquema convencional cada 3 semanas, particularmente relevante en enfermedad de alto riesgo con compromiso ganglionar extenso."},
           {label:"Cirugía primero", points:0,
             feedback:"En un tumor cT3N2 de alto grado, operar de entrada no permite evaluar la respuesta a tratamiento sistémico ni facilita la cirugía.",
             paper:"Rouzier et al., Clin Cancer Res 2005", finding:"Los tumores de alta proliferación tienen mayor tasa de respuesta a quimioterapia neoadyuvante."},
@@ -850,15 +850,15 @@ her2: {
       {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
         prompt:"Tumor HER2+ localmente avanzado (cT3N1). ¿Cuál es la conducta inicial más apropiada?",
         options:[
-          {label:"Quimioterapia neoadyuvante + bloqueo dual anti-HER2 (trastuzumab + pertuzumab)", points:2,
-            feedback:"Correcto. Logra las tasas más altas de respuesta patológica completa entre todos los subtipos, y esa respuesta guía la adyuvancia posterior.",
-            paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"Agregar pertuzumab a trastuzumab + docetaxel casi duplicó la tasa de respuesta patológica completa."},
+          {label:"TCHP: docetaxel + carboplatino + trastuzumab + pertuzumab neoadyuvante", points:2,
+            feedback:"Correcto. TCHP (docetaxel + carboplatino junto con el bloqueo dual trastuzumab + pertuzumab) logra las tasas más altas de respuesta patológica completa entre todos los subtipos, y esa respuesta guía la adyuvancia posterior. Se prefiere este esquema sin antraciclina (en vez de AC seguido de docetaxel + bloqueo dual) por su menor cardiotoxicidad, dado que ya se administra un anti-HER2 con riesgo cardíaco propio.",
+            paper:"TRYPHAENA — Schneeweiss et al., Ann Oncol 2013; NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"TRYPHAENA evaluó específicamente el esquema TCHP (sin antraciclina) junto con bloqueo dual, mostrando alta tasa de respuesta patológica completa con menor toxicidad cardíaca que los esquemas con antraciclina. NeoSphere mostró que agregar pertuzumab a trastuzumab + docetaxel casi duplicó la tasa de respuesta patológica completa."},
           {label:"Cirugía primero, sin tratamiento sistémico previo", points:0,
             feedback:"Los tumores HER2+ tienen alta sensibilidad a la neoadyuvancia; operar primero pierde esa oportunidad.",
             paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"HER2+ es de los subtipos con mayor capacidad de respuesta patológica completa."},
-          {label:"Trastuzumab en monoterapia con quimioterapia, sin pertuzumab", points:1,
-            feedback:"Efectivo, pero el bloqueo dual con pertuzumab logra mayor tasa de respuesta patológica completa.",
-            paper:"NeoSphere / TRYPHAENA", finding:"El bloqueo dual mostró consistentemente mayor tasa de respuesta patológica completa que trastuzumab solo."},
+          {label:"Docetaxel + trastuzumab neoadyuvante, sin pertuzumab ni carboplatino", points:1,
+            feedback:"Efectivo, pero omitir pertuzumab del bloqueo deja fuera el componente que más aumenta la tasa de respuesta patológica completa en este perfil.",
+            paper:"NeoSphere / TRYPHAENA", finding:"El bloqueo dual con pertuzumab mostró consistentemente mayor tasa de respuesta patológica completa que trastuzumab solo."},
           {label:"Terapia endocrina neoadyuvante", points:0,
             feedback:"No tiene rol: el tumor es RE negativo.",
             paper:"—", finding:"La terapia endocrina solo tiene indicación con expresión de receptores hormonales."}
@@ -950,9 +950,9 @@ her2: {
       {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
         prompt:"Tumor HER2+/RE+ cT2N1. ¿Cuál es la conducta inicial más apropiada?",
         options:[
-          {label:"Quimioterapia neoadyuvante + bloqueo dual anti-HER2 (trastuzumab + pertuzumab)", points:2,
-            feedback:"Correcto. Aun siendo también RE positivo, el HER2 positivo determina la estrategia inicial: la neoadyuvancia con bloqueo dual sigue siendo el estándar, priorizando el tratamiento del impulsor HER2 sobre el hormonal en esta etapa.",
-            paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"El bloqueo dual neoadyuvante mostró alta tasa de respuesta patológica completa, con beneficio consistente independientemente del estado de receptores hormonales."},
+          {label:"TCHP: docetaxel + carboplatino + trastuzumab + pertuzumab neoadyuvante", points:2,
+            feedback:"Correcto. Aun siendo también RE positivo, el HER2 positivo determina la estrategia inicial: la neoadyuvancia con TCHP (docetaxel + carboplatino + bloqueo dual) sigue siendo el estándar, priorizando el tratamiento del impulsor HER2 sobre el hormonal en esta etapa.",
+            paper:"TRYPHAENA — Schneeweiss et al., Ann Oncol 2013; NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"El bloqueo dual neoadyuvante junto con quimioterapia sin antraciclina (TCHP) mostró alta tasa de respuesta patológica completa con buen perfil de seguridad cardíaca, con beneficio consistente independientemente del estado de receptores hormonales."},
           {label:"Terapia endocrina neoadyuvante, dado que también es RE positivo", points:0,
             feedback:"No es la prioridad: en un tumor HER2 positivo, el impulsor dominante y de mayor sensibilidad a tratamiento dirigido es HER2, no el componente hormonal.",
             paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"La respuesta patológica completa fue consistentemente mayor con esquemas dirigidos a HER2 que los basados solo en terapia endocrina en tumores HER2 positivos."},
@@ -1035,7 +1035,7 @@ her2: {
       {type:"decision", phase:1, eyebrow:"Decisión 1 · Rol de la cirugía en enfermedad metastásica de novo",
         prompt:"Enfermedad HER2+ metastásica de novo (mama + hígado) al momento del diagnóstico, sin tratamiento previo. ¿Cuál es la conducta inicial más apropiada respecto al tumor primario de mama?",
         options:[
-          {label:"Iniciar tratamiento sistémico de primera línea sin cirugía de la mama en este momento", points:2,
+          {label:"Iniciar tratamiento sistémico de primera línea (bloqueo dual anti-HER2 + taxano) sin cirugía de la mama en este momento", points:2,
             feedback:"Correcto. En enfermedad metastásica de novo, el tratamiento sistémico es la prioridad inicial; la cirugía del tumor primario no ha demostrado mejorar la supervivencia de forma consistente en este contexto y se reserva para indicaciones específicas de control local (por ejemplo, sangrado, ulceración) o se reevalúa según la respuesta al tratamiento sistémico.",
             paper:"NCCN Guidelines Breast Cancer, versión vigente", finding:"En enfermedad metastásica de novo, recomienda iniciar tratamiento sistémico como prioridad; la cirugía del tumor primario se considera de forma individualizada, no como estándar sistemático de entrada, dado que no ha mostrado un beneficio consistente en supervivencia en los ensayos aleatorizados disponibles."},
           {label:"Mastectomía inmediata seguida de tratamiento sistémico, igual que en enfermedad no metastásica", points:0,
@@ -1126,7 +1126,7 @@ tnbc: {
       {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
         prompt:"Triple negativo, estadio II con ganglio positivo (cT2N1), de alto riesgo. ¿Cuál es la conducta inicial más apropiada?",
         options:[
-          {label:"Quimioterapia neoadyuvante (carboplatino + paclitaxel, luego antraciclina/ciclofosfamida) + pembrolizumab", points:2,
+          {label:"Quimioterapia neoadyuvante (carboplatino + paclitaxel semanal x4, seguido de doxorrubicina + ciclofosfamida x4) + pembrolizumab", points:2,
             feedback:"Correcto. Estándar actual en triple negativo estadio II-III de alto riesgo.",
             paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"Agregar pembrolizumab mejoró la respuesta patológica completa y la supervivencia libre de eventos, independiente del estado de PD-L1."},
           {label:"Quimioterapia neoadyuvante estándar, sin inmunoterapia", points:1,
@@ -1242,7 +1242,7 @@ tnbc: {
       {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
         prompt:"Triple negativo cT2N0, alto riesgo por tamaño y grado, sin mutación germinal. ¿Cuál es la conducta inicial más apropiada?",
         options:[
-          {label:"Quimioterapia neoadyuvante (carboplatino + paclitaxel, luego antraciclina/ciclofosfamida) + pembrolizumab", points:2,
+          {label:"Quimioterapia neoadyuvante (carboplatino + paclitaxel semanal x4, seguido de doxorrubicina + ciclofosfamida x4) + pembrolizumab", points:2,
             feedback:"Correcto. El estadio II-III de alto riesgo es indicación de pembrolizumab neoadyuvante/adyuvante independientemente del estado germinal de BRCA o del PD-L1.",
             paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El beneficio de agregar pembrolizumab fue independiente del estado de PD-L1 y no requiere estratificación por mutación germinal para esta indicación neoadyuvante/adyuvante."},
           {label:"Quimioterapia neoadyuvante sin pembrolizumab, dado que no tiene mutación BRCA", points:0,
@@ -1327,7 +1327,7 @@ tnbc: {
       {type:"decision", phase:1, eyebrow:"Decisión 1 · Abordaje inicial",
         prompt:"Carcinoma inflamatorio triple negativo, cT4dN2, PD-L1 negativo. ¿Cuál es la conducta inicial más apropiada?",
         options:[
-          {label:"Quimioterapia neoadyuvante + pembrolizumab, a pesar del PD-L1 negativo", points:2,
+          {label:"Carboplatino + paclitaxel seguido de doxorrubicina + ciclofosfamida, con pembrolizumab, a pesar del PD-L1 negativo", points:2,
             feedback:"Correcto. A diferencia de la indicación en enfermedad metastásica (donde el beneficio de pembrolizumab requiere PD-L1 positivo), en el contexto neoadyuvante/adyuvante de KEYNOTE-522 el beneficio fue independiente del estado de PD-L1, por lo que se agrega igual pese a ser negativo.",
             paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El beneficio de pembrolizumab neoadyuvante/adyuvante fue consistente independientemente del estado de PD-L1, a diferencia de la indicación en enfermedad metastásica de primera línea, que sí requiere PD-L1 positivo (CPS ≥10) según KEYNOTE-355."},
           {label:"Quimioterapia neoadyuvante sin pembrolizumab, dado que el PD-L1 es negativo", points:0,
@@ -2162,14 +2162,14 @@ function render(){
   }
 
   if(s.type === "decision"){
-    currentOptions = s.options;
+    currentOptions = shuffleArray(s.options);
     state.answered = false;
     const letters = ["A","B","C","D"];
     panel.innerHTML = `
       <div class="eyebrow ${isTox ? "tox":""}">${s.eyebrow}</div>
       <div class="narrative"><p>${s.prompt}</p></div>
       <div class="options" id="optionsWrap">
-        ${s.options.map((o,i) => `
+        ${currentOptions.map((o,i) => `
           <button class="opt" data-i="${i}">
             <span class="letter">${letters[i]}</span>
             <span>${o.label}</span>
@@ -2207,6 +2207,15 @@ function render(){
     document.getElementById("otherCaseBtn").onclick = () => renderCaseSelect(activeCancer, activeModule);
     document.getElementById("homeBtn").onclick = goHome;
   }
+}
+
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
 
 function tierOf(points){
