@@ -643,7 +643,7 @@ lumB: {
     cardDesc:"52 años, perimenopáusica. Cáncer de mama Luminal B de alto grado.",
     patient:"V.M., 52 años · perimenopáusica<br>Motivo: nódulo palpable, mama izquierda",
     vitals:{"RE / RP":"70% / 40%","HER2":"negativo (IHQ 0)","Ki67":"40%","Subtipo":"Luminal B","Estadio":"cT2N1","Tratamiento":"—"},
-    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","Epicrisis"],
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","1ª línea metastásica","Epicrisis"],
     stages:[
       {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
         <p>V.M., 52 años, con último período menstrual hace 5 meses (perimenopáusica), consulta por nódulo palpable de 3.2 cm en mama izquierda con adenopatía axilar sospechosa.</p>
@@ -702,6 +702,25 @@ lumB: {
           {label:"Cambiar directamente a quimioterapia de mantenimiento en lugar de terapia endocrina", points:0,
             feedback:"No tiene sustento: la quimioterapia de mantenimiento no está indicada en el escenario adyuvante y tiene un perfil de toxicidad considerablemente mayor que la terapia endocrina.",
             paper:"—", finding:"No existe evidencia que sustente reemplazar la terapia endocrina adyuvante por quimioterapia de mantenimiento por intolerancia sintomática."}
+        ]},
+      {type:"info", phase:4, eyebrow:"Recaída — 4 años después", vitalsUpdate:{"Tratamiento":"Recaída tras adyuvancia completa (endocrino-sensible)","Estadio":"Metastásico (óseo + hepático)"}, html:`
+        <p>Completó los 2 años de abemaciclib adyuvante y continuó con inhibidor de aromatasa. Cuatro años después de finalizado el abemaciclib, en un control de rutina se detectan <b>lesiones óseas múltiples y una lesión hepática de 2 cm</b>. Biopsia hepática: <b>metastásico, RE+/RP+, HER2 negativo</b>.</p>
+        <div class="callout">La recaída ocurre más de 12 meses después de haber completado la terapia adyuvante (incluido el CDK4/6i): se considera una recaída <b>endocrino-sensible</b>, a diferencia de una progresión durante el tratamiento adyuvante o dentro del año de finalizado, que se consideraría resistencia endocrina precoz.</div>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 3 · Primera línea metastásica",
+        prompt:"Recaída ósea y hepática 4 años después de completar abemaciclib + terapia endocrina adyuvante, RE+/HER2- metastásico, sin crisis visceral. ¿Esquema de primera línea preferido?",
+        options:[
+          {label:"Inhibidor de aromatasa + inhibidor de CDK4/6 (ribociclib)", points:2,
+            feedback:"Correcto. Una recaída endocrino-sensible (más de 12 meses tras finalizar el CDK4/6i adyuvante) sigue siendo candidata al estándar de primera línea metastásica con un nuevo inhibidor de CDK4/6, ya que la exposición adyuvante previa no se considera resistencia cruzada relevante cuando el intervalo libre de enfermedad es prolongado.",
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016; consenso ESMO sobre recaída endocrino-sensible", finding:"Las pacientes con recaída más de 12 meses después de completar terapia endocrina (con o sin CDK4/6i) adyuvante se consideran endocrino-sensibles y son candidatas al esquema estándar de primera línea metastásica, incluyendo un inhibidor de CDK4/6i aunque ya hayan recibido uno en el escenario adyuvante."},
+          {label:"Continuar solo con el inhibidor de aromatasa que ya venía tomando, sin agregar CDK4/6i", points:0,
+            feedback:"La progresión bajo terapia endocrina sola indica la necesidad de intensificar con un inhibidor de CDK4/6i, no de mantener el mismo esquema que ya demostró ser insuficiente.",
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"Agregar un inhibidor de CDK4/6i mejora sustancialmente los resultados frente a terapia endocrina sola en primera línea metastásica."},
+          {label:"Quimioterapia con antraciclina o taxano de entrada", points:0,
+            feedback:"Sin crisis visceral, la terapia endocrina-based con CDK4/6i sigue siendo preferida sobre la quimioterapia de entrada.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Reserva la quimioterapia de primera línea para los casos con crisis visceral."},
+          {label:"Fulvestrant en monoterapia, dado que ya recibió un CDK4/6i en el escenario adyuvante", points:1,
+            feedback:"Es una opción razonable si hubiera dudas sobre resistencia cruzada, pero con un intervalo libre de enfermedad de 4 años la recaída se considera endocrino-sensible y el esquema combinado con un nuevo CDK4/6i ofrece mayor beneficio esperado que fulvestrant solo.",
+            paper:"MONALEESA-2 / consenso ESMO sobre recaída endocrino-sensible", finding:"Los estudios con CDK4/6i combinado mostraron mayor beneficio que la monoterapia con fulvestrant en primera línea, incluyendo pacientes con exposición previa a CDK4/6i en escenario adyuvante con recaída tardía."}
         ]}
     ]},
 
@@ -709,7 +728,7 @@ lumB: {
     cardDesc:"61 años, posmenopáusica. Cáncer de mama Luminal B con compromiso ganglionar extenso.",
     patient:"E.R., 61 años · posmenopáusica<br>Motivo: nódulo palpable, mama izquierda",
     vitals:{"RE / RP":"55% / 5%","HER2":"negativo (IHQ 0)","Ki67":"45%","Subtipo":"Luminal B","Estadio":"cT3N2","Tratamiento":"—"},
-    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia sistémica","Manejo de toxicidad","Primera línea y crisis visceral","Epicrisis"],
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia sistémica","Manejo de toxicidad","Primera línea y crisis visceral","Mantenimiento","Epicrisis"],
     stages:[
       {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
         <p>E.R., 61 años, posmenopáusica, consulta por nódulo palpable de crecimiento progresivo en mama izquierda de 3 meses de evolución, con múltiples adenopatías axilares palpables.</p>
@@ -787,6 +806,25 @@ lumB: {
           {label:"Manejo exclusivamente paliativo sin tratamiento oncológico activo, dado el mal pronóstico aparente", points:0,
             feedback:"Es prematuro: una crisis visceral es una urgencia oncológica tratable en muchos casos con quimioterapia de inicio rápido, que puede revertir el deterioro clínico; los cuidados paliativos se integran en paralelo, no reemplazan el intento de tratamiento activo de entrada.",
             paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda tratamiento sistémico activo urgente ante crisis visceral potencialmente reversible, integrando cuidados de soporte en paralelo."}
+        ]},
+      {type:"info", phase:6, eyebrow:"Respuesta a la quimioterapia — 4 meses después", vitalsUpdate:{"Tratamiento":"Respuesta a quimioterapia — crisis visceral resuelta","Estadio":"Metastásico hepático — enfermedad estable, crisis resuelta"}, html:`
+        <p>Tras 4 meses de quimioterapia con taxano, la bilirrubina se normalizó, la función hepática mejoró marcadamente y la TC muestra <b>reducción significativa de la carga tumoral hepática</b>. La paciente está clínicamente estable, sin signos de disfunción orgánica.</p>
+        <div class="callout good">Con la crisis visceral resuelta y el tumor RE positivo, se abre la pregunta de si conviene continuar la quimioterapia indefinidamente o cambiar de estrategia una vez lograda la estabilización.</div>`, buttonLabel:"Definir conducta de mantenimiento →"},
+      {type:"decision", phase:6, eyebrow:"Decisión 5 · Mantenimiento tras respuesta a la quimioterapia de inducción",
+        prompt:"Crisis visceral resuelta tras quimioterapia de inducción, tumor RE positivo/HER2 negativo, buena respuesta clínica y radiológica. ¿Cuál es la conducta más apropiada de mantenimiento?",
+        options:[
+          {label:"Suspender la quimioterapia y pasar a terapia endocrina + inhibidor de CDK4/6 de mantenimiento", points:2,
+            feedback:"Correcto. Una vez resuelta la crisis visceral y lograda la estabilización con quimioterapia de inducción, el estándar es cambiar a una estrategia de mantenimiento con terapia endocrina-based (inhibidor de aromatasa + CDK4/6i) en tumores RE positivos, reservando la quimioterapia continua para cuando ya no hay alternativa endocrina razonable.",
+            paper:"NCCN Guidelines Breast Cancer; ESMO Metastatic Breast Cancer Guidelines", finding:"Recomiendan que, tras controlar una crisis visceral con quimioterapia y lograr respuesta o estabilización, se reevalúe el cambio a terapia endocrina-based de mantenimiento en tumores RE positivos, dado su menor toxicidad acumulada y beneficio sostenido a largo plazo."},
+          {label:"Continuar la misma quimioterapia en forma indefinida mientras haya respuesta", points:0,
+            feedback:"La quimioterapia prolongada acumula toxicidad (neuropatía, mielosupresión, fatiga) sin beneficio adicional claro una vez que existe una alternativa de menor toxicidad y eficacia sostenida como la terapia endocrina-based en un tumor RE positivo.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"No recomienda quimioterapia continua indefinida en tumores RE positivos que han respondido, cuando existe una opción de mantenimiento endocrino disponible."},
+          {label:"Suspender todo tratamiento oncológico activo dado que la crisis se resolvió", points:0,
+            feedback:"Sería un error: la enfermedad metastásica sigue presente y requiere tratamiento de mantenimiento continuo para sostener el control alcanzado; suspender todo tratamiento lleva a una recaída rápida.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda mantenimiento continuo tras la respuesta a la primera línea en enfermedad metastásica, no la suspensión completa del tratamiento."},
+          {label:"Cambiar a un segundo esquema de quimioterapia distinto como mantenimiento", points:1,
+            feedback:"Es una alternativa válida en tumores sin buena expresión hormonal, pero en esta paciente RE positiva la terapia endocrina-based ofrece un perfil de toxicidad más favorable para el mantenimiento a largo plazo, por lo que no es la primera opción.",
+            paper:"NCCN Guidelines Breast Cancer", finding:"En tumores RE positivos, la terapia endocrina-based es preferida como mantenimiento sobre la quimioterapia de mantenimiento con otro agente citotóxico."}
         ]}
     ]}
 
@@ -903,7 +941,7 @@ her2: {
     cardDesc:"50 años, posmenopáusica. Cáncer de mama HER2 positivo con receptores hormonales también positivos.",
     patient:"A.D., 50 años · posmenopáusica<br>Motivo: nódulo palpable, mama izquierda",
     vitals:{"RE / RP":"80% / 60%","HER2":"positivo (IHQ 3+)","Ki67":"30%","Subtipo":"HER2+ / RE+ (doble positivo)","Estadio":"cT2N1","Tratamiento":"—"},
-    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","Epicrisis"],
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","1ª línea metastásica","Epicrisis"],
     stages:[
       {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
         <p>A.D., 50 años, posmenopáusica, consulta por nódulo palpable de 2.5 cm en mama izquierda con adenopatía axilar sospechosa.</p>
@@ -962,6 +1000,25 @@ her2: {
           {label:"No es necesaria ninguna intervención específica, los síntomas se resolverán solos", points:0,
             feedback:"Subestima una reacción aguda con compromiso hemodinámico (hipotensión) que requiere tratamiento activo inmediato, no solo observación pasiva.",
             paper:"Perfil de seguridad de pertuzumab", finding:"Las reacciones a la infusión con compromiso hemodinámico requieren tratamiento sintomático activo e inmediato."}
+        ]},
+      {type:"info", phase:4, eyebrow:"Recaída — 5 años después", vitalsUpdate:{"Tratamiento":"Recaída metastásica tras adyuvancia completa","Estadio":"Metastásico (óseo + pulmonar)"}, html:`
+        <p>Completó el año de bloqueo dual adyuvante y continuó con inhibidor de aromatasa. Cinco años después, en un control por dolor lumbar se detectan <b>lesiones óseas múltiples y nódulos pulmonares</b>. Biopsia de una lesión ósea: <b>metastásico, HER2 positivo (IHQ 3+), RE positivo</b>, sin evidencia de crisis visceral.</p>
+        <div class="callout">Aunque el tumor también es RE positivo, en la enfermedad metastásica HER2 positiva el impulsor dominante sigue siendo HER2: la estrategia de primera línea se define por el bloqueo anti-HER2, no por la terapia endocrina.</div>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 3 · Primera línea metastásica", vitalsUpdate:{"Estadio":"Metastásico (óseo + pulmonar)"},
+        prompt:"Recaída metastásica HER2+/RE+ 5 años después de completar la adyuvancia, sin crisis visceral. ¿Esquema de primera línea preferido?",
+        options:[
+          {label:"Trastuzumab + pertuzumab + docetaxel (THP)", points:2,
+            feedback:"Correcto. En enfermedad metastásica HER2 positiva, incluso con receptores hormonales también positivos, el estándar de primera línea sigue siendo el bloqueo dual anti-HER2 con quimioterapia, dado que HER2 es el impulsor dominante; la terapia endocrina puede sumarse más adelante como mantenimiento, pero no reemplaza este esquema de inicio.",
+            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"Estableció el esquema con trastuzumab + pertuzumab + docetaxel como estándar de primera línea en enfermedad metastásica HER2 positiva, con beneficio independiente del estado de receptores hormonales."},
+          {label:"Terapia endocrina sola (inhibidor de aromatasa), dado que el tumor también es RE positivo", points:0,
+            feedback:"Sería un error grave: ignora que HER2 es el impulsor dominante en este perfil, y la terapia endocrina sola no controla adecuadamente una enfermedad HER2 positiva metastásica.",
+            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"El bloqueo anti-HER2 es central en el tratamiento de primera línea independientemente de la coexpresión de receptores hormonales."},
+          {label:"Trastuzumab deruxtecan (T-DXd) en primera línea", points:1,
+            feedback:"T-DXd es altamente efectivo, pero la evidencia más robusta y el estándar habitual lo posicionan tras progresión a un esquema con taxano y bloqueo dual, no como primera línea de entrada en este escenario.",
+            paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Evaluó T-DXd en pacientes ya tratadas con trastuzumab y taxano, no en primera línea de novo tras recaída."},
+          {label:"Continuar el mismo inhibidor de aromatasa que ya venía tomando, sin agregar tratamiento anti-HER2", points:0,
+            feedback:"La progresión a enfermedad metastásica bajo terapia endocrina indica la necesidad de reiniciar tratamiento sistémico dirigido a HER2, no de mantener sin cambios un esquema que ya no está controlando la enfermedad.",
+            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"La enfermedad metastásica HER2 positiva requiere reiniciar bloqueo anti-HER2 activo, independientemente del tratamiento endocrino adyuvante previo."}
         ]}
     ]},
 
@@ -1176,7 +1233,7 @@ tnbc: {
     cardDesc:"44 años, premenopáusica, sin antecedentes familiares relevantes. Cáncer de mama triple negativo.",
     patient:"R.O., 44 años · premenopáusica<br>Motivo: nódulo palpable, mama derecha",
     vitals:{"RE / RP":"negativo / negativo","HER2":"negativo (IHQ 0)","Ki67":"70%","Subtipo":"Triple negativo","Estadio":"cT2N0","Tratamiento":"—"},
-    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","Epicrisis"],
+    timeline:["Diagnóstico","Abordaje inicial","Adyuvancia dirigida","Manejo de toxicidad","1ª línea metastásica","Epicrisis"],
     stages:[
       {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
         <p>R.O., 44 años, sin antecedentes familiares relevantes, consulta por nódulo palpable de 2.2 cm en mama derecha, axila clínicamente negativa.</p>
@@ -1235,6 +1292,25 @@ tnbc: {
           {label:"Iniciar corticoides sistémicos en dosis alta, igual que en la colitis", points:0,
             feedback:"No es el tratamiento indicado para el hipotiroidismo establecido: los corticoides no revierten el daño tiroideo ya instalado, y el manejo correcto es el reemplazo hormonal con levotiroxina.",
             paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"El tratamiento del hipotiroidismo inmunomediado establecido es el reemplazo hormonal, no la inmunosupresión con corticoides."}
+        ]},
+      {type:"info", phase:4, eyebrow:"Recaída — 4 meses tras finalizar la adyuvancia", vitalsUpdate:{"Tratamiento":"Recaída metastásica temprana post-pembrolizumab","Estadio":"Metastásico hepático"}, html:`
+        <p>Cuatro meses después de completar el año de pembrolizumab adyuvante, en un control de rutina se detecta una <b>lesión hepática de 3 cm</b>. Biopsia: <b>carcinoma metastásico triple negativo</b>. El nuevo panel sobre la lesión metastásica confirma <b>PD-L1 negativo (CPS &lt;1)</b> y persiste sin mutación germinal BRCA. Sin evidencia de crisis visceral.</p>
+        <div class="callout warn">Recaída temprana (menos de 6 meses de finalizada la inmunoterapia adyuvante) con PD-L1 negativo en la lesión metastásica: ambos elementos son relevantes para decidir si tiene sentido volver a exponer a la paciente a un inhibidor de checkpoint en esta línea.</div>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 3 · Primera línea metastásica",
+        prompt:"Recaída metastásica hepática 4 meses después de completar pembrolizumab adyuvante, PD-L1 negativo en la lesión metastásica, sin mutación BRCA, sin crisis visceral. ¿Cuál es la conducta más apropiada de primera línea?",
+        options:[
+          {label:"Quimioterapia citotóxica sola (sin inmunoterapia)", points:2,
+            feedback:"Correcto. La combinación de recaída temprana bajo/tras inmunoterapia reciente (que sugiere resistencia al checkpoint) y PD-L1 negativo en la lesión metastásica no respalda agregar un inhibidor de checkpoint en esta línea; sin mutación BRCA tampoco hay indicación de un inhibidor de PARP. La quimioterapia citotóxica es la base del tratamiento en este escenario.",
+            paper:"KEYNOTE-355 — Cortés et al., Lancet 2020; NCCN Guidelines Breast Cancer", finding:"El beneficio de agregar un inhibidor de checkpoint a la quimioterapia en primera línea metastásica de triple negativo se concentra en tumores PD-L1 positivos; las guías no recomiendan agregarlo en enfermedad PD-L1 negativa, y recomiendan cautela con el rechallenge tras progresión temprana a inmunoterapia previa."},
+          {label:"Rechallenge con pembrolizumab + quimioterapia, igual que en primera línea sin exposición previa", points:0,
+            feedback:"Con PD-L1 negativo en la lesión actual y una recaída temprana tras inmunoterapia adyuvante reciente, no hay base para esperar beneficio adicional de reintroducir un inhibidor de checkpoint en esta línea.",
+            paper:"KEYNOTE-355 — Cortés et al., Lancet 2020", finding:"El beneficio de agregar inmunoterapia requiere PD-L1 positivo; no se demostró beneficio en enfermedad PD-L1 negativa."},
+          {label:"Inhibidor de PARP (olaparib), dado que es triple negativo", points:0,
+            feedback:"El triple negativo por sí solo no es indicación de un inhibidor de PARP; esta paciente no tiene mutación germinal BRCA1/2, que es el criterio que define la población de beneficio.",
+            paper:"OlympiA — Tutt et al., N Engl J Med 2021", finding:"El beneficio de olaparib está validado específicamente en mutación germinal BRCA1/2, ausente en esta paciente."},
+          {label:"Sacituzumab govitecan como primera línea de entrada", points:1,
+            feedback:"Es una opción activa y bien validada en triple negativo metastásico, pero su evidencia principal es en líneas posteriores a la quimioterapia estándar; como primera línea de entrada sin haber agotado la quimioterapia citotóxica convencional, no es la opción preferida en este momento.",
+            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"La población de beneficio del estudio fueron pacientes con triple negativo metastásico previamente tratadas con al menos dos líneas sistémicas, no como primera línea de entrada."}
         ]}
     ]},
 
@@ -1339,7 +1415,7 @@ egfr: {
     cardDesc:"58 años, no fumadora. Hallazgo incidental de un nódulo pulmonar.",
     patient:"C.L., 58 años · no fumadora<br>Motivo: hallazgo incidental en TC de tórax",
     vitals:{"Histología":"Adenocarcinoma","EGFR":"deleción exón 19 (positivo)","PD-L1":"TPS 5%","Estadio":"IIB (resecado)","Tratamiento":"—"},
-    timeline:["Diagnóstico","Cirugía y adyuvancia","Manejo de toxicidad","Progresión y estudio de resistencia","Tratamiento dirigido por resistencia","Epicrisis"],
+    timeline:["Diagnóstico","Cirugía y adyuvancia","Manejo de toxicidad","Progresión y estudio de resistencia","Tratamiento dirigido por resistencia","Progresión y siguiente línea","Epicrisis"],
     stages:[
       {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
         <p>C.L., 58 años, no fumadora, sin síntomas respiratorios, consulta tras un <b>hallazgo incidental de un nódulo pulmonar de 3.2 cm en el lóbulo superior derecho</b> en una tomografía solicitada por otro motivo. PET-TC: captación en el nódulo y en un ganglio hiliar ipsilateral, sin enfermedad a distancia.</p>
@@ -1417,6 +1493,25 @@ egfr: {
           {label:"Radioterapia sistémica como único tratamiento de la enfermedad hepática y mediastínica", points:0,
             feedback:"La radioterapia tiene un rol para el control local de lesiones específicas, pero no reemplaza al tratamiento sistémico ante enfermedad diseminada con progresión documentada.",
             paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda tratamiento sistémico como pilar en enfermedad metastásica diseminada, con radioterapia como complemento para control local."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Progresión — 7 meses de quimioterapia con platino", vitalsUpdate:{"Tratamiento":"Progresión bajo quimioterapia con platino"}, html:`
+        <p>Tras respuesta inicial a la quimioterapia con platino, a los 7 meses una TC de control muestra <b>progresión hepática y aparición de nuevas lesiones óseas</b>. La paciente mantiene buen estado funcional (ECOG 1).</p>
+        <div class="callout">No se logró acceso a la combinación con inhibidor de MET durante este período. Ante la progresión a quimioterapia en una paciente con EGFR mutado ya tratada con un inhibidor de tercera generación, hay que definir la siguiente estrategia sistémica.</div>`, buttonLabel:"Definir conducta ante la progresión →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 4 · Tratamiento tras progresión a la quimioterapia",
+        prompt:"Progresión hepática y ósea tras quimioterapia con platino, en una paciente EGFR mutada ya tratada con osimertinib. Buen estado funcional. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Amivantamab (anticuerpo biespecífico anti-EGFR/MET) en combinación con quimioterapia", points:2,
+            feedback:"Correcto. Amivantamab combinado con quimioterapia con platino es una opción validada tras progresión a un inhibidor de EGFR de tercera generación como osimertinib, independientemente del mecanismo específico de resistencia identificado previamente.",
+            paper:"MARIPOSA-2 — Passaro et al., N Engl J Med 2024", finding:"La combinación de amivantamab con quimioterapia mejoró la supervivencia libre de progresión frente a quimioterapia sola en pacientes con NSCLC EGFR mutado que progresaron a osimertinib, consolidándose como una opción estándar en esta línea."},
+          {label:"Continuar la misma quimioterapia con platino sin cambios, dado que hubo respuesta inicial", points:0,
+            feedback:"La progresión documentada, con nuevas lesiones hepáticas y óseas, indica que el esquema actual ya no está controlando la enfermedad y requiere cambiarse.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda cambiar de línea de tratamiento ante progresión documentada por imágenes."},
+          {label:"Inmunoterapia en monoterapia (inhibidor de checkpoint)", points:0,
+            feedback:"Los tumores EGFR mutados tienen, en general, menor beneficio de la inmunoterapia en monoterapia que los NSCLC sin mutación conductora, por lo que no es la opción preferida en esta línea.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Los tumores con mutaciones conductoras como EGFR muestran, en general, menor respuesta a la inmunoterapia en monoterapia que los tumores sin driver molecular."},
+          {label:"Suspender el tratamiento activo y pasar a cuidados paliativos exclusivos", points:0,
+            feedback:"Es prematuro: la paciente mantiene buen estado funcional y existen opciones sistémicas activas adicionales tras progresión a quimioterapia.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda continuar evaluando líneas sistémicas activas en pacientes con adecuado estado funcional."}
         ]}
     ]}
   ]
@@ -1431,7 +1526,7 @@ alk: {
     cardDesc:"45 años, no fumador. Cáncer de pulmón diagnosticado por tos persistente.",
     patient:"J.M., 45 años · no fumador<br>Motivo: tos persistente",
     vitals:{"Histología":"Adenocarcinoma","ALK":"fusión EML4-ALK (positivo)","PD-L1":"TPS 1%","Estadio":"IIIA (resecado)","Tratamiento":"—"},
-    timeline:["Diagnóstico","Cirugía y adyuvancia","Manejo de toxicidad","Progresión cerebral","Epicrisis"],
+    timeline:["Diagnóstico","Cirugía y adyuvancia","Manejo de toxicidad","Progresión cerebral","Progresión sistémica","Epicrisis"],
     stages:[
       {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
         <p>J.M., 45 años, no fumador, consulta por tos persistente de 6 semanas. TC de tórax: <b>masa de 4.5 cm en el lóbulo inferior izquierdo con adenopatías mediastínicas</b>. PET-TC sin evidencia de enfermedad a distancia.</p>
@@ -1490,6 +1585,25 @@ alk: {
           {label:"Quimioterapia con platino, discontinuando todo tratamiento dirigido contra ALK", points:0,
             feedback:"Prescindir de la terapia dirigida contra ALK en un tumor que la mantiene como impulsor molecular, y que dispone de opciones de generación posterior con mejor penetración al sistema nervioso central, no es la conducta preferida en este momento.",
             paper:"CROWN — Solomon et al., N Engl J Med 2020", finding:"Los inhibidores de ALK de generaciones sucesivas mostraron beneficio clínico relevante tras progresión a inhibidores previos, antes de recurrir a quimioterapia."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Progresión sistémica — 11 meses de lorlatinib", vitalsUpdate:{"Tratamiento":"Progresión extracraneal bajo lorlatinib"}, html:`
+        <p>Tras buena respuesta intracraneal inicial con lorlatinib, a los 11 meses una TC de tórax y abdomen muestra <b>progresión hepática y de adenopatías mediastínicas</b>, sin nuevas lesiones cerebrales. El paciente ya agotó las líneas de inhibidores de ALK disponibles (alectinib y lorlatinib).</p>
+        <div class="callout warn">Con progresión sistémica tras haber recibido un inhibidor de ALK de segunda y de tercera generación, se agotaron las opciones de terapia dirigida secuencial contra ALK disponibles actualmente, y hay que definir el siguiente pilar del tratamiento.</div>`, buttonLabel:"Definir conducta ante la progresión sistémica →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 3 · Tratamiento tras progresión a lorlatinib",
+        prompt:"Progresión hepática y ganglionar tras lorlatinib, en un paciente que ya recibió alectinib y lorlatinib secuencialmente. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Quimioterapia citotóxica con platino (esquema basado en pemetrexed)", points:2,
+            feedback:"Correcto. Una vez agotadas las opciones secuenciales de inhibidores de ALK, la quimioterapia citotóxica con platino (habitualmente con pemetrexed, dada la histología de adenocarcinoma) pasa a ser el pilar del tratamiento sistémico, igual que en otros NSCLC con mutación conductora que progresan tras la terapia dirigida disponible.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda quimioterapia citotóxica con platino como siguiente línea estándar en NSCLC con reordenamiento de ALK que progresa tras agotar las opciones de inhibidores de ALK disponibles."},
+          {label:"Continuar lorlatinib a la misma dosis, dado que la progresión es lenta", points:0,
+            feedback:"La progresión hepática y ganglionar documentada indica que lorlatinib ya no está controlando la enfermedad y requiere cambiarse de estrategia sistémica.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda cambiar de línea de tratamiento ante progresión documentada, independientemente de su velocidad aparente."},
+          {label:"Inmunoterapia en monoterapia (inhibidor de checkpoint)", points:0,
+            feedback:"Los tumores con reordenamiento de ALK muestran, en general, menor beneficio de la inmunoterapia en monoterapia que los NSCLC sin alteraciones conductoras, en parte por su menor concordancia con PD-L1 alto/carga mutacional elevada; no es la opción preferida en esta línea.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Los tumores con alteraciones conductoras como ALK muestran, en general, menor respuesta a la inmunoterapia en monoterapia que los tumores sin driver molecular identificado."},
+          {label:"Volver a alectinib, dado que fue mejor tolerado que lorlatinib", points:0,
+            feedback:"No hay sustento para retomar un inhibidor de generación anterior tras progresar bajo uno de generación posterior con mayor potencia y penetración al sistema nervioso central; la tolerancia por sí sola no es criterio para esta decisión.",
+            paper:"CROWN — Solomon et al., N Engl J Med 2020", finding:"No hay evidencia de beneficio al retomar un inhibidor de ALK de generación previa tras progresión documentada a uno de generación posterior."}
         ]}
     ]}
   ]
@@ -1504,7 +1618,7 @@ nodriver: {
     cardDesc:"66 años, fumador activo. Cáncer de pulmón metastásico al momento del diagnóstico.",
     patient:"H.G., 66 años · fumador activo (40 paquetes-año)<br>Motivo: dolor torácico y pérdida de peso",
     vitals:{"Histología":"Adenocarcinoma","Driver molecular":"EGFR, ALK, ROS1 negativos","PD-L1":"TPS 60%","Estadio":"IV (metastásico de novo)","Tratamiento":"—"},
-    timeline:["Diagnóstico","Primera línea sistémica","Manejo de toxicidad","Progresión","Segunda línea","Epicrisis"],
+    timeline:["Diagnóstico","Primera línea sistémica","Manejo de toxicidad","Progresión","Segunda línea","Tercera línea","Epicrisis"],
     stages:[
       {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
         <p>H.G., 66 años, fumador activo (40 paquetes-año), consulta por dolor torácico y pérdida de peso de 2 meses. TC de tórax: <b>masa de 5 cm en el lóbulo superior derecho con múltiples nódulos pulmonares contralaterales y una lesión suprarrenal</b>.</p>
@@ -1562,6 +1676,25 @@ nodriver: {
           {label:"Suspender todo tratamiento oncológico activo y pasar a cuidados paliativos exclusivos", points:0,
             feedback:"Con buen estado funcional (ECOG 1) y una opción estándar de segunda línea disponible con beneficio demostrado, no corresponde suspender el tratamiento activo en este momento.",
             paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda continuar tratamiento sistémico activo en pacientes con adecuado estado funcional tras progresión a primera línea."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Progresión — 5 meses de quimioterapia con platino", vitalsUpdate:{"Tratamiento":"Progresión bajo quimioterapia con platino"}, html:`
+        <p>Tras respuesta parcial inicial a la quimioterapia con platino y pemetrexed, a los 5 meses una TC muestra <b>progresión de las lesiones pulmonares y hepáticas</b>. El paciente mantiene buen estado funcional (ECOG 1) y ya recibió inmunoterapia y quimioterapia con platino.</p>
+        <div class="callout">Con progresión tras inmunoterapia y quimioterapia con platino, y sin ninguna alteración molecular accionable, hay que definir una tercera línea de tratamiento sistémico.</div>`, buttonLabel:"Definir tercera línea →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 3 · Tercera línea",
+        prompt:"Progresión tras primera línea con pembrolizumab y segunda línea con quimioterapia basada en platino, sin alteración conductora accionable, ECOG 1. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Docetaxel + ramucirumab", points:2,
+            feedback:"Correcto. Tras progresión a inmunoterapia y a quimioterapia con platino, docetaxel combinado con ramucirumab (inhibidor del receptor 2 del VEGF) es un estándar validado de línea posterior en NSCLC, con beneficio en supervivencia global frente a docetaxel solo.",
+            paper:"REVEL — Garon et al., Lancet 2014", finding:"La combinación de docetaxel con ramucirumab mejoró la supervivencia global frente a docetaxel solo en pacientes con NSCLC que progresaron tras quimioterapia basada en platino, y es una opción estándar de línea posterior independientemente de la histología."},
+          {label:"Reintroducir pembrolizumab en monoterapia, dado que respondió bien inicialmente", points:0,
+            feedback:"El paciente ya progresó bajo pembrolizumab en primera línea; no hay sustento para reintroducir el mismo inhibidor de checkpoint sin cambios tras progresión documentada a ese fármaco.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"No recomienda reintroducir el mismo inhibidor de checkpoint tras progresión documentada a ese fármaco en monoterapia."},
+          {label:"Continuar el mismo esquema de quimioterapia con platino sin cambios", points:0,
+            feedback:"La progresión documentada en pulmón e hígado indica que el esquema actual ya no controla la enfermedad y requiere cambiarse.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda cambiar de línea de tratamiento ante progresión documentada por imágenes."},
+          {label:"Suspender todo tratamiento oncológico activo y pasar a cuidados paliativos exclusivos", points:0,
+            feedback:"Con buen estado funcional (ECOG 1) y una opción estándar de tercera línea disponible con beneficio demostrado, es prematuro limitar el manejo a cuidados paliativos exclusivos en este momento.",
+            paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda continuar evaluando líneas sistémicas activas en pacientes con adecuado estado funcional."}
         ]}
     ]}
   ]
@@ -1576,7 +1709,7 @@ sclc: {
     cardDesc:"68 años, fumador activo. Cáncer de pulmón de células pequeñas en estadio extenso.",
     patient:"O.P., 68 años · fumador activo (50 paquetes-año)<br>Motivo: tos, hemoptisis y dolor óseo",
     vitals:{"Histología":"Carcinoma de células pequeñas","Estadio":"Extenso (hepático + óseo)","ECOG":"1","Tratamiento":"—"},
-    timeline:["Diagnóstico","Primera línea sistémica","Manejo de toxicidad","Recaída y segunda línea","Epicrisis"],
+    timeline:["Diagnóstico","Primera línea sistémica","Manejo de toxicidad","Recaída y segunda línea","Tercera línea","Epicrisis"],
     stages:[
       {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
         <p>O.P., 68 años, fumador activo (50 paquetes-año), consulta por tos, un episodio de hemoptisis leve y dolor óseo en columna lumbar de 3 semanas de evolución. TC de tórax: <b>masa hiliar derecha de 6 cm con adenopatías mediastínicas voluminosas</b>. Estadificación completa: <b>lesiones hepáticas múltiples y lesiones óseas líticas</b>.</p>
@@ -1635,6 +1768,25 @@ sclc: {
           {label:"Suspender todo tratamiento oncológico activo y pasar a cuidados paliativos exclusivos", points:0,
             feedback:"Con buen estado funcional (ECOG 1) y una opción de segunda línea con actividad demostrada específicamente en este escenario de recaída resistente al platino, no corresponde suspender el tratamiento activo en este momento.",
             paper:"Trigo et al., Lancet Oncol 2020", finding:"Demostró actividad clínica relevante de lurbinectedina en pacientes con buen estado funcional y recaída resistente al platino, un grupo que históricamente tenía pocas opciones activas."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Progresión — 3 meses de lurbinectedina", vitalsUpdate:{"Tratamiento":"Progresión bajo lurbinectedina"}, html:`
+        <p>Tras una respuesta parcial inicial, a los 3 meses una TC muestra <b>nueva progresión hepática y ósea</b>. El paciente mantiene ECOG 1 y ya recibió quimio-inmunoterapia de primera línea y lurbinectedina.</p>
+        <div class="callout">Con progresión tras dos líneas de tratamiento sistémico, se agotaron las opciones citotóxicas estándar más establecidas; hay que evaluar alternativas más recientes para esta línea.</div>`, buttonLabel:"Definir tercera línea →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 3 · Tercera línea",
+        prompt:"Progresión tras primera línea con platino-etopósido-atezolizumab y segunda línea con lurbinectedina, ECOG 1. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Tarlatamab (anticuerpo biespecífico anti-DLL3)", points:2,
+            feedback:"Correcto. Tarlatamab, un anticuerpo biespecífico que dirige linfocitos T contra DLL3 (una proteína de superficie expresada en la gran mayoría de los carcinomas de células pequeñas), mostró actividad relevante y fue aprobado para esta línea de tratamiento tras progresión a quimioterapia con platino y a una línea posterior.",
+            paper:"DeLLphi-301 — Ahn et al., N Engl J Med 2023", finding:"Tarlatamab demostró tasas de respuesta duraderas en pacientes con carcinoma de células pequeñas previamente tratado con quimioterapia con platino y al menos una línea adicional, llevando a su aprobación acelerada como opción de tratamiento en esta población."},
+          {label:"Reintroducir el esquema de platino y etopósido nuevamente", points:0,
+            feedback:"El paciente ya progresó a un intervalo corto desde el platino inicial y luego a lurbinectedina; no hay sustento para reintroducir el mismo platino sin un intervalo prolongado de sensibilidad demostrada.",
+            paper:"NCCN Guidelines — Small Cell Lung Cancer, versión vigente", finding:"Recomienda reintroducir platino únicamente en recaídas platino-sensibles con intervalo prolongado, no tras progresión reciente a múltiples líneas."},
+          {label:"Continuar lurbinectedina a pesar de la progresión documentada", points:0,
+            feedback:"La progresión hepática y ósea documentada indica que lurbinectedina ya no controla la enfermedad y requiere cambiarse de estrategia.",
+            paper:"NCCN Guidelines — Small Cell Lung Cancer, versión vigente", finding:"Recomienda cambiar de línea de tratamiento ante progresión documentada por imágenes."},
+          {label:"Topotecán en monoterapia", points:1,
+            feedback:"Es una alternativa citotóxica razonable y históricamente utilizada en líneas posteriores de carcinoma de células pequeñas, pero con menor tasa de respuesta y durabilidad que tarlatamab en este contexto específico de progresión a múltiples líneas previas.",
+            paper:"NCCN Guidelines — Small Cell Lung Cancer, versión vigente", finding:"Topotecán es una opción citotóxica establecida en líneas posteriores, aunque con eficacia más modesta que las opciones más recientes dirigidas específicamente a este escenario."}
         ]}
     ]}
   ]
