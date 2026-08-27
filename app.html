@@ -141,6 +141,25 @@
   .evidence .ev-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:1px;opacity:.6;display:block;margin-bottom:4px;}
   .evidence .ev-study{font-weight:500;color:#F1E6C8;}
 
+  .chart-card{margin-top:10px;background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:16px 18px;}
+  .chart-title{font-family:'Lora',serif;font-size:14px;font-weight:600;color:var(--ink);margin:0 0 14px;}
+  .chart-row{margin-bottom:12px;}
+  .chart-row:last-child{margin-bottom:0;}
+  .chart-row-label{font-size:12px;color:var(--ink-soft);margin-bottom:5px;}
+  .chart-track{background:var(--paper);border:1px solid var(--line);border-radius:6px;height:26px;overflow:hidden;}
+  .chart-fill{height:100%;background:var(--line);border-radius:5px 0 0 5px;display:flex;align-items:center;justify-content:flex-end;padding-right:9px;min-width:38px;}
+  .chart-fill.hi{background:var(--teal);}
+  .chart-val{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:var(--ink);white-space:nowrap;}
+  .chart-fill.hi .chart-val{color:#fff;}
+  .chart-source{font-size:10.5px;color:var(--ink-soft);margin-top:12px;font-family:'IBM Plex Mono',monospace;line-height:1.5;}
+
+  .km-svg{width:100%;height:auto;display:block;}
+  .km-axis-label{font-family:'IBM Plex Mono',monospace;font-size:8.5px;fill:var(--ink-soft);}
+  .km-legend{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+  .km-legend-item{font-size:12px;color:var(--ink);display:flex;align-items:center;gap:8px;line-height:1.4;}
+  .km-legend-item b{color:var(--ink-soft);font-weight:500;}
+  .km-swatch{width:14px;height:4px;border-radius:2px;display:inline-block;flex-shrink:0;}
+
   .next-btn{margin-top:20px;background:var(--teal);color:#fff;border:none;padding:11px 22px;border-radius:5px;font-size:14px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;}
   .next-btn:hover{background:var(--teal-deep);}
   .ghost-btn{margin-top:12px;margin-left:10px;background:transparent;color:var(--ink-soft);border:1px solid var(--line);padding:10px 18px;border-radius:5px;font-size:13px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;}
@@ -233,7 +252,13 @@ lumA: {
         options:[
           {label:"Terapia endocrina sola, sin quimioterapia", points:2,
             feedback:"Correcto. Con RS bajo y N0, la quimioterapia adyuvante no aporta beneficio adicional.",
-            paper:"TAILORx — Sparano et al., N Engl J Med 2018", finding:"En N0 con RS 11-25 (y más claramente en RS bajo), la quimioterapia no mejoró la supervivencia libre de enfermedad frente a terapia endocrina sola."},
+            paper:"TAILORx — Sparano et al., N Engl J Med 2018", finding:"En N0 con RS 11-25 (y más claramente en RS bajo), la quimioterapia no mejoró la supervivencia libre de enfermedad frente a terapia endocrina sola.",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva (RS 11-25, N0)", timeUnit:"meses",
+              curves:[
+                {label:"Terapia endocrina sola", atMonths:60, survivalPct:92.8, highlight:true},
+                {label:"Quimioterapia + terapia endocrina", atMonths:60, survivalPct:93.1}
+              ],
+              source:"TAILORx — Sparano et al., N Engl J Med 2018 (resultado a 5 años, no inferioridad)"}},
           {label:"Quimioterapia seguida de terapia endocrina", points:0,
             feedback:"Sobretratamiento con RS 12 y N0.",
             paper:"TAILORx — Sparano et al., N Engl J Med 2018", finding:"El beneficio de quimioterapia solo se observó en RS 26-100, o en menores de 50 con RS 16-25."},
@@ -268,7 +293,13 @@ lumA: {
         options:[
           {label:"Inhibidor de aromatasa + inhibidor de CDK4/6 (ribociclib)", points:2,
             feedback:"Correcto. Estándar preferido en RE+/HER2- metastásico sin crisis visceral.",
-            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"Ribociclib + letrozol mejoró la supervivencia libre de progresión y global."},
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"Ribociclib + letrozol mejoró la supervivencia libre de progresión y global.",
+            chart:{type:"km", metric:"Supervivencia global", timeUnit:"meses",
+              curves:[
+                {label:"Letrozol + ribociclib", atMonths:63.9, survivalPct:50, highlight:true},
+                {label:"Letrozol solo", atMonths:51.4, survivalPct:50}
+              ],
+              source:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2022 (análisis final de supervivencia global)"}},
           {label:"Quimioterapia (taxano)", points:0,
             feedback:"Reservada para crisis visceral o progresión tras agotar líneas endocrinas.",
             paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda terapia endocrina-based como preferida sin crisis visceral."},
@@ -304,7 +335,13 @@ lumA: {
         options:[
           {label:"Cambiar a elacestrant (SERD oral)", points:2,
             feedback:"Correcto. Beneficio específico en ESR1 mutado tras progresión a IA + CDK4/6i.",
-            paper:"EMERALD — Bidard et al., J Clin Oncol 2022", finding:"Elacestrant mejoró la supervivencia libre de progresión, con mayor beneficio en ESR1 mutado."},
+            paper:"EMERALD — Bidard et al., J Clin Oncol 2022", finding:"Elacestrant mejoró la supervivencia libre de progresión, con mayor beneficio en ESR1 mutado.",
+            chart:{type:"km", metric:"Supervivencia libre de progresión (subgrupo ESR1 mutado)", timeUnit:"meses",
+              curves:[
+                {label:"Elacestrant", atMonths:3.8, survivalPct:50, highlight:true},
+                {label:"Fulvestrant o inhibidor de aromatasa (SOC)", atMonths:1.9, survivalPct:50}
+              ],
+              source:"EMERALD — Bidard et al., J Clin Oncol 2022 (subgrupo ESR1 mutado)"}},
           {label:"Continuar el mismo IA con el mismo CDK4/6i", points:0,
             feedback:"ESR1 mutado confiere resistencia específica al IA.",
             paper:"EMERALD — Bidard et al., J Clin Oncol 2022", finding:"Incluyó pacientes con progresión documentada bajo IA + CDK4/6i."},
@@ -432,7 +469,13 @@ lumA: {
         options:[
           {label:"Quimioterapia adyuvante con AC-T (doxorrubicina + ciclofosfamida por 4 ciclos, seguido de paclitaxel) seguida de terapia endocrina", points:2,
             feedback:"Correcto. A diferencia de una paciente mayor de 50 años con el mismo RS, en el subgrupo de 50 años o menos con RS 16-25, TAILORx sí mostró un beneficio modesto pero real de agregar quimioterapia, por lo que aquí sí corresponde intensificar el tratamiento. AC-T (doxorrubicina + ciclofosfamida seguido de un taxano) es el esquema con antraciclina más utilizado en este contexto; en pacientes N0 de riesgo moderado, un esquema no antraciclínico como TC (docetaxel + ciclofosfamida x4) es una alternativa razonable con menor cardiotoxicidad.",
-            paper:"TAILORx — Sparano et al., N Engl J Med 2018 (análisis por edad)", finding:"En el subgrupo de 50 años o menos con RS 16-25, se observó un beneficio absoluto modesto de agregar quimioterapia en la tasa de recurrencia a distancia, a diferencia de las pacientes mayores de 50 con el mismo rango de RS. El estudio no impuso un esquema de quimioterapia específico; AC-T y TC son ambos esquemas aceptados en la práctica según el perfil de riesgo cardiovascular de la paciente."},
+            paper:"TAILORx — Sparano et al., N Engl J Med 2018 (análisis por edad)", finding:"En el subgrupo de 50 años o menos con RS 16-25, se observó un beneficio absoluto modesto de agregar quimioterapia en la tasa de recurrencia a distancia, a diferencia de las pacientes mayores de 50 con el mismo rango de RS. El estudio no impuso un esquema de quimioterapia específico; AC-T y TC son ambos esquemas aceptados en la práctica según el perfil de riesgo cardiovascular de la paciente.",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva (≤50 años, RS 21-25)", timeUnit:"meses",
+              curves:[
+                {label:"Quimioterapia + terapia endocrina", atMonths:60, survivalPct:92.1, highlight:true},
+                {label:"Terapia endocrina sola", atMonths:60, survivalPct:86.3}
+              ],
+              source:"TAILORx — Sparano et al., N Engl J Med 2018 (análisis por edad, subgrupo RS 21-25, resultado a 5 años)"}},
           {label:"Terapia endocrina sola, sin quimioterapia, igual que con un RS bajo", points:0,
             feedback:"No es correcto extrapolar la conducta de un RS bajo (como en otros casos) a un RS 22 en una paciente de 45 años: en ese subgrupo etario específico, TAILORx mostró beneficio de agregar quimioterapia.",
             paper:"TAILORx — Sparano et al., N Engl J Med 2018", finding:"El beneficio de la quimioterapia en RS 16-25 se concentró específicamente en pacientes de 50 años o menos, no en toda la población con ese rango de RS."},
@@ -485,7 +528,13 @@ lumA: {
         options:[
           {label:"Inhibidor de aromatasa + inhibidor de CDK4/6", points:2,
             feedback:"Correcto. Estándar de primera línea en RE+/HER2- metastásico, incluyendo enfermedad exclusivamente ósea, que no constituye crisis visceral.",
-            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"Beneficio consistente en supervivencia libre de progresión y global, independientemente de la localización metastásica evaluada en el estudio."},
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"Beneficio consistente en supervivencia libre de progresión y global, independientemente de la localización metastásica evaluada en el estudio.",
+            chart:{type:"km", metric:"Supervivencia global", timeUnit:"meses",
+              curves:[
+                {label:"Inhibidor de aromatasa + ribociclib", atMonths:63.9, survivalPct:50, highlight:true},
+                {label:"Inhibidor de aromatasa solo", atMonths:51.4, survivalPct:50}
+              ],
+              source:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2022 (análisis final de supervivencia global)"}},
           {label:"Radioterapia paliativa exclusiva, sin tratamiento sistémico", points:0,
             feedback:"La radioterapia tiene un rol para el control local del dolor, pero no reemplaza al tratamiento sistémico, que es lo que controla la enfermedad a nivel general.",
             paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda tratamiento sistémico como pilar en enfermedad metastásica, con radioterapia como complemento para control local de síntomas."},
@@ -504,7 +553,13 @@ lumA: {
         options:[
           {label:"Fulvestrant + capivasertib (inhibidor de AKT)", points:2,
             feedback:"Correcto. Capivasertib está dirigido a la vía AKT y demostró beneficio en pacientes con alteraciones de esta vía (incluyendo mutaciones de AKT1), que es justamente el hallazgo en esta paciente.",
-            paper:"CAPItello-291 — Turner et al., N Engl J Med 2023", finding:"Fulvestrant + capivasertib mejoró la supervivencia libre de progresión frente a fulvestrant solo, con el mayor beneficio en el subgrupo con alteraciones en la vía AKT (PIK3CA, AKT1 o PTEN)."},
+            paper:"CAPItello-291 — Turner et al., N Engl J Med 2023", finding:"Fulvestrant + capivasertib mejoró la supervivencia libre de progresión frente a fulvestrant solo, con el mayor beneficio en el subgrupo con alteraciones en la vía AKT (PIK3CA, AKT1 o PTEN).",
+            chart:{type:"km", metric:"Supervivencia libre de progresión (subgrupo con alteración de la vía AKT)", timeUnit:"meses",
+              curves:[
+                {label:"Fulvestrant + capivasertib", atMonths:7.3, survivalPct:50, highlight:true},
+                {label:"Fulvestrant solo", atMonths:3.1, survivalPct:50}
+              ],
+              source:"CAPItello-291 — Turner et al., N Engl J Med 2023 (subgrupo con alteración de la vía AKT)"}},
           {label:"Fulvestrant + alpelisib", points:0,
             feedback:"Alpelisib está validado específicamente para mutación de PIK3CA, que en este caso es wild-type; no es la elección dirigida por biomarcador aquí.",
             paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"El beneficio de alpelisib se demostró exclusivamente en tumores con mutación de PIK3CA, no evaluó específicamente mutaciones aisladas de AKT1."},
@@ -559,7 +614,13 @@ lumB: {
         options:[
           {label:"Agregar abemaciclib por 2 años", points:2,
             feedback:"Correcto. Cumple criterios de alto riesgo (ganglio positivo con grado 3) para intensificación con CDK4/6i.",
-            paper:"monarchE — Johnston et al., J Clin Oncol 2020; Rastogi et al., 2024", finding:"Abemaciclib + terapia endocrina redujo significativamente el riesgo de recurrencia en pacientes de alto riesgo."},
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020; Rastogi et al., J Clin Oncol 2024", finding:"Abemaciclib + terapia endocrina redujo significativamente el riesgo de recurrencia en pacientes de alto riesgo.",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva", timeUnit:"meses",
+              curves:[
+                {label:"Abemaciclib + terapia endocrina", atMonths:60, survivalPct:83.6, highlight:true},
+                {label:"Terapia endocrina sola", atMonths:60, survivalPct:76.0}
+              ],
+              source:"monarchE — Rastogi et al., J Clin Oncol 2024 (actualización a 5 años)"}},
           {label:"Solo terapia endocrina, sin terapia dirigida adicional", points:0,
             feedback:"Sería infratratamiento en este perfil de alto riesgo.",
             paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"El beneficio se concentró en la población de alto riesgo definida por el estudio."},
@@ -612,7 +673,13 @@ lumB: {
         options:[
           {label:"Supresión ovárica + inhibidor de aromatasa + inhibidor de CDK4/6", points:2,
             feedback:"Correcto. Estándar de primera línea en premenopáusicas.",
-            paper:"MONALEESA-7 — Im et al., N Engl J Med 2019", finding:"Primer estudio de CDK4/6i específicamente en premenopáusicas con supresión ovárica, con mejora en supervivencia."},
+            paper:"MONALEESA-7 — Im et al., N Engl J Med 2019", finding:"Primer estudio de CDK4/6i específicamente en premenopáusicas con supresión ovárica, con mejora en supervivencia.",
+            chart:{type:"km", metric:"Supervivencia global", timeUnit:"meses",
+              curves:[
+                {label:"Supresión ovárica + IA + ribociclib", atMonths:58.7, survivalPct:50, highlight:true},
+                {label:"Supresión ovárica + IA solo", atMonths:48.0, survivalPct:50}
+              ],
+              source:"MONALEESA-7 — Im et al., análisis final de supervivencia global (Clin Cancer Res 2023)"}},
           {label:"IA + CDK4/6i sin supresión ovárica", points:0,
             feedback:"Sin supresión ovárica, el IA no es efectivo en premenopáusica.",
             paper:"MONALEESA-7 — Im et al., N Engl J Med 2019", finding:"Incluyó supresión ovárica obligatoria en todas las pacientes premenopáusicas."},
@@ -630,7 +697,13 @@ lumB: {
         options:[
           {label:"Fulvestrant + alpelisib", points:2,
             feedback:"Correcto. Dirigida específicamente a PIK3CA mutado, en una paciente que ya recibió y progresó a un CDK4/6i.",
-            paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"Casi duplicó la supervivencia libre de progresión frente a fulvestrant solo en PIK3CA mutado. Nota: en pacientes que aún no han recibido CDK4/6i en metastásico y presentan recaída endocrino-resistente (dentro de los 12 meses de finalizar la terapia endocrina adyuvante) con PIK3CA mutado, la combinación de primera línea inavolisib + palbociclib + fulvestrant (estudio INAVO120, Turner et al., N Engl J Med 2024) es hoy una alternativa preferida antes que agregar alpelisib después; ambas actúan sobre la misma vía PI3K pero en momentos distintos de la secuencia terapéutica."},
+            paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"Casi duplicó la supervivencia libre de progresión frente a fulvestrant solo en PIK3CA mutado. Nota: en pacientes que aún no han recibido CDK4/6i en metastásico y presentan recaída endocrino-resistente (dentro de los 12 meses de finalizar la terapia endocrina adyuvante) con PIK3CA mutado, la combinación de primera línea inavolisib + palbociclib + fulvestrant (estudio INAVO120, Turner et al., N Engl J Med 2024) es hoy una alternativa preferida antes que agregar alpelisib después; ambas actúan sobre la misma vía PI3K pero en momentos distintos de la secuencia terapéutica.",
+            chart:{type:"km", metric:"Supervivencia libre de progresión (subgrupo PIK3CA mutado)", timeUnit:"meses",
+              curves:[
+                {label:"Fulvestrant + alpelisib", atMonths:11.0, survivalPct:50, highlight:true},
+                {label:"Fulvestrant solo", atMonths:5.7, survivalPct:50}
+              ],
+              source:"SOLAR-1 — André et al., N Engl J Med 2019 (subgrupo PIK3CA mutado)"}},
           {label:"Cambiar a elacestrant", points:0,
             feedback:"Beneficio en ESR1 mutado, negativo aquí.",
             paper:"EMERALD — Bidard et al., J Clin Oncol 2022", finding:"Mayor beneficio en el subgrupo con mutación de ESR1."},
@@ -677,7 +750,13 @@ lumB: {
         options:[
           {label:"Terapia endocrina + abemaciclib, a pesar de la respuesta patológica completa", points:2,
             feedback:"Correcto. La indicación de CDK4/6i adyuvante en monarchE se basa en las características clínico-patológicas de riesgo previas al tratamiento (estadio clínico inicial, grado, Ki67), no en si se logró o no respuesta patológica completa; esta paciente cumple criterios de alto riesgo basal.",
-            paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"Los criterios de elegibilidad para abemaciclib adyuvante se basan en el estadio y las características de riesgo al momento del diagnóstico, incluyendo a pacientes que reciben quimioterapia neoadyuvante, independientemente de la respuesta patológica alcanzada."},
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"Los criterios de elegibilidad para abemaciclib adyuvante se basan en el estadio y las características de riesgo al momento del diagnóstico, incluyendo a pacientes que reciben quimioterapia neoadyuvante, independientemente de la respuesta patológica alcanzada.",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva", timeUnit:"meses",
+              curves:[
+                {label:"Abemaciclib + terapia endocrina", atMonths:60, survivalPct:83.6, highlight:true},
+                {label:"Terapia endocrina sola", atMonths:60, survivalPct:76.0}
+              ],
+              source:"monarchE — Rastogi et al., J Clin Oncol 2024 (actualización a 5 años)"}},
           {label:"Solo terapia endocrina, sin CDK4/6i, dado que logró respuesta patológica completa", points:0,
             feedback:"Es un error conceptual frecuente: a diferencia de HER2+ o triple negativo, en Luminal B el pCR no es el criterio que determina la intensificación adyuvante; el riesgo basal sigue siendo alto.",
             paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"La población del estudio se definió por el riesgo clínico-patológico inicial, no por la respuesta a la neoadyuvancia."},
@@ -715,7 +794,13 @@ lumB: {
         options:[
           {label:"Inhibidor de aromatasa + inhibidor de CDK4/6 (ribociclib)", points:2,
             feedback:"Correcto. Una recaída endocrino-sensible (más de 12 meses tras finalizar el CDK4/6i adyuvante) sigue siendo candidata al estándar de primera línea metastásica con un nuevo inhibidor de CDK4/6, ya que la exposición adyuvante previa no se considera resistencia cruzada relevante cuando el intervalo libre de enfermedad es prolongado.",
-            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016; consenso ESMO sobre recaída endocrino-sensible", finding:"Las pacientes con recaída más de 12 meses después de completar terapia endocrina (con o sin CDK4/6i) adyuvante se consideran endocrino-sensibles y son candidatas al esquema estándar de primera línea metastásica, incluyendo un inhibidor de CDK4/6i aunque ya hayan recibido uno en el escenario adyuvante."},
+            paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016; consenso ESMO sobre recaída endocrino-sensible", finding:"Las pacientes con recaída más de 12 meses después de completar terapia endocrina (con o sin CDK4/6i) adyuvante se consideran endocrino-sensibles y son candidatas al esquema estándar de primera línea metastásica, incluyendo un inhibidor de CDK4/6i aunque ya hayan recibido uno en el escenario adyuvante.",
+            chart:{type:"km", metric:"Supervivencia global", timeUnit:"meses",
+              curves:[
+                {label:"Inhibidor de aromatasa + ribociclib", atMonths:63.9, survivalPct:50, highlight:true},
+                {label:"Inhibidor de aromatasa solo", atMonths:51.4, survivalPct:50}
+              ],
+              source:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2022 (análisis final de supervivencia global)"}},
           {label:"Continuar solo con el inhibidor de aromatasa que ya venía tomando, sin agregar CDK4/6i", points:0,
             feedback:"La progresión bajo terapia endocrina sola indica la necesidad de intensificar con un inhibidor de CDK4/6i, no de mantener el mismo esquema que ya demostró ser insuficiente.",
             paper:"MONALEESA-2 — Hortobagyi et al., N Engl J Med 2016", finding:"Agregar un inhibidor de CDK4/6i mejora sustancialmente los resultados frente a terapia endocrina sola en primera línea metastásica."},
@@ -762,7 +847,13 @@ lumB: {
         options:[
           {label:"Agregar ribociclib adyuvante junto con terapia endocrina", points:2,
             feedback:"Correcto. A diferencia de abemaciclib (monarchE), ribociclib fue evaluado en NATALEE con criterios de elegibilidad más amplios, incluyendo pacientes con compromiso ganglionar extenso como esta, y es una opción de intensificación adyuvante validada en este perfil de alto riesgo.",
-            paper:"NATALEE — Slamon et al., N Engl J Med 2024", finding:"Ribociclib adyuvante junto con inhibidor de aromatasa redujo el riesgo de recurrencia en pacientes con cáncer de mama en estadio II-III de alto riesgo, incluyendo compromiso ganglionar extenso, con un perfil de toxicidad distinto al de abemaciclib."},
+            paper:"NATALEE — Slamon et al., N Engl J Med 2024", finding:"Ribociclib adyuvante junto con inhibidor de aromatasa redujo el riesgo de recurrencia en pacientes con cáncer de mama en estadio II-III de alto riesgo, incluyendo compromiso ganglionar extenso, con un perfil de toxicidad distinto al de abemaciclib.",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva a 3 años", timeUnit:"meses",
+              curves:[
+                {label:"Ribociclib + inhibidor de aromatasa", atMonths:36, survivalPct:90.7, highlight:true},
+                {label:"Inhibidor de aromatasa solo", atMonths:36, survivalPct:87.6}
+              ],
+              source:"NATALEE — Slamon et al., N Engl J Med 2024"}},
           {label:"Solo terapia endocrina, sin CDK4/6i, dado que ya respondió mal a la quimioterapia", points:0,
             feedback:"La respuesta pobre a quimioterapia no descarta el beneficio de un CDK4/6i, que actúa por un mecanismo completamente distinto (bloqueo del ciclo celular vía RE), y esta paciente es justamente de alto riesgo, la población que más se beneficia.",
             paper:"NATALEE — Slamon et al., N Engl J Med 2024", finding:"El beneficio del CDK4/6i adyuvante fue independiente de la respuesta previa a la quimioterapia neoadyuvante."},
@@ -856,7 +947,13 @@ her2: {
         options:[
           {label:"TCHP: docetaxel + carboplatino + trastuzumab + pertuzumab neoadyuvante", points:2,
             feedback:"Correcto. TCHP (docetaxel + carboplatino junto con el bloqueo dual trastuzumab + pertuzumab) logra las tasas más altas de respuesta patológica completa entre todos los subtipos, y esa respuesta guía la adyuvancia posterior. Se prefiere este esquema sin antraciclina (en vez de AC seguido de docetaxel + bloqueo dual) por su menor cardiotoxicidad, dado que ya se administra un anti-HER2 con riesgo cardíaco propio.",
-            paper:"TRYPHAENA — Schneeweiss et al., Ann Oncol 2013; NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"TRYPHAENA evaluó específicamente el esquema TCHP (sin antraciclina) junto con bloqueo dual, mostrando alta tasa de respuesta patológica completa con menor toxicidad cardíaca que los esquemas con antraciclina. NeoSphere mostró que agregar pertuzumab a trastuzumab + docetaxel casi duplicó la tasa de respuesta patológica completa."},
+            paper:"TRYPHAENA — Schneeweiss et al., Ann Oncol 2013; NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"TRYPHAENA evaluó específicamente el esquema TCHP (sin antraciclina) junto con bloqueo dual, mostrando alta tasa de respuesta patológica completa con menor toxicidad cardíaca que los esquemas con antraciclina. NeoSphere mostró que agregar pertuzumab a trastuzumab + docetaxel casi duplicó la tasa de respuesta patológica completa.",
+            chart:{type:"bars", metric:"Respuesta patológica completa", unit:"%",
+              bars:[
+                {label:"Pertuzumab + trastuzumab + docetaxel", value:45.8, highlight:true},
+                {label:"Trastuzumab + docetaxel (sin pertuzumab)", value:29.0}
+              ],
+              source:"NeoSphere — Gianni et al., Lancet Oncol 2012"}},
           {label:"Cirugía primero, sin tratamiento sistémico previo", points:0,
             feedback:"Los tumores HER2+ tienen alta sensibilidad a la neoadyuvancia; operar primero pierde esa oportunidad.",
             paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"HER2+ es de los subtipos con mayor capacidad de respuesta patológica completa."},
@@ -874,7 +971,13 @@ her2: {
         options:[
           {label:"Cambiar a T-DM1 adyuvante por 14 ciclos", points:2,
             feedback:"Correcto. Ante enfermedad residual invasiva, el estándar es cambiar a T-DM1.",
-            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019", finding:"T-DM1 redujo el riesgo de recurrencia o muerte en un 50% frente a continuar trastuzumab."},
+            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019", finding:"T-DM1 redujo el riesgo de recurrencia o muerte en un 50% frente a continuar trastuzumab.",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva a 3 años (enfermedad residual)", timeUnit:"meses",
+              curves:[
+                {label:"T-DM1", atMonths:36, survivalPct:88.3, highlight:true},
+                {label:"Trastuzumab", atMonths:36, survivalPct:77.0}
+              ],
+              source:"KATHERINE — von Minckwitz et al., N Engl J Med 2019"}},
           {label:"Continuar trastuzumab + pertuzumab hasta completar un año", points:0,
             feedback:"Es la conducta si hubiera respuesta patológica completa; con enfermedad residual es inferior a T-DM1.",
             paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019", finding:"Mostró superioridad clara de T-DM1 sobre continuar trastuzumab en enfermedad residual."},
@@ -910,7 +1013,13 @@ her2: {
         options:[
           {label:"Trastuzumab + pertuzumab + docetaxel (THP)", points:2,
             feedback:"Correcto. Estándar preferido para primera línea metastásica.",
-            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"Mejoró significativamente la supervivencia global frente a trastuzumab + docetaxel solo."},
+            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"Mejoró significativamente la supervivencia global frente a trastuzumab + docetaxel solo.",
+            chart:{type:"km", metric:"Supervivencia global", timeUnit:"meses",
+              curves:[
+                {label:"Trastuzumab + pertuzumab + docetaxel (THP)", atMonths:57.1, survivalPct:50, highlight:true},
+                {label:"Trastuzumab + docetaxel solo", atMonths:40.8, survivalPct:50}
+              ],
+              source:"CLEOPATRA — Swain et al., N Engl J Med 2015 (análisis final de supervivencia)"}},
           {label:"T-DXd en primera línea", points:1,
             feedback:"Gran actividad, pero la evidencia más robusta es en líneas posteriores.",
             paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Evaluó T-DXd en pacientes ya tratadas con trastuzumab y taxano, no en primera línea de novo."},
@@ -928,7 +1037,13 @@ her2: {
         options:[
           {label:"Trastuzumab deruxtecan (T-DXd)", points:2,
             feedback:"Correcto. Estándar preferido tras progresión a THP.",
-            paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Mejora dramática en supervivencia libre de progresión frente a T-DM1, y también en supervivencia global."},
+            paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Mejora dramática en supervivencia libre de progresión frente a T-DM1, y también en supervivencia global.",
+            chart:{type:"km", metric:"Supervivencia libre de progresión", timeUnit:"meses",
+              curves:[
+                {label:"Trastuzumab deruxtecan (T-DXd)", atMonths:29.0, survivalPct:50, highlight:true},
+                {label:"T-DM1", atMonths:7.2, survivalPct:50}
+              ],
+              source:"DESTINY-Breast03 — actualización de seguimiento a largo plazo, JCO 2024"}},
           {label:"T-DM1", points:1,
             feedback:"Estándar histórico, razonable si T-DXd no está disponible, pero inferior según evidencia actual.",
             paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Comparó directamente T-DXd contra T-DM1 y demostró superioridad de T-DXd."},
@@ -956,7 +1071,13 @@ her2: {
         options:[
           {label:"TCHP: docetaxel + carboplatino + trastuzumab + pertuzumab neoadyuvante", points:2,
             feedback:"Correcto. Aun siendo también RE positivo, el HER2 positivo determina la estrategia inicial: la neoadyuvancia con TCHP (docetaxel + carboplatino + bloqueo dual) sigue siendo el estándar, priorizando el tratamiento del impulsor HER2 sobre el hormonal en esta etapa.",
-            paper:"TRYPHAENA — Schneeweiss et al., Ann Oncol 2013; NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"El bloqueo dual neoadyuvante junto con quimioterapia sin antraciclina (TCHP) mostró alta tasa de respuesta patológica completa con buen perfil de seguridad cardíaca, con beneficio consistente independientemente del estado de receptores hormonales."},
+            paper:"TRYPHAENA — Schneeweiss et al., Ann Oncol 2013; NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"El bloqueo dual neoadyuvante junto con quimioterapia sin antraciclina (TCHP) mostró alta tasa de respuesta patológica completa con buen perfil de seguridad cardíaca, con beneficio consistente independientemente del estado de receptores hormonales.",
+            chart:{type:"bars", metric:"Respuesta patológica completa", unit:"%",
+              bars:[
+                {label:"Pertuzumab + trastuzumab + docetaxel", value:45.8, highlight:true},
+                {label:"Trastuzumab + docetaxel (sin pertuzumab)", value:29.0}
+              ],
+              source:"NeoSphere — Gianni et al., Lancet Oncol 2012"}},
           {label:"Terapia endocrina neoadyuvante, dado que también es RE positivo", points:0,
             feedback:"No es la prioridad: en un tumor HER2 positivo, el impulsor dominante y de mayor sensibilidad a tratamiento dirigido es HER2, no el componente hormonal.",
             paper:"NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"La respuesta patológica completa fue consistentemente mayor con esquemas dirigidos a HER2 que los basados solo en terapia endocrina en tumores HER2 positivos."},
@@ -975,7 +1096,13 @@ her2: {
         options:[
           {label:"Continuar trastuzumab + pertuzumab hasta completar un año, y agregar terapia endocrina adyuvante (inhibidor de aromatasa)", points:2,
             feedback:"Correcto. Con respuesta patológica completa, se continúa el mismo bloqueo dual (no se cambia a T-DM1, que se reserva para enfermedad residual) hasta completar un año, y se agrega terapia endocrina adyuvante por el componente RE positivo del tumor.",
-            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019; APHINITY — von Minckwitz et al., N Engl J Med 2017", finding:"KATHERINE definió el cambio a T-DM1 específicamente para enfermedad residual, no para respuesta patológica completa. APHINITY mostró beneficio de pertuzumab adyuvante particularmente en pacientes con compromiso ganglionar, respaldando continuar el bloqueo dual completo en este perfil."},
+            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019; APHINITY — von Minckwitz et al., N Engl J Med 2017", finding:"KATHERINE definió el cambio a T-DM1 específicamente para enfermedad residual, no para respuesta patológica completa. APHINITY mostró beneficio de pertuzumab adyuvante particularmente en pacientes con compromiso ganglionar, respaldando continuar el bloqueo dual completo en este perfil.",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva a 6 años (subgrupo con ganglios positivos)", timeUnit:"meses",
+              curves:[
+                {label:"Trastuzumab + pertuzumab", atMonths:72, survivalPct:88, highlight:true},
+                {label:"Trastuzumab solo", atMonths:72, survivalPct:83}
+              ],
+              source:"APHINITY — von Minckwitz et al., J Clin Oncol 2021 (actualización a 6 años, subgrupo con ganglios positivos)"}},
           {label:"Cambiar a T-DM1 adyuvante, igual que ante enfermedad residual", points:0,
             feedback:"No corresponde: el cambio a T-DM1 en KATHERINE se definió específicamente para pacientes con enfermedad residual invasiva, no para quienes lograron respuesta patológica completa.",
             paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019", finding:"La población de beneficio de T-DM1 adyuvante fueron pacientes con enfermedad residual tras neoadyuvancia, no aquellas con respuesta patológica completa."},
@@ -1013,7 +1140,13 @@ her2: {
         options:[
           {label:"Trastuzumab + pertuzumab + docetaxel (THP)", points:2,
             feedback:"Correcto. En enfermedad metastásica HER2 positiva, incluso con receptores hormonales también positivos, el estándar de primera línea sigue siendo el bloqueo dual anti-HER2 con quimioterapia, dado que HER2 es el impulsor dominante; la terapia endocrina puede sumarse más adelante como mantenimiento, pero no reemplaza este esquema de inicio.",
-            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"Estableció el esquema con trastuzumab + pertuzumab + docetaxel como estándar de primera línea en enfermedad metastásica HER2 positiva, con beneficio independiente del estado de receptores hormonales."},
+            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"Estableció el esquema con trastuzumab + pertuzumab + docetaxel como estándar de primera línea en enfermedad metastásica HER2 positiva, con beneficio independiente del estado de receptores hormonales.",
+            chart:{type:"km", metric:"Supervivencia global", timeUnit:"meses",
+              curves:[
+                {label:"Trastuzumab + pertuzumab + docetaxel (THP)", atMonths:57.1, survivalPct:50, highlight:true},
+                {label:"Trastuzumab + docetaxel solo", atMonths:40.8, survivalPct:50}
+              ],
+              source:"CLEOPATRA — Swain et al., N Engl J Med 2015 (análisis final de supervivencia)"}},
           {label:"Terapia endocrina sola (inhibidor de aromatasa), dado que el tumor también es RE positivo", points:0,
             feedback:"Sería un error grave: ignora que HER2 es el impulsor dominante en este perfil, y la terapia endocrina sola no controla adecuadamente una enfermedad HER2 positiva metastásica.",
             paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"El bloqueo anti-HER2 es central en el tratamiento de primera línea independientemente de la coexpresión de receptores hormonales."},
@@ -1057,7 +1190,13 @@ her2: {
         options:[
           {label:"Trastuzumab + pertuzumab + docetaxel (THP)", points:2,
             feedback:"Correcto. Es el estándar de primera línea en enfermedad HER2+ metastásica, incluyendo presentaciones de novo.",
-            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"Mejoró significativamente la supervivencia global frente a trastuzumab + docetaxel solo en primera línea metastásica."},
+            paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"Mejoró significativamente la supervivencia global frente a trastuzumab + docetaxel solo en primera línea metastásica.",
+            chart:{type:"km", metric:"Supervivencia global", timeUnit:"meses",
+              curves:[
+                {label:"Trastuzumab + pertuzumab + docetaxel (THP)", atMonths:57.1, survivalPct:50, highlight:true},
+                {label:"Trastuzumab + docetaxel solo", atMonths:40.8, survivalPct:50}
+              ],
+              source:"CLEOPATRA — Swain et al., N Engl J Med 2015 (análisis final de supervivencia)"}},
           {label:"T-DXd de entrada en primera línea", points:1,
             feedback:"Fármaco de gran actividad, pero la evidencia más robusta y el estándar histórico de primera línea siguen siendo THP.",
             paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Evaluó T-DXd en pacientes ya tratadas previamente, no como primera línea de novo sin tratamiento previo."},
@@ -1095,7 +1234,13 @@ her2: {
         options:[
           {label:"Tucatinib + trastuzumab + capecitabina", points:2,
             feedback:"Correcto. Este esquema demostró beneficio específico en supervivencia libre de progresión y global en pacientes HER2+ con metástasis cerebrales, incluyendo compromiso activo del sistema nervioso central, por lo que es la elección preferida ante progresión con compromiso leptomeníngeo.",
-            paper:"HER2CLIMB — Murthy et al., N Engl J Med 2020", finding:"Tucatinib + trastuzumab + capecitabina mejoró significativamente la supervivencia libre de progresión y la supervivencia global frente a trastuzumab + capecitabina solo, con beneficio específico y consistente en el subgrupo de pacientes con metástasis cerebrales activas al momento de la inclusión."},
+            paper:"HER2CLIMB — Murthy et al., N Engl J Med 2020", finding:"Tucatinib + trastuzumab + capecitabina mejoró significativamente la supervivencia libre de progresión y la supervivencia global frente a trastuzumab + capecitabina solo, con beneficio específico y consistente en el subgrupo de pacientes con metástasis cerebrales activas al momento de la inclusión.",
+            chart:{type:"km", metric:"Supervivencia libre de progresión (población global del estudio)", timeUnit:"meses",
+              curves:[
+                {label:"Tucatinib + trastuzumab + capecitabina", atMonths:7.6, survivalPct:50, highlight:true},
+                {label:"Trastuzumab + capecitabina", atMonths:4.9, survivalPct:50}
+              ],
+              source:"HER2CLIMB — Murthy et al., N Engl J Med 2020"}},
           {label:"Trastuzumab deruxtecan (T-DXd)", points:1,
             feedback:"Tiene actividad demostrada también en metástasis cerebrales y es una alternativa razonable, pero la evidencia específica más robusta en compromiso activo del sistema nervioso central, incluyendo componente leptomeníngeo, corresponde al esquema con tucatinib.",
             paper:"HER2CLIMB — Murthy et al., N Engl J Med 2020", finding:"El diseño de HER2CLIMB incluyó específicamente y de forma prospectiva a pacientes con metástasis cerebrales activas, con un beneficio de supervivencia central en ese subgrupo."},
@@ -1132,7 +1277,13 @@ tnbc: {
         options:[
           {label:"Quimioterapia neoadyuvante (carboplatino + paclitaxel semanal x4, seguido de doxorrubicina + ciclofosfamida x4) + pembrolizumab", points:2,
             feedback:"Correcto. Estándar actual en triple negativo estadio II-III de alto riesgo.",
-            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"Agregar pembrolizumab mejoró la respuesta patológica completa y la supervivencia libre de eventos, independiente del estado de PD-L1."},
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"Agregar pembrolizumab mejoró la respuesta patológica completa y la supervivencia libre de eventos, independiente del estado de PD-L1.",
+            chart:{type:"km", metric:"Supervivencia libre de eventos a 3 años", timeUnit:"meses",
+              curves:[
+                {label:"Quimioterapia + pembrolizumab", atMonths:36, survivalPct:84, highlight:true},
+                {label:"Quimioterapia sola", atMonths:36, survivalPct:77}
+              ],
+              source:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022"}},
           {label:"Quimioterapia neoadyuvante estándar, sin inmunoterapia", points:1,
             feedback:"Estándar antes de 2021; hoy subóptimo.",
             paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"Mostró superioridad de agregar pembrolizumab como nuevo estándar."},
@@ -1168,7 +1319,13 @@ tnbc: {
         options:[
           {label:"No reexponer a pembrolizumab dado el irAE grave, y agregar olaparib adyuvante por 1 año (BRCA1 positivo)", points:2,
             feedback:"Correcto. Un irAE grado 3 que requirió infliximab contraindica en general reexponer al inhibidor de checkpoint; olaparib sigue indicado por mecanismo distinto.",
-            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021; OlympiA — Tutt et al., N Engl J Med 2021", finding:"ASCO desaconseja reexposición tras irAE grado 3 tratado con infliximab. OlympiA mostró beneficio de olaparib adyuvante en BRCA1/2 mutadas de alto riesgo, independiente del uso de pembrolizumab."},
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021; OlympiA — Tutt et al., N Engl J Med 2021", finding:"ASCO desaconseja reexposición tras irAE grado 3 tratado con infliximab. OlympiA mostró beneficio de olaparib adyuvante en BRCA1/2 mutadas de alto riesgo, independiente del uso de pembrolizumab.",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva a 3 años (BRCA1/2 mutado)", timeUnit:"meses",
+              curves:[
+                {label:"Olaparib adyuvante", atMonths:36, survivalPct:85.9, highlight:true},
+                {label:"Placebo", atMonths:36, survivalPct:77.1}
+              ],
+              source:"OlympiA — Tutt et al., N Engl J Med 2021"}},
           {label:"Reiniciar pembrolizumab de todas formas, y agregar olaparib", points:0,
             feedback:"Alto riesgo de recurrencia del irAE, potencialmente más grave.",
             paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Mayor riesgo de recurrencia y gravedad al reexponer tras irAE grado 3 tratado con inmunosupresores biológicos."},
@@ -1220,7 +1377,13 @@ tnbc: {
         options:[
           {label:"Sacituzumab govitecan", points:2,
             feedback:"Correcto. Estándar preferido tras al menos dos líneas previas.",
-            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Casi triplicó la supervivencia libre de progresión y mejoró la supervivencia global frente a quimioterapia de elección del médico."},
+            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Casi triplicó la supervivencia libre de progresión y mejoró la supervivencia global frente a quimioterapia de elección del médico.",
+            chart:{type:"km", metric:"Supervivencia libre de progresión", timeUnit:"meses",
+              curves:[
+                {label:"Sacituzumab govitecan", atMonths:5.6, survivalPct:50, highlight:true},
+                {label:"Quimioterapia de elección del médico", atMonths:1.7, survivalPct:50}
+              ],
+              source:"ASCENT — Bardia et al., N Engl J Med 2021"}},
           {label:"Trastuzumab deruxtecan (T-DXd), dado el HER2-low", points:1,
             feedback:"Alternativa válida en HER2-low pretratado; en esta secuencia puntual sacituzumab suele priorizarse.",
             paper:"DESTINY-Breast04 — Modi et al., N Engl J Med 2022", finding:"Mejoró supervivencia libre de progresión y global en HER2-low pretratado, incluyendo subgrupo hormono-negativo."},
@@ -1248,7 +1411,13 @@ tnbc: {
         options:[
           {label:"Quimioterapia neoadyuvante (carboplatino + paclitaxel semanal x4, seguido de doxorrubicina + ciclofosfamida x4) + pembrolizumab", points:2,
             feedback:"Correcto. El estadio II-III de alto riesgo es indicación de pembrolizumab neoadyuvante/adyuvante independientemente del estado germinal de BRCA o del PD-L1.",
-            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El beneficio de agregar pembrolizumab fue independiente del estado de PD-L1 y no requiere estratificación por mutación germinal para esta indicación neoadyuvante/adyuvante."},
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El beneficio de agregar pembrolizumab fue independiente del estado de PD-L1 y no requiere estratificación por mutación germinal para esta indicación neoadyuvante/adyuvante.",
+            chart:{type:"km", metric:"Supervivencia libre de eventos a 3 años", timeUnit:"meses",
+              curves:[
+                {label:"Quimioterapia + pembrolizumab", atMonths:36, survivalPct:84, highlight:true},
+                {label:"Quimioterapia sola", atMonths:36, survivalPct:77}
+              ],
+              source:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022"}},
           {label:"Quimioterapia neoadyuvante sin pembrolizumab, dado que no tiene mutación BRCA", points:0,
             feedback:"El estado de BRCA no es criterio para decidir el uso de pembrolizumab en este contexto; ambas intervenciones actúan por mecanismos independientes.",
             paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"La indicación de pembrolizumab en esta población no depende del estado germinal de BRCA."},
@@ -1333,7 +1502,13 @@ tnbc: {
         options:[
           {label:"Carboplatino + paclitaxel seguido de doxorrubicina + ciclofosfamida, con pembrolizumab, a pesar del PD-L1 negativo", points:2,
             feedback:"Correcto. A diferencia de la indicación en enfermedad metastásica (donde el beneficio de pembrolizumab requiere PD-L1 positivo), en el contexto neoadyuvante/adyuvante de KEYNOTE-522 el beneficio fue independiente del estado de PD-L1, por lo que se agrega igual pese a ser negativo.",
-            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El beneficio de pembrolizumab neoadyuvante/adyuvante fue consistente independientemente del estado de PD-L1, a diferencia de la indicación en enfermedad metastásica de primera línea, que sí requiere PD-L1 positivo (CPS ≥10) según KEYNOTE-355."},
+            paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El beneficio de pembrolizumab neoadyuvante/adyuvante fue consistente independientemente del estado de PD-L1, a diferencia de la indicación en enfermedad metastásica de primera línea, que sí requiere PD-L1 positivo (CPS ≥10) según KEYNOTE-355.",
+            chart:{type:"km", metric:"Supervivencia libre de eventos a 3 años", timeUnit:"meses",
+              curves:[
+                {label:"Quimioterapia + pembrolizumab", atMonths:36, survivalPct:84, highlight:true},
+                {label:"Quimioterapia sola", atMonths:36, survivalPct:77}
+              ],
+              source:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022"}},
           {label:"Quimioterapia neoadyuvante sin pembrolizumab, dado que el PD-L1 es negativo", points:0,
             feedback:"Confunde el criterio de PD-L1 aplicable a metastásico (KEYNOTE-355) con el de neoadyuvante (KEYNOTE-522), que no requiere PD-L1 positivo.",
             paper:"KEYNOTE-522 — Schmid et al., N Engl J Med 2022", finding:"El beneficio en el contexto neoadyuvante/adyuvante no dependió del estado de PD-L1, a diferencia de la indicación metastásica."},
@@ -1391,7 +1566,13 @@ tnbc: {
         options:[
           {label:"Sacituzumab govitecan (conjugado anti-Trop-2)", points:2,
             feedback:"Correcto. Su eficacia no depende de la expresión de HER2, por lo que es una opción dirigida apropiada en este perfil HER2-null.",
-            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Mejoró significativamente la supervivencia frente a quimioterapia de elección del médico en triple negativo pretratado, con un mecanismo (dirigido a Trop-2) independiente de la expresión de HER2."},
+            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Mejoró significativamente la supervivencia frente a quimioterapia de elección del médico en triple negativo pretratado, con un mecanismo (dirigido a Trop-2) independiente de la expresión de HER2.",
+            chart:{type:"km", metric:"Supervivencia libre de progresión", timeUnit:"meses",
+              curves:[
+                {label:"Sacituzumab govitecan", atMonths:5.6, survivalPct:50, highlight:true},
+                {label:"Quimioterapia de elección del médico", atMonths:1.7, survivalPct:50}
+              ],
+              source:"ASCENT — Bardia et al., N Engl J Med 2021"}},
           {label:"Trastuzumab deruxtecan (T-DXd), extrapolando el beneficio de HER2-low", points:0,
             feedback:"No corresponde: esta paciente es HER2-null (IHC 0), no HER2-low (IHC 1+/2+); la evidencia de beneficio de T-DXd no incluye al grupo HER2-null.",
             paper:"DESTINY-Breast04 — Modi et al., N Engl J Med 2022", finding:"La población de beneficio se definió específicamente como HER2-low (IHC 1+ o 2+ no amplificado), excluyendo a los tumores HER2-null (IHC 0)."},
@@ -1430,7 +1611,13 @@ egfr: {
         options:[
           {label:"Osimertinib adyuvante por 3 años", points:2,
             feedback:"Correcto. En NSCLC resecado EGFR mutado (exón 19 o L858R) estadio IB-IIIA, osimertinib adyuvante es el estándar de cuidado, con o sin quimioterapia adyuvante previa.",
-            paper:"ADAURA — Wu et al., N Engl J Med 2020; actualización de supervivencia global, Tsuboi et al., N Engl J Med 2023", finding:"Osimertinib adyuvante redujo el riesgo de recurrencia o muerte de forma marcada frente a placebo en estadio II-IIIA (HR 0.17 en el análisis inicial), con beneficio también en supervivencia global confirmado en el análisis final a más de 5 años de seguimiento, y beneficio específico en la reducción de recurrencia a nivel del sistema nervioso central."},
+            paper:"ADAURA — Wu et al., N Engl J Med 2020; actualización de supervivencia global, Tsuboi et al., N Engl J Med 2023", finding:"Osimertinib adyuvante redujo el riesgo de recurrencia o muerte de forma marcada frente a placebo en estadio II-IIIA (HR 0.17 en el análisis inicial), con beneficio también en supervivencia global confirmado en el análisis final a más de 5 años de seguimiento, y beneficio específico en la reducción de recurrencia a nivel del sistema nervioso central.",
+            chart:{type:"km", metric:"Supervivencia global a 5 años (estadio II-IIIA)", timeUnit:"meses",
+              curves:[
+                {label:"Osimertinib adyuvante", atMonths:60, survivalPct:85, highlight:true},
+                {label:"Placebo", atMonths:60, survivalPct:73}
+              ],
+              source:"ADAURA — Tsuboi et al., N Engl J Med 2023 (análisis final de supervivencia global)"}},
           {label:"Quimioterapia adyuvante con platino, sin terapia dirigida", points:1,
             feedback:"Es razonable como componente adicional (osimertinib se estudió con o sin quimioterapia adyuvante previa), pero omitir el osimertinib deja fuera el componente con mayor impacto demostrado en este perfil molecular.",
             paper:"ADAURA — Wu et al., N Engl J Med 2020", finding:"El beneficio de osimertinib se observó tanto en pacientes que habían recibido quimioterapia adyuvante como en quienes no, siendo el osimertinib el componente que aportó el mayor beneficio adicional."},
@@ -1506,7 +1693,13 @@ egfr: {
         options:[
           {label:"Amivantamab (anticuerpo biespecífico anti-EGFR/MET) en combinación con quimioterapia", points:2,
             feedback:"Correcto. Amivantamab combinado con quimioterapia con platino es una opción validada tras progresión a un inhibidor de EGFR de tercera generación como osimertinib, independientemente del mecanismo específico de resistencia identificado previamente.",
-            paper:"MARIPOSA-2 — Passaro et al., N Engl J Med 2024", finding:"La combinación de amivantamab con quimioterapia mejoró la supervivencia libre de progresión frente a quimioterapia sola en pacientes con NSCLC EGFR mutado que progresaron a osimertinib, consolidándose como una opción estándar en esta línea."},
+            paper:"MARIPOSA-2 — Passaro et al., N Engl J Med 2024", finding:"La combinación de amivantamab con quimioterapia mejoró la supervivencia libre de progresión frente a quimioterapia sola en pacientes con NSCLC EGFR mutado que progresaron a osimertinib, consolidándose como una opción estándar en esta línea.",
+            chart:{type:"km", metric:"Supervivencia libre de progresión", timeUnit:"meses",
+              curves:[
+                {label:"Amivantamab + quimioterapia", atMonths:8.2, survivalPct:50, highlight:true},
+                {label:"Quimioterapia sola", atMonths:4.2, survivalPct:50}
+              ],
+              source:"MARIPOSA-2 — Passaro et al., N Engl J Med 2024"}},
           {label:"Continuar la misma quimioterapia con platino sin cambios, dado que hubo respuesta inicial", points:0,
             feedback:"La progresión documentada, con nuevas lesiones hepáticas y óseas, indica que el esquema actual ya no está controlando la enfermedad y requiere cambiarse.",
             paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda cambiar de línea de tratamiento ante progresión documentada por imágenes."},
@@ -1541,7 +1734,13 @@ alk: {
         options:[
           {label:"Alectinib adyuvante por 2 años", points:2,
             feedback:"Correcto. En NSCLC resecado ALK positivo estadio IB-IIIA, alectinib adyuvante es superior a la quimioterapia adyuvante y es hoy el estándar de cuidado.",
-            paper:"ALINA — Wu et al., N Engl J Med 2024", finding:"Alectinib adyuvante durante 24 meses redujo el riesgo de recurrencia o muerte en un 76% frente a quimioterapia con platino en pacientes con NSCLC resecado ALK positivo estadio IB-IIIA, con un beneficio particularmente marcado en la reducción de recurrencias en el sistema nervioso central."},
+            paper:"ALINA — Wu et al., N Engl J Med 2024", finding:"Alectinib adyuvante durante 24 meses redujo el riesgo de recurrencia o muerte en un 76% frente a quimioterapia con platino en pacientes con NSCLC resecado ALK positivo estadio IB-IIIA, con un beneficio particularmente marcado en la reducción de recurrencias en el sistema nervioso central.",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad a 2 años (estadio II-IIIA)", timeUnit:"meses",
+              curves:[
+                {label:"Alectinib adyuvante", atMonths:24, survivalPct:93.8, highlight:true},
+                {label:"Quimioterapia con platino", atMonths:24, survivalPct:63.0}
+              ],
+              source:"ALINA — Wu et al., N Engl J Med 2024 (subgrupo estadio II-IIIA)"}},
           {label:"Osimertinib adyuvante, igual que en EGFR mutado", points:0,
             feedback:"No corresponde: osimertinib es un inhibidor de EGFR sin actividad relevante contra ALK; el fármaco dirigido específico para este perfil molecular es un inhibidor de ALK como alectinib.",
             paper:"ALINA — Wu et al., N Engl J Med 2024", finding:"El beneficio adyuvante demostrado en NSCLC ALK positivo corresponde específicamente a alectinib, un inhibidor de ALK, no a osimertinib."},
@@ -1633,7 +1832,13 @@ nodriver: {
         options:[
           {label:"Pembrolizumab en monoterapia", points:2,
             feedback:"Correcto. Con PD-L1 TPS ≥50% y sin alteración conductora, pembrolizumab en monoterapia es una opción de primera línea preferida, con un perfil de toxicidad más favorable que agregar quimioterapia y eficacia bien establecida en este subgrupo.",
-            paper:"KEYNOTE-024 — Reck et al., N Engl J Med 2016; actualización a 5 años, Reck et al., 2021", finding:"En pacientes con PD-L1 TPS ≥50% sin alteración conductora, pembrolizumab en monoterapia mejoró significativamente la supervivencia libre de progresión y la supervivencia global frente a quimioterapia con platino, con una tasa de supervivencia a 5 años sustancialmente mayor que la esperada históricamente con quimioterapia sola."},
+            paper:"KEYNOTE-024 — Reck et al., N Engl J Med 2016; actualización a 5 años, Reck et al., 2021", finding:"En pacientes con PD-L1 TPS ≥50% sin alteración conductora, pembrolizumab en monoterapia mejoró significativamente la supervivencia libre de progresión y la supervivencia global frente a quimioterapia con platino, con una tasa de supervivencia a 5 años sustancialmente mayor que la esperada históricamente con quimioterapia sola.",
+            chart:{type:"km", metric:"Supervivencia global a 5 años (PD-L1 TPS ≥50%)", timeUnit:"meses",
+              curves:[
+                {label:"Pembrolizumab en monoterapia", atMonths:60, survivalPct:31.9, highlight:true},
+                {label:"Quimioterapia con platino", atMonths:60, survivalPct:16.3}
+              ],
+              source:"KEYNOTE-024 — actualización a 5 años, Reck et al., J Clin Oncol 2021"}},
           {label:"Pembrolizumab + quimioterapia con platino", points:1,
             feedback:"Es también una opción válida y razonable en PD-L1 alto, especialmente si se busca una respuesta más rápida o hay mayor volumen de enfermedad, pero con TPS ≥50% pembrolizumab en monoterapia ofrece eficacia comparable con menor toxicidad, por lo que suele preferirse como primera elección salvo indicación específica de combinar.",
             paper:"KEYNOTE-189 — Gandhi et al., N Engl J Med 2018", finding:"Mostró beneficio de agregar pembrolizumab a quimioterapia en la población general no seleccionada por PD-L1 alto; en el subgrupo específico de TPS ≥50%, los resultados de monoterapia con pembrolizumab (KEYNOTE-024) son comparables con menor toxicidad acumulada."},
@@ -1689,7 +1894,13 @@ nodriver: {
         options:[
           {label:"Docetaxel + ramucirumab", points:2,
             feedback:"Correcto. Tras progresión a inmunoterapia y a quimioterapia con platino, docetaxel combinado con ramucirumab (inhibidor del receptor 2 del VEGF) es un estándar validado de línea posterior en NSCLC, con beneficio en supervivencia global frente a docetaxel solo.",
-            paper:"REVEL — Garon et al., Lancet 2014", finding:"La combinación de docetaxel con ramucirumab mejoró la supervivencia global frente a docetaxel solo en pacientes con NSCLC que progresaron tras quimioterapia basada en platino, y es una opción estándar de línea posterior independientemente de la histología."},
+            paper:"REVEL — Garon et al., Lancet 2014", finding:"La combinación de docetaxel con ramucirumab mejoró la supervivencia global frente a docetaxel solo en pacientes con NSCLC que progresaron tras quimioterapia basada en platino, y es una opción estándar de línea posterior independientemente de la histología.",
+            chart:{type:"km", metric:"Supervivencia global", timeUnit:"meses",
+              curves:[
+                {label:"Docetaxel + ramucirumab", atMonths:10.5, survivalPct:50, highlight:true},
+                {label:"Docetaxel solo", atMonths:9.1, survivalPct:50}
+              ],
+              source:"REVEL — Garon et al., Lancet 2014"}},
           {label:"Reintroducir pembrolizumab en monoterapia, dado que respondió bien inicialmente", points:0,
             feedback:"El paciente ya progresó bajo pembrolizumab en primera línea; no hay sustento para reintroducir el mismo inhibidor de checkpoint sin cambios tras progresión documentada a ese fármaco.",
             paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"No recomienda reintroducir el mismo inhibidor de checkpoint tras progresión documentada a ese fármaco en monoterapia."},
@@ -1724,7 +1935,13 @@ sclc: {
         options:[
           {label:"Quimioterapia con platino y etopósido, combinada con inmunoterapia (atezolizumab o durvalumab)", points:2,
             feedback:"Correcto. La combinación de quimioterapia con un inhibidor de checkpoint es el estándar actual de primera línea en enfermedad extensa, superando a la quimioterapia sola.",
-            paper:"IMpower133 — Horn et al., N Engl J Med 2018; CASPIAN — Paz-Ares et al., Lancet 2019", finding:"Ambos estudios mostraron mejora en supervivencia global al agregar un inhibidor de checkpoint (atezolizumab o durvalumab, respectivamente) a la quimioterapia con platino y etopósido de primera línea en enfermedad extensa, estableciendo esta combinación como el nuevo estándar de cuidado."},
+            paper:"IMpower133 — Horn et al., N Engl J Med 2018; CASPIAN — Paz-Ares et al., Lancet 2019", finding:"Ambos estudios mostraron mejora en supervivencia global al agregar un inhibidor de checkpoint (atezolizumab o durvalumab, respectivamente) a la quimioterapia con platino y etopósido de primera línea en enfermedad extensa, estableciendo esta combinación como el nuevo estándar de cuidado.",
+            chart:{type:"km", metric:"Supervivencia global", timeUnit:"meses",
+              curves:[
+                {label:"Atezolizumab + platino/etopósido", atMonths:12.3, survivalPct:50, highlight:true},
+                {label:"Platino/etopósido solo", atMonths:10.3, survivalPct:50}
+              ],
+              source:"IMpower133 — Horn et al., N Engl J Med 2018"}},
           {label:"Quimioterapia con platino y etopósido sola, sin inmunoterapia", points:1,
             feedback:"Fue el estándar histórico y sigue siendo razonable si hay contraindicación a inmunoterapia, pero hoy se considera subóptimo frente a la combinación con un inhibidor de checkpoint.",
             paper:"IMpower133 / CASPIAN", finding:"Ambos estudios demostraron la superioridad de agregar inmunoterapia a la quimioterapia estándar como nuevo estándar de primera línea."},
@@ -1781,7 +1998,13 @@ sclc: {
         options:[
           {label:"Tarlatamab (anticuerpo biespecífico anti-DLL3)", points:2,
             feedback:"Correcto. Tarlatamab, un anticuerpo biespecífico que dirige linfocitos T contra DLL3 (una proteína de superficie expresada en la gran mayoría de los carcinomas de células pequeñas), mostró actividad relevante y fue aprobado para esta línea de tratamiento tras progresión a quimioterapia con platino y a una línea posterior.",
-            paper:"DeLLphi-301 — Ahn et al., N Engl J Med 2023", finding:"Tarlatamab demostró tasas de respuesta duraderas en pacientes con carcinoma de células pequeñas previamente tratado con quimioterapia con platino y al menos una línea adicional, llevando a su aprobación acelerada como opción de tratamiento en esta población."},
+            paper:"DeLLphi-301 — Ahn et al., N Engl J Med 2023", finding:"Tarlatamab demostró tasas de respuesta duraderas en pacientes con carcinoma de células pequeñas previamente tratado con quimioterapia con platino y al menos una línea adicional, llevando a su aprobación acelerada como opción de tratamiento en esta población.",
+            chart:{type:"km", metric:"Supervivencia global (confirmación aleatorizada, segunda línea)", timeUnit:"meses",
+              curves:[
+                {label:"Tarlatamab", atMonths:13.6, survivalPct:50, highlight:true},
+                {label:"Quimioterapia (topotecán, lurbinectedina o amrubicina)", atMonths:8.3, survivalPct:50}
+              ],
+              source:"DeLLphi-304 — estudio fase 3 aleatorizado confirmatorio, J Clin Oncol 2025"}},
           {label:"Reintroducir el esquema de platino y etopósido nuevamente", points:0,
             feedback:"El paciente ya progresó a un intervalo corto desde el platino inicial y luego a lurbinectedina; no hay sustento para reintroducir el mismo platino sin un intervalo prolongado de sensibilidad demostrada.",
             paper:"NCCN Guidelines — Small Cell Lung Cancer, versión vigente", finding:"Recomienda reintroducir platino únicamente en recaídas platino-sensibles con intervalo prolongado, no tras progresión reciente a múltiples líneas."},
@@ -2258,6 +2481,89 @@ function shuffleArray(arr){
   return a;
 }
 
+function renderEvidenceChart(chart){
+  if(!chart) return "";
+  if(chart.type === "bars") return renderBarChart(chart);
+  return renderKMChart(chart);
+}
+
+function renderBarChart(chart){
+  const maxVal = Math.max(...chart.bars.map(b => b.value));
+  const rows = chart.bars.map(b => {
+    const pct = maxVal > 0 ? Math.max(6, (b.value / maxVal) * 100) : 0;
+    const displayVal = chart.unit === "%" ? `${b.value}%` : `${b.value} ${chart.unit}`;
+    return `
+      <div class="chart-row">
+        <div class="chart-row-label">${b.label}</div>
+        <div class="chart-track">
+          <div class="chart-fill ${b.highlight ? "hi" : ""}" style="width:${pct}%">
+            <span class="chart-val">${displayVal}</span>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+  return `
+    <div class="chart-card">
+      <div class="chart-title">${chart.metric}</div>
+      ${rows}
+      <div class="chart-source">Fuente: ${chart.source}</div>
+    </div>`;
+}
+
+function renderKMChart(chart){
+  const W = 420, H = 230;
+  const padL = 36, padR = 14, padT = 16, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const rawMax = Math.max(...chart.curves.map(c => c.atMonths)) * 1.5;
+  const maxTime = Math.max(6, Math.ceil(rawMax / 6) * 6);
+  const xOf = t => padL + (t / maxTime) * plotW;
+  const yOf = p => padT + ((100 - p) / 100) * plotH;
+  const y50 = yOf(50);
+
+  const steps = 40;
+  const curves = chart.curves.map(c => {
+    const base = Math.pow(c.survivalPct / 100, 1 / c.atMonths);
+    let d = "";
+    for(let i = 0; i <= steps; i++){
+      const t = (i / steps) * maxTime;
+      const p = 100 * Math.pow(base, t);
+      const x = xOf(t).toFixed(1), y = yOf(p).toFixed(1);
+      d += (i === 0 ? `M${x},${y}` : ` L${x},${y}`);
+    }
+    const color = c.highlight ? "var(--teal)" : "var(--ink-soft)";
+    const anchorLabel = c.survivalPct === 50 ? `mediana ${c.atMonths} ${chart.timeUnit}` : `${c.survivalPct}% a los ${c.atMonths} ${chart.timeUnit}`;
+    return { d, color, x: xOf(c.atMonths), y: yOf(c.survivalPct), label: c.label, anchorLabel, highlight: c.highlight };
+  });
+
+  const anchorLines = curves.map(c => `
+    <line x1="${c.x.toFixed(1)}" y1="${c.y.toFixed(1)}" x2="${c.x.toFixed(1)}" y2="${(padT+plotH).toFixed(1)}" stroke="${c.color}" stroke-width="1" stroke-dasharray="3,3"/>
+    <circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="3" fill="${c.color}"/>
+  `).join("");
+
+  const legend = curves.map(c => `
+    <div class="km-legend-item"><span class="km-swatch" style="background:${c.color}"></span>${c.label} <b>(${c.anchorLabel})</b></div>
+  `).join("");
+
+  return `
+    <div class="chart-card">
+      <div class="chart-title">${chart.metric}</div>
+      <svg viewBox="0 0 ${W} ${H}" class="km-svg" preserveAspectRatio="xMidYMid meet">
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+plotH}" stroke="var(--line)" stroke-width="1"/>
+        <line x1="${padL}" y1="${padT+plotH}" x2="${padL+plotW}" y2="${padT+plotH}" stroke="var(--line)" stroke-width="1"/>
+        <line x1="${padL}" y1="${y50.toFixed(1)}" x2="${padL+plotW}" y2="${y50.toFixed(1)}" stroke="var(--line)" stroke-width="1" stroke-dasharray="2,3"/>
+        <text x="${padL-6}" y="${padT+4}" class="km-axis-label" text-anchor="end">100%</text>
+        <text x="${padL-6}" y="${y50.toFixed(1)}" text-anchor="end" dy="4" class="km-axis-label">50%</text>
+        <text x="${padL-6}" y="${(padT+plotH).toFixed(1)}" class="km-axis-label" text-anchor="end">0%</text>
+        <text x="${padL}" y="${H-6}" class="km-axis-label">0</text>
+        <text x="${(padL+plotW).toFixed(1)}" y="${H-6}" class="km-axis-label" text-anchor="end">${maxTime} ${chart.timeUnit}</text>
+        ${anchorLines}
+        ${curves.map(c => `<path d="${c.d}" fill="none" stroke="${c.color}" stroke-width="2.4"/>`).join("")}
+      </svg>
+      <div class="km-legend">${legend}</div>
+      <div class="chart-source">Curva ilustrativa construida a partir del dato reportado (no es la curva digitalizada del paper) · Fuente: ${chart.source}</div>
+    </div>`;
+}
+
 function tierOf(points){
   if(points >= 2) return "correct";
   if(points === 1) return "partial";
@@ -2295,13 +2601,12 @@ function selectOption(i){
     </div>` : "";
 
   let bestRefHtml = "";
-  if(tier !== "correct"){
-    const bestIdx = opts.findIndex(o => o.points >= 2);
-    if(bestIdx !== -1){
-      const letters = ["A","B","C","D"];
-      bestRefHtml = `<div class="bestref">La opción con mayor respaldo en este escenario era <b>${letters[bestIdx]}. ${opts[bestIdx].label}</b>.</div>`;
-    }
+  const bestIdx = opts.findIndex(o => o.points >= 2);
+  if(tier !== "correct" && bestIdx !== -1){
+    const letters = ["A","B","C","D"];
+    bestRefHtml = `<div class="bestref">La opción con mayor respaldo en este escenario era <b>${letters[bestIdx]}. ${opts[bestIdx].label}</b>.</div>`;
   }
+  const chartHtml = bestIdx !== -1 ? renderEvidenceChart(opts[bestIdx].chart) : "";
 
   const fb = document.getElementById("feedbackWrap");
   fb.innerHTML = `
@@ -2311,6 +2616,7 @@ function selectOption(i){
     </div>
     ${evidenceHtml}
     ${bestRefHtml}
+    ${chartHtml}
     <button class="next-btn" id="nextBtn">Continuar →</button>
   `;
   document.getElementById("nextBtn").onclick = () => {
