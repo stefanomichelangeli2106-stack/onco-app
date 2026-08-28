@@ -947,7 +947,7 @@ her2: {
         options:[
           {label:"TCHP: docetaxel + carboplatino + trastuzumab + pertuzumab neoadyuvante", points:2,
             feedback:"Correcto. TCHP (docetaxel + carboplatino junto con el bloqueo dual trastuzumab + pertuzumab) logra las tasas más altas de respuesta patológica completa entre todos los subtipos, y esa respuesta guía la adyuvancia posterior. Se prefiere este esquema sin antraciclina (en vez de AC seguido de docetaxel + bloqueo dual) por su menor cardiotoxicidad, dado que ya se administra un anti-HER2 con riesgo cardíaco propio.",
-            paper:"TRYPHAENA — Schneeweiss et al., Ann Oncol 2013; NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"TRYPHAENA evaluó específicamente el esquema TCHP (sin antraciclina) junto con bloqueo dual, mostrando alta tasa de respuesta patológica completa con menor toxicidad cardíaca que los esquemas con antraciclina. NeoSphere mostró que agregar pertuzumab a trastuzumab + docetaxel casi duplicó la tasa de respuesta patológica completa.",
+            paper:"TRYPHAENA — Schneeweiss et al., Ann Oncol 2013; NeoSphere — Gianni et al., Lancet Oncol 2012", finding:"TRYPHAENA evaluó específicamente el esquema TCHP (sin antraciclina) junto con bloqueo dual, mostrando alta tasa de respuesta patológica completa con menor toxicidad cardíaca que los esquemas con antraciclina. NeoSphere mostró que agregar pertuzumab a trastuzumab + docetaxel aumentó significativamente la tasa de respuesta patológica completa (45.8% frente a 29.0%, un incremento absoluto de 16.8 puntos porcentuales).",
             chart:{type:"bars", metric:"Respuesta patológica completa", unit:"%",
               bars:[
                 {label:"Pertuzumab + trastuzumab + docetaxel", value:45.8, highlight:true},
@@ -994,17 +994,17 @@ her2: {
         prompt:"Caída de FEVI de 62% a 40% con disnea leve, bajo T-DM1 adyuvante. ¿Conducta más apropiada?",
         options:[
           {label:"Suspender temporalmente T-DM1, IECA/betabloqueante, cardiología, reevaluar FEVI en 3-4 semanas", points:2,
-            feedback:"Correcto. La disfunción ventricular anti-HER2 es habitualmente reversible con manejo cardioprotector.",
-            paper:"HERA trial — Piccart-Gebhart et al., N Engl J Med 2005", finding:"La disfunción ventricular fue en la mayoría de los casos reversible con suspensión y manejo cardioprotector."},
+            feedback:"Correcto. La disfunción ventricular por T-DM1 es infrecuente y habitualmente reversible con suspensión temporal y manejo cardioprotector.",
+            paper:"ATEMPT — Tolaney et al., npj Breast Cancer 2022; KATHERINE — von Minckwitz et al., N Engl J Med 2019 (perfil de seguridad)", finding:"En KATHERINE, la disminución significativa de FEVI con T-DM1 adyuvante fue infrecuente (alrededor del 1% de las pacientes). En el estudio ATEMPT, los casos de caída asintomática significativa de FEVI que requirieron suspender T-DM1 (0.8%) se resolvieron por completo en el seguimiento disponible, con normalización de la FEVI y posibilidad de completar el tratamiento planificado."},
           {label:"Continuar T-DM1 sin cambios", points:0,
             feedback:"Una caída de más de 20 puntos con síntomas nuevos requiere suspender y evaluar.",
-            paper:"HERA trial — Piccart-Gebhart et al., N Engl J Med 2005", finding:"El protocolo definía umbrales de caída de FEVI que obligaban a suspender el tratamiento."},
+            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019 (perfil de seguridad)", finding:"El protocolo definía umbrales de caída de FEVI que obligaban a suspender el tratamiento para evaluación cardiológica."},
           {label:"Discontinuar T-DM1 de forma permanente sin reevaluación", points:1,
             feedback:"Puede ser el desenlace final si no se recupera, pero primero se intenta manejo cardioprotector y reevaluación.",
-            paper:"HERA trial — Piccart-Gebhart et al., N Engl J Med 2005", finding:"Muchas pacientes pudieron reiniciar terapia anti-HER2 tras recuperación de la FEVI."},
+            paper:"ATEMPT — Tolaney et al., npj Breast Cancer 2022", finding:"Las pacientes con caída de FEVI documentada en este estudio pudieron reiniciar T-DM1 tras la recuperación completa de la función ventricular."},
           {label:"No requiere ninguna conducta especial", points:0,
             feedback:"Subestima un hallazgo relevante que exige acción activa.",
-            paper:"HERA trial — Piccart-Gebhart et al., N Engl J Med 2005", finding:"Estableció el estándar de vigilancia cardíaca activa para actuar tempranamente."}
+            paper:"KATHERINE — von Minckwitz et al., N Engl J Med 2019 (perfil de seguridad)", finding:"Estableció el estándar de vigilancia cardíaca activa periódica durante el tratamiento con T-DM1 para actuar tempranamente ante una caída de FEVI."}
         ]},
       {type:"info", phase:4, eyebrow:"Seguimiento — 3 años después", vitalsUpdate:{"Tratamiento":"T-DM1 reiniciado tras recuperación de FEVI","Estadio":"Sin evidencia de enfermedad"}, html:`
         <p>FEVI se recupera a 54%, se reinicia T-DM1 hasta completar el esquema. Tres años después, <b>cefalea persistente y visión borrosa</b>. RM cerebral: <b>2 lesiones metastásicas cerebrales</b>. PET-TC: <b>lesión hepática única</b>.</p>`, buttonLabel:"Definir primera línea metastásica →"},
