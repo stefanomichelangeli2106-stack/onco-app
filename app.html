@@ -305,7 +305,7 @@ lumA: {
             paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda terapia endocrina-based como preferida sin crisis visceral."},
           {label:"Fulvestrant en monoterapia", points:1,
             feedback:"Válido, pero inferior a inhibidor de aromatasa + CDK4/6i en primera línea.",
-            paper:"PALOMA-3 / FALCON", finding:"Los estudios con CDK4/6i combinado mostraron mayor beneficio en primera línea."},
+            paper:"PALOMA-2 — Finn et al., N Engl J Med 2016", finding:"Palbociclib + letrozol de primera línea mejoró la supervivencia libre de progresión frente a letrozol solo; los esquemas de primera línea con CDK4/6i combinado mostraron mayor beneficio que la terapia endocrina en monoterapia."},
           {label:"Continuar el mismo inhibidor de aromatasa sin cambios", points:0,
             feedback:"La progresión indica resistencia endocrina; hay que agregar CDK4/6i.",
             paper:"MONALEESA-2 / MONARCH-3", finding:"Agregar CDK4/6i revierte parcialmente la resistencia."}
@@ -423,16 +423,16 @@ lumA: {
         options:[
           {label:"No extender la terapia endocrina más allá de los 5 años dado el perfil de bajo riesgo basal y la edad avanzada", points:2,
             feedback:"Correcto. El beneficio de extender la terapia endocrina más allá de 5 años es mayor en tumores de riesgo más alto; en un tumor de bajo riesgo como este, sumado a la edad avanzada y el riesgo de toxicidad prolongada (ósea, cognitiva, funcional), el balance riesgo-beneficio no favorece la extensión.",
-            paper:"EBCTCG meta-analysis extended endocrine therapy, Lancet Oncol 2020", finding:"El beneficio de extender la terapia endocrina más allá de 5 años es proporcional al riesgo basal de recurrencia; en tumores de bajo riesgo, el beneficio absoluto adicional es pequeño y debe balancearse contra la toxicidad acumulada."},
+            paper:"EBCTCG — meta-análisis de terapia con inhibidor de aromatasa extendida, The Lancet 2025", finding:"El beneficio de extender la terapia endocrina más allá de 5 años es proporcional al riesgo basal de recurrencia; en tumores de bajo riesgo, el beneficio absoluto adicional es pequeño y debe balancearse contra la toxicidad acumulada."},
           {label:"Extender automáticamente a 10 años porque es lo recomendado en todas las pacientes RE+", points:0,
             feedback:"No es una recomendación universal: la decisión de extender debe individualizarse según el riesgo basal, la tolerancia y la expectativa de vida funcional, no aplicarse de forma automática.",
-            paper:"EBCTCG meta-analysis extended endocrine therapy, Lancet Oncol 2020", finding:"El beneficio de la extensión varía sustancialmente según el riesgo basal; no todas las pacientes se benefician igual de prolongar el tratamiento."},
+            paper:"EBCTCG — meta-análisis de terapia con inhibidor de aromatasa extendida, The Lancet 2025", finding:"El beneficio de la extensión varía sustancialmente según el riesgo basal; no todas las pacientes se benefician igual de prolongar el tratamiento."},
           {label:"Suspender toda terapia endocrina de inmediato sin haber completado los 5 años planificados", points:0,
             feedback:"No corresponde interrumpir antes de completar el curso planificado de 5 años sin una razón de toxicidad activa; en este momento la paciente ya está tolerando bien el agente rotado.",
             paper:"EBCTCG meta-analysis, Lancet 2011", finding:"Completar al menos 5 años de terapia endocrina adyuvante reduce sustancialmente el riesgo de recurrencia en tumores RE+."},
           {label:"Cambiar de inhibidor de aromatasa a tamoxifeno para los años adicionales, en lugar de suspender", points:0,
             feedback:"Cambiar de clase de agente es una estrategia real de terapia endocrina extendida en pacientes seleccionadas, pero en esta paciente de bajo riesgo basal y edad avanzada el problema de fondo no es qué droga usar, sino que la extensión en sí misma no está indicada: el beneficio esperado es pequeño y no compensa el riesgo de toxicidad prolongada.",
-            paper:"EBCTCG meta-analysis extended endocrine therapy, Lancet Oncol 2020", finding:"Los ensayos de terapia endocrina extendida evaluaron tanto continuar la misma clase como cambiar de agente; en ambos casos el beneficio esperado depende del riesgo basal, que en este perfil es bajo."}
+            paper:"EBCTCG — meta-análisis de terapia con inhibidor de aromatasa extendida, The Lancet 2025", finding:"Los ensayos de terapia endocrina extendida evaluaron tanto continuar la misma clase como cambiar de agente; en ambos casos el beneficio esperado depende del riesgo basal, que en este perfil es bajo."}
         ]}
     ]},
 
@@ -1693,13 +1693,13 @@ egfr: {
         options:[
           {label:"Amivantamab (anticuerpo biespecífico anti-EGFR/MET) en combinación con quimioterapia", points:2,
             feedback:"Correcto. Amivantamab combinado con quimioterapia con platino es una opción validada tras progresión a un inhibidor de EGFR de tercera generación como osimertinib, independientemente del mecanismo específico de resistencia identificado previamente.",
-            paper:"MARIPOSA-2 — Passaro et al., N Engl J Med 2024", finding:"La combinación de amivantamab con quimioterapia mejoró la supervivencia libre de progresión frente a quimioterapia sola en pacientes con NSCLC EGFR mutado que progresaron a osimertinib, consolidándose como una opción estándar en esta línea.",
+            paper:"MARIPOSA-2 — Passaro et al., Ann Oncol 2024", finding:"La combinación de amivantamab con quimioterapia mejoró la supervivencia libre de progresión frente a quimioterapia sola en pacientes con NSCLC EGFR mutado que progresaron a osimertinib, consolidándose como una opción estándar en esta línea.",
             chart:{type:"km", metric:"Supervivencia libre de progresión", timeUnit:"meses",
               curves:[
                 {label:"Amivantamab + quimioterapia", atMonths:8.2, survivalPct:50, highlight:true},
                 {label:"Quimioterapia sola", atMonths:4.2, survivalPct:50}
               ],
-              source:"MARIPOSA-2 — Passaro et al., N Engl J Med 2024"}},
+              source:"MARIPOSA-2 — Passaro et al., Ann Oncol 2024"}},
           {label:"Continuar la misma quimioterapia con platino sin cambios, dado que hubo respuesta inicial", points:0,
             feedback:"La progresión documentada, con nuevas lesiones hepáticas y óseas, indica que el esquema actual ya no está controlando la enfermedad y requiere cambiarse.",
             paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda cambiar de línea de tratamiento ante progresión documentada por imágenes."},
@@ -1778,16 +1778,16 @@ alk: {
         options:[
           {label:"Cambiar a lorlatinib (inhibidor de ALK de tercera generación)", points:2,
             feedback:"Correcto. Lorlatinib tiene mayor penetración y actividad en el sistema nervioso central que alectinib, y es la opción preferida ante progresión cerebral bajo un inhibidor de ALK de generación anterior.",
-            paper:"CROWN — Solomon et al., N Engl J Med 2020; actualización a 5 años, Solomon et al., 2024", finding:"Lorlatinib mostró alta tasa de respuesta intracraneal y control prolongado de la enfermedad cerebral, incluyendo en pacientes con progresión bajo inhibidores de ALK de generación previa, con un perfil de penetración al sistema nervioso central superior."},
+            paper:"Estudio de fase 2 — Solomon et al., Lancet Oncol 2018 (cohorte con progresión a inhibidores de ALK previos)", finding:"En la cohorte de este estudio con progresión específicamente tras un inhibidor de ALK de segunda generación (como alectinib), lorlatinib mostró una tasa de respuesta intracraneal alta. A diferencia de CROWN —que evaluó lorlatinib como primera línea en pacientes sin tratamiento previo—, este estudio de fase 2 sí incluyó y es la evidencia aplicable a pacientes que ya progresaron bajo otro inhibidor de ALK."},
           {label:"Continuar alectinib sin cambios, ya que la enfermedad extracraneal está controlada", points:0,
             feedback:"La progresión cerebral documentada, aunque la enfermedad extracraneal esté controlada, indica la necesidad de cambiar a un inhibidor de ALK con mejor penetración al sistema nervioso central.",
-            paper:"CROWN — Solomon et al., N Engl J Med 2020", finding:"Se diseñó específicamente considerando el alto riesgo de progresión cerebral en NSCLC ALK positivo, mostrando el beneficio de un inhibidor de mayor penetración al sistema nervioso central."},
+            paper:"Estudio de fase 2 — Solomon et al., Lancet Oncol 2018", finding:"Se diseñó específicamente para evaluar la actividad de lorlatinib, incluyendo a nivel intracraneal, en pacientes con progresión documentada bajo inhibidores de ALK previos, mostrando el beneficio de cambiar a un inhibidor de mayor penetración al sistema nervioso central."},
           {label:"Radioterapia holocraneal exclusiva, sin cambio de tratamiento sistémico", points:1,
             feedback:"La radioterapia focal o holocraneal puede tener un rol complementario según el número y tamaño de las lesiones, pero cambiar a un inhibidor de ALK con mejor penetración al sistema nervioso central aborda la causa sistémica de la progresión y puede evitar o complementar la radioterapia según el caso.",
-            paper:"CROWN — Solomon et al., N Engl J Med 2020", finding:"Mostró que un inhibidor de ALK con alta penetración al sistema nervioso central puede lograr control intracraneal prolongado, lo que en muchos casos permite diferir o evitar la radioterapia holocraneal y su toxicidad asociada."},
+            paper:"Estudio de fase 2 — Solomon et al., Lancet Oncol 2018", finding:"Mostró que, tras progresión a un inhibidor de ALK previo, lorlatinib puede lograr control intracraneal relevante, lo que en muchos casos permite diferir o evitar la radioterapia holocraneal y su toxicidad asociada."},
           {label:"Quimioterapia con platino, discontinuando todo tratamiento dirigido contra ALK", points:0,
             feedback:"Prescindir de la terapia dirigida contra ALK en un tumor que la mantiene como impulsor molecular, y que dispone de opciones de generación posterior con mejor penetración al sistema nervioso central, no es la conducta preferida en este momento.",
-            paper:"CROWN — Solomon et al., N Engl J Med 2020", finding:"Los inhibidores de ALK de generaciones sucesivas mostraron beneficio clínico relevante tras progresión a inhibidores previos, antes de recurrir a quimioterapia."}
+            paper:"Estudio de fase 2 — Solomon et al., Lancet Oncol 2018", finding:"Los inhibidores de ALK de generaciones sucesivas, como lorlatinib tras progresión a alectinib, mostraron beneficio clínico relevante en esta secuencia, antes de recurrir a quimioterapia."}
         ]},
       {type:"info", phase:5, eyebrow:"Progresión sistémica — 11 meses de lorlatinib", vitalsUpdate:{"Tratamiento":"Progresión extracraneal bajo lorlatinib"}, html:`
         <p>Tras buena respuesta intracraneal inicial con lorlatinib, a los 11 meses una TC de tórax y abdomen muestra <b>progresión hepática y de adenopatías mediastínicas</b>, sin nuevas lesiones cerebrales. El paciente ya agotó las líneas de inhibidores de ALK disponibles (alectinib y lorlatinib).</p>
