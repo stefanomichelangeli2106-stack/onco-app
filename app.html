@@ -169,6 +169,14 @@
   .refs{margin-top:20px;font-size:12px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:14px;line-height:1.8;}
   .refs b{color:var(--ink);}
 
+  .synthesis{margin-top:22px;background:var(--paper-2);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:8px;padding:20px 22px;text-align:left;}
+  .synthesis-title{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);margin-bottom:10px;}
+  .synthesis h3{font-family:'Lora',serif;font-size:16px;margin:14px 0 6px;}
+  .synthesis h3:first-of-type{margin-top:0;}
+  .synthesis p{font-size:13.5px;line-height:1.65;color:var(--ink);margin:0 0 10px;}
+  .synthesis p:last-child{margin-bottom:0;}
+  .synthesis b{color:var(--ink);}
+
   .masthead-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
   .userbar{font-size:11.5px;color:var(--ink-soft);display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
   .userbar .email{color:var(--ink-soft);}
@@ -352,7 +360,14 @@ lumA: {
             feedback:"Sin crisis visceral, hay opciones endocrinas dirigidas preferibles.",
             paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda agotar opciones endocrina-based antes de quimioterapia."}
         ]}
-    ]},
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana</h3>
+      <p>En un Luminal A operable (RE/RP muy positivos, HER2 negativo, Ki67 bajo), el estándar es <b>cirugía de entrada</b> —la baja proliferación predice escasa respuesta a la neoadyuvancia—, seguida de test genómico (Oncotype DX) sobre la pieza para guiar la adyuvancia sistémica. Con Recurrence Score bajo y ganglios negativos, la <b>terapia endocrina sola es suficiente, sin quimioterapia</b> (TAILORx — Sparano et al., N Engl J Med 2018). En la posmenopáusica, el inhibidor de aromatasa es superior a tamoxifeno (ATAC — Cuzick et al., Lancet Oncol 2010) y se mantiene 5 a 10 años según el riesgo basal.</p>
+      <h3>Enfermedad metastásica</h3>
+      <p>Ante progresión RE+/HER2- sin crisis visceral, la primera línea estándar es <b>inhibidor de aromatasa + inhibidor de CDK4/6</b>, con beneficio en supervivencia libre de progresión y global (MONALEESA-2 — Hortobagyi et al., N Engl J Med 2022). En la progresión siguiente, el perfil molecular define la segunda línea: <b>ESR1 mutado → elacestrant</b> (EMERALD — Bidard et al., J Clin Oncol 2022); <b>PIK3CA mutado → fulvestrant + alpelisib</b> (SOLAR-1); <b>alteración de la vía AKT (PIK3CA, AKT1 o PTEN) → fulvestrant + capivasertib</b> (CAPItello-291 — Turner et al., N Engl J Med 2023). La quimioterapia queda reservada para cuando se agotan las opciones endocrina-based o ante crisis visceral franca.</p>
+    `
+  },
 
   { key:"elderly", label:"Caso 2",
     cardDesc:"76 años, con comorbilidades cardíacas y deterioro cognitivo leve. Cáncer de mama Luminal A.",
@@ -434,7 +449,14 @@ lumA: {
             feedback:"Cambiar de clase de agente es una estrategia real de terapia endocrina extendida en pacientes seleccionadas, pero en esta paciente de bajo riesgo basal y edad avanzada el problema de fondo no es qué droga usar, sino que la extensión en sí misma no está indicada: el beneficio esperado es pequeño y no compensa el riesgo de toxicidad prolongada.",
             paper:"EBCTCG — meta-análisis de terapia con inhibidor de aromatasa extendida, The Lancet 2025", finding:"Los ensayos de terapia endocrina extendida evaluaron tanto continuar la misma clase como cambiar de agente; en ambos casos el beneficio esperado depende del riesgo basal, que en este perfil es bajo."}
         ]}
-    ]},
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana en la paciente frágil</h3>
+      <p>En una paciente mayor con comorbilidades relevantes, la biología del tumor (aquí, Luminal A de bajo grado) importa tanto como la fragilidad clínica. La <b>terapia endocrina neoadyuvante</b> es una herramienta válida para ganar tiempo y optimizar comorbilidades antes de una cirugía electiva, sin perder control oncológico en un tumor de baja agresividad (ACOSOG Z1031; guías SIOG de oncología geriátrica). Con un tumor de bajo riesgo (pequeño, grado 1, N0, Ki67 bajo), <b>ni la quimioterapia ni un inhibidor de CDK4/6 aportan beneficio esperado</b>: la terapia endocrina sola es suficiente. La edad cronológica por sí sola nunca es motivo para negar tratamiento oncológico —las guías SIOG recomiendan evaluación geriátrica integral para individualizar la conducta— pero tampoco justifica intensificar el tratamiento cuando el riesgo tumoral no lo amerita.</p>
+      <h3>Duración de la terapia endocrina</h3>
+      <p>Extender la terapia endocrina más allá de 5 años beneficia más a los tumores de mayor riesgo basal; en un perfil de bajo riesgo y edad avanzada, el beneficio absoluto adicional es pequeño y debe balancearse contra la toxicidad ósea, cognitiva y funcional acumulada de continuar el tratamiento (EBCTCG — meta-análisis de terapia extendida, The Lancet 2025). La decisión de extender nunca debe ser automática: se individualiza según riesgo, tolerancia y expectativa de vida funcional.</p>
+    `
+  },
 
   { key:"denovo-akt", label:"Caso 3",
     cardDesc:"45 años, perimenopáusica. Cáncer de mama Luminal A con perfil de riesgo intermedio.",
@@ -570,7 +592,14 @@ lumA: {
             feedback:"La progresión documentada junto con un biomarcador accionable hacen que continuar sin cambios no tenga sustento.",
             paper:"CAPItello-291 — Turner et al., N Engl J Med 2023", finding:"Incluyó pacientes con progresión documentada a terapia endocrina previa (con o sin CDK4/6i), mostrando beneficio de un cambio de esquema dirigido por biomarcador."}
         ]}
-    ]}
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana</h3>
+      <p>Aun en el extremo superior de Ki67 para Luminal A, sin indicación clara de reducción tumoral, la conducta inicial sigue siendo <b>cirugía primero</b>. El test genómico se realiza sobre la pieza quirúrgica definitiva, nunca antes de operar. Con Recurrence Score intermedio (16-25) en una paciente <b>de 50 años o menos</b>, a diferencia de las mayores de 50 con el mismo RS, sí hay beneficio real de agregar quimioterapia adyuvante —aquí, <b>AC-T</b> (TAILORx, análisis por edad). Antes de definir el esquema endocrino definitivo, es clave <b>confirmar el estado menopáusico con FSH/estradiol</b>: la amenorrea inducida por quimioterapia en una mujer de 45 años puede ser transitoria, y asumir menopausia definitiva sin confirmarla puede dejarla con un inhibidor de aromatasa sin la supresión ovárica necesaria.</p>
+      <h3>Enfermedad metastásica</h3>
+      <p>En la progresión a enfermedad ósea RE+/HER2- sin crisis visceral, el estándar de primera línea es <b>inhibidor de aromatasa + inhibidor de CDK4/6</b> (MONALEESA-2). Ante una progresión posterior, el perfil molecular vuelve a ser decisivo: con <b>mutación de AKT1</b> (vía PI3K/AKT/mTOR, distinta de PIK3CA), la opción dirigida es <b>fulvestrant + capivasertib</b> (CAPItello-291), reservando fulvestrant + alpelisib específicamente para mutación de PIK3CA.</p>
+    `
+  }
 
   ]
 },
@@ -714,7 +743,14 @@ lumB: {
             feedback:"Con biomarcador accionable y sin crisis visceral, se prefiere la opción endocrina dirigida.",
             paper:"NCCN Guidelines Breast Cancer", finding:"Recomienda agotar opciones endocrina-based antes de quimioterapia."}
         ]}
-    ]},
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana</h3>
+      <p>En Luminal B de alta proliferación con compromiso axilar, la alta proliferación sí predice sensibilidad relevante a quimioterapia: <b>AC-T neoadyuvante</b> (con la variante en dosis densas como opción preferida en alto riesgo) es la conducta inicial. Con enfermedad residual tras la neoadyuvancia, se agrega <b>abemaciclib adyuvante</b> (monarchE) por el riesgo basal alto (ganglio positivo, grado 3), independientemente de la respuesta patológica. En la premenopáusica de alto riesgo, la terapia endocrina adyuvante de elección es <b>supresión ovárica + inhibidor de aromatasa</b>, superior a tamoxifeno solo (SOFT/TEXT).</p>
+      <h3>Enfermedad metastásica</h3>
+      <p>Ante progresión pulmonar/pleural bajo terapia adyuvante con CDK4/6i, la primera línea metastásica sigue siendo <b>supresión ovárica + inhibidor de aromatasa + inhibidor de CDK4/6</b> —aquí específicamente validado en premenopáusicas con supresión ovárica obligatoria (MONALEESA-7)—. Con progresión posterior y <b>mutación de PIK3CA</b>, la opción dirigida es <b>fulvestrant + alpelisib</b> (SOLAR-1); en recaídas más tempranas y sin CDK4/6i previo en metastásico, inavolisib + palbociclib + fulvestrant (INAVO120) es hoy una alternativa preferida en ese escenario puntual.</p>
+    `
+  },
 
   { key:"pcr", label:"Caso 2",
     cardDesc:"52 años, perimenopáusica. Cáncer de mama Luminal B de alto grado.",
@@ -811,7 +847,14 @@ lumB: {
             feedback:"Es una opción razonable si hubiera dudas sobre resistencia cruzada, pero con un intervalo libre de enfermedad de 4 años la recaída se considera endocrino-sensible y el esquema combinado con un nuevo CDK4/6i ofrece mayor beneficio esperado que fulvestrant solo.",
             paper:"MONALEESA-2 / consenso ESMO sobre recaída endocrino-sensible", finding:"Los estudios con CDK4/6i combinado mostraron mayor beneficio que la monoterapia con fulvestrant en primera línea, incluyendo pacientes con exposición previa a CDK4/6i en escenario adyuvante con recaída tardía."}
         ]}
-    ]},
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana</h3>
+      <p>Alta proliferación y compromiso axilar justifican <b>AC-T neoadyuvante</b>. A diferencia de HER2+ o triple negativo, en Luminal B <b>la respuesta patológica completa no es el criterio que determina la intensificación adyuvante</b>: la indicación de abemaciclib en monarchE se basa en el riesgo clínico-patológico basal (estadio, grado, Ki67 previos al tratamiento), no en si se logró o no pCR. Antes de fijar el esquema endocrino definitivo en una paciente perimenopáusica que recibió quimioterapia reciente, conviene <b>confirmar el estado hormonal</b> y manejar activamente los síntomas vasomotores/articulares, que son la causa más frecuente de mala adherencia.</p>
+      <h3>Enfermedad metastásica</h3>
+      <p>Una recaída que ocurre <b>más de 12 meses</b> después de completar la terapia adyuvante (incluido un CDK4/6i) se considera <b>endocrino-sensible</b> y sigue siendo candidata al estándar de primera línea metastásica con un nuevo inhibidor de CDK4/6i (MONALEESA-2), no a fulvestrant en monoterapia por el solo hecho de exposición previa a esa clase de fármaco.</p>
+    `
+  },
 
   { key:"crisis", label:"Caso 3",
     cardDesc:"61 años, posmenopáusica. Cáncer de mama Luminal B con compromiso ganglionar extenso.",
@@ -921,7 +964,14 @@ lumB: {
             feedback:"Es una alternativa válida en tumores sin buena expresión hormonal, pero en esta paciente RE positiva la terapia endocrina-based ofrece un perfil de toxicidad más favorable para el mantenimiento a largo plazo, por lo que no es la primera opción.",
             paper:"NCCN Guidelines Breast Cancer", finding:"En tumores RE positivos, la terapia endocrina-based es preferida como mantenimiento sobre la quimioterapia de mantenimiento con otro agente citotóxico."}
         ]}
-    ]}
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana</h3>
+      <p>Con compromiso ganglionar extenso y alta proliferación, la neoadyuvancia con <b>AC-T en dosis densas</b> es prioritaria, incluso ante una respuesta patológica finalmente mínima. Una respuesta pobre a la quimioterapia <b>no descarta</b> el beneficio de un CDK4/6i, que actúa por un mecanismo completamente distinto: a diferencia de abemaciclib (monarchE), <b>ribociclib fue validado en NATALEE con criterios más amplios</b>, incluyendo compromiso ganglionar extenso como este, por lo que sigue indicado pese a la quimio-resistencia observada.</p>
+      <h3>Enfermedad metastásica</h3>
+      <p>Una recaída temprana (menos de 12 meses de la adyuvancia) con <b>compromiso hepático extenso y disfunción orgánica</b> constituye una <b>crisis visceral</b>: la conducta preferida de primera línea es <b>quimioterapia citotóxica</b> (por ejemplo, un taxano), priorizando la velocidad y probabilidad de respuesta por sobre la terapia endocrina-based, incluso en un tumor RE positivo. Una vez <b>resuelta la crisis y lograda la estabilización</b>, el estándar es cambiar a mantenimiento con <b>terapia endocrina + CDK4/6i</b>, reservando la quimioterapia continua para cuando ya no hay alternativa endocrina razonable.</p>
+    `
+  }
 
   ]
 },
@@ -1054,7 +1104,14 @@ her2: {
             feedback:"Suspender el bloqueo anti-HER2 en un tumor confirmado positivo sería un error.",
             paper:"DESTINY-Breast03 — Cortés et al., N Engl J Med 2022", finding:"Mantener y optimizar el bloqueo anti-HER2 sigue siendo superior en cada línea."}
         ]}
-    ]},
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana</h3>
+      <p>En HER2 puro localmente avanzado, la neoadyuvancia estándar es <b>TCHP</b> (docetaxel + carboplatino + trastuzumab + pertuzumab), preferido sin antraciclina por su menor cardiotoxicidad al ya administrarse un anti-HER2 (TRYPHAENA/NeoSphere). Ante <b>enfermedad residual</b> tras la cirugía, el estándar es cambiar a <b>T-DM1 adyuvante</b> por 14 ciclos (KATHERINE), no continuar el bloqueo dual. La caída de FEVI bajo T-DM1 es infrecuente y habitualmente reversible con suspensión temporal y manejo cardioprotector, permitiendo reiniciar el fármaco.</p>
+      <h3>Enfermedad metastásica</h3>
+      <p>En la recaída HER2+ metastásica, la primera línea preferida es <b>trastuzumab + pertuzumab + docetaxel (THP)</b> (CLEOPATRA); al progresar, <b>trastuzumab deruxtecan (T-DXd)</b> es el estándar de segunda línea, con superioridad demostrada frente a T-DM1 (DESTINY-Breast03).</p>
+    `
+  },
 
   { key:"pcr", label:"Caso 2",
     cardDesc:"50 años, posmenopáusica. Cáncer de mama HER2 positivo con receptores hormonales también positivos.",
@@ -1157,7 +1214,14 @@ her2: {
             feedback:"La progresión a enfermedad metastásica bajo terapia endocrina indica la necesidad de reiniciar tratamiento sistémico dirigido a HER2, no de mantener sin cambios un esquema que ya no está controlando la enfermedad.",
             paper:"CLEOPATRA — Swain et al., N Engl J Med 2015", finding:"La enfermedad metastásica HER2 positiva requiere reiniciar bloqueo anti-HER2 activo, independientemente del tratamiento endocrino adyuvante previo."}
         ]}
-    ]},
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana</h3>
+      <p>Aun con receptores hormonales también positivos, en un tumor HER2+ el impulsor dominante sigue siendo HER2: la neoadyuvancia estándar es <b>TCHP</b> (TRYPHAENA/NeoSphere), priorizando el tratamiento anti-HER2 sobre el hormonal en esta etapa. A diferencia del caso con enfermedad residual, aquí la <b>respuesta patológica completa sí cambia la estrategia</b>: se <b>continúa el mismo bloqueo dual</b> (trastuzumab + pertuzumab) hasta completar un año —no se cambia a T-DM1, reservado para enfermedad residual (KATHERINE)— y se <b>agrega terapia endocrina adyuvante</b> por el componente RE positivo, con beneficio sostenido incluso tras buena respuesta neoadyuvante (APHINITY).</p>
+      <h3>Enfermedad metastásica</h3>
+      <p>En la recaída metastásica, aunque el tumor también sea RE positivo, <b>HER2 sigue siendo el impulsor dominante</b>: el estándar de primera línea es <b>THP</b> (CLEOPATRA), no la terapia endocrina sola; esta última puede sumarse más adelante como mantenimiento, pero no reemplaza el esquema de inicio.</p>
+    `
+  },
 
   { key:"denovo", label:"Caso 3",
     cardDesc:"38 años. Cáncer de mama HER2 positivo con enfermedad metastásica al momento del diagnóstico.",
@@ -1251,7 +1315,14 @@ her2: {
             feedback:"La radioterapia puede tener un rol complementario según el caso, pero no reemplaza la necesidad de un tratamiento sistémico con capacidad de penetración al sistema nervioso central ante progresión leptomeníngea documentada.",
             paper:"HER2CLIMB — Murthy et al., N Engl J Med 2020", finding:"Estableció el beneficio de un esquema sistémico específico para el control de la enfermedad del sistema nervioso central, más allá de las medidas locales de radioterapia."}
         ]}
-    ]}
+    ],
+    synthesis: `
+      <h3>Enfermedad metastásica de novo</h3>
+      <p>Cuando la enfermedad ya es metastásica desde el diagnóstico, no hay secuencia de neoadyuvancia-cirugía-adyuvancia: la prioridad es <b>iniciar tratamiento sistémico sin demora</b>; la cirugía del tumor primario no ha mostrado beneficio consistente en supervivencia en este contexto y se reserva para indicaciones específicas de control local. La primera línea sistémica estándar es <b>THP</b> (trastuzumab + pertuzumab + docetaxel), independientemente de que la presentación sea de novo o recurrente (CLEOPATRA).</p>
+      <h3>Progresión con compromiso del sistema nervioso central</h3>
+      <p>Ante progresión con <b>carcinomatosis leptomeníngea</b>, el tratamiento sistémico elegido debe tener capacidad demostrada de penetración al sistema nervioso central: <b>tucatinib + trastuzumab + capecitabina</b> es la opción preferida, con beneficio específico y prospectivamente demostrado en pacientes con metástasis cerebrales activas (HER2CLIMB), por delante de T-DXd o de continuar el esquema previo.</p>
+    `
+  }
 
   ]
 },
@@ -1394,7 +1465,14 @@ tnbc: {
             feedback:"Con buen estado funcional y opciones activas disponibles, no corresponde suspender.",
             paper:"ASCENT / DESTINY-Breast04", finding:"Ambos estudios demostraron beneficio de continuar tratamiento activo en pacientes con buen estado funcional."}
         ]}
-    ]},
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana</h3>
+      <p>En triple negativo estadio II-III de alto riesgo, el estándar actual es <b>quimioterapia neoadyuvante + pembrolizumab</b> (KEYNOTE-522), independiente del estado de PD-L1. Un irAE grado 3 que requirió infliximab (como la colitis de este caso) <b>contraindica en general reexponer</b> al inhibidor de checkpoint. Con <b>mutación germinal BRCA1</b>, se agrega <b>olaparib adyuvante</b> por 1 año (OlympiA) —de mecanismo distinto, no condicionado por la toxicidad previa con pembrolizumab— y se evalúa <b>salpingooforectomía bilateral de reducción de riesgo</b> más estudio genético en cascada a familiares, dado el beneficio en mortalidad demostrado (Domchek et al., JAMA 2010).</p>
+      <h3>Enfermedad metastásica</h3>
+      <p>Con antecedente de irAE grave, <b>no se reexpone a inmunoterapia</b> pese a un PD-L1 positivo en la recaída: la quimioterapia sola es la primera línea. Tras progresar a múltiples líneas de quimioterapia, con perfil <b>HER2-low</b>, <b>sacituzumab govitecan</b> (ASCENT) es el estándar preferido en esta secuencia, con T-DXd (DESTINY-Breast04) como alternativa dirigida al mismo perfil molecular.</p>
+    `
+  },
 
   { key:"pcr", label:"Caso 2",
     cardDesc:"44 años, premenopáusica, sin antecedentes familiares relevantes. Cáncer de mama triple negativo.",
@@ -1485,7 +1563,14 @@ tnbc: {
             feedback:"Es una opción activa y bien validada en triple negativo metastásico, pero su evidencia principal es en líneas posteriores a la quimioterapia estándar; como primera línea de entrada sin haber agotado la quimioterapia citotóxica convencional, no es la opción preferida en este momento.",
             paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"La población de beneficio del estudio fueron pacientes con triple negativo metastásico previamente tratadas con al menos dos líneas sistémicas, no como primera línea de entrada."}
         ]}
-    ]},
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana</h3>
+      <p>El estado de BRCA <b>no condiciona</b> la indicación de pembrolizumab: en triple negativo estadio II-III de alto riesgo, la neoadyuvancia con <b>quimioterapia + pembrolizumab</b> se indica independientemente del estado germinal o del PD-L1 (KEYNOTE-522). Con respuesta patológica completa, se <b>continúa pembrolizumab adyuvante</b> hasta completar el año —el beneficio no depende de la respuesta alcanzada— y, sin mutación BRCA, <b>no hay indicación de olaparib</b> (restringido a BRCA1/2 positivo, OlympiA).</p>
+      <h3>Enfermedad metastásica</h3>
+      <p>Una recaída <b>temprana</b> (dentro de los meses de finalizada la inmunoterapia adyuvante) con <b>PD-L1 negativo</b> en la lesión metastásica no respalda reintroducir un inhibidor de checkpoint en esta línea: el criterio de PD-L1 positivo de KEYNOTE-355 (que rige en metastásico) es distinto al de KEYNOTE-522 (que no lo exige en neoadyuvancia). La quimioterapia citotóxica sola es la base del tratamiento de primera línea en este escenario.</p>
+    `
+  },
 
   { key:"inflammatory", label:"Caso 3",
     cardDesc:"56 años, posmenopáusica. Presentación de carcinoma inflamatorio de mama.",
@@ -1583,7 +1668,14 @@ tnbc: {
             feedback:"No corresponde: el PD-L1 sigue siendo negativo, por lo que no hay indicación de pembrolizumab en este escenario metastásico independientemente de la tolerancia previa.",
             paper:"KEYNOTE-355 — Cortés et al., Lancet 2020", finding:"El beneficio de pembrolizumab en metastásico requiere PD-L1 positivo (CPS ≥10), ausente en esta paciente."}
         ]}
-    ]}
+    ],
+    synthesis: `
+      <h3>Enfermedad temprana</h3>
+      <p>El carcinoma inflamatorio, definido por hallazgos clínicos y siempre considerado localmente avanzado, <b>nunca se opera de entrada</b>: la secuencia obligatoria es terapia sistémica neoadyuvante primero, luego cirugía, luego radioterapia. En el contexto neoadyuvante, <b>pembrolizumab se agrega igual pese a un PD-L1 negativo</b> (KEYNOTE-522), a diferencia de la indicación metastásica que sí lo exige. Independientemente de la respuesta a la neoadyuvancia, la <b>radioterapia post-mastectomía es obligatoria</b> en esta presentación.</p>
+      <h3>Enfermedad metastásica</h3>
+      <p>En la recaída con <b>PD-L1 nuevamente negativo</b>, la quimioterapia sola es el estándar de primera línea (KEYNOTE-355). Confirmado el perfil <b>HER2-null (IHC 0)</b> —no HER2-low— en la progresión posterior, <b>sacituzumab govitecan</b> (ASCENT) es la opción dirigida apropiada, ya que su eficacia no depende de la expresión de HER2, a diferencia de T-DXd, que requiere al menos HER2-low.</p>
+    `
+  }
 
   ]
 }
@@ -1710,7 +1802,14 @@ egfr: {
             feedback:"Es prematuro: la paciente mantiene buen estado funcional y existen opciones sistémicas activas adicionales tras progresión a quimioterapia.",
             paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda continuar evaluando líneas sistémicas activas en pacientes con adecuado estado funcional."}
         ]}
-    ]}
+    ],
+    synthesis: `
+      <h3>Adyuvancia y vigilancia</h3>
+      <p>En NSCLC resecado EGFR mutado (deleción exón 19 o L858R) estadio IB-IIIA, <b>osimertinib adyuvante por 3 años</b> es el estándar de cuidado, con o sin quimioterapia adyuvante previa, con beneficio marcado en supervivencia libre de enfermedad y global (ADAURA). A diferencia de otras toxicidades de este módulo, la <b>enfermedad pulmonar intersticial</b> por osimertinib exige suspensión inmediata y una decisión de reexposición cautelosa e individualizada, dado su riesgo de recurrencia grave.</p>
+      <h3>Progresión y estudio de resistencia</h3>
+      <p>Ante progresión a osimertinib, el paso previo a elegir el siguiente tratamiento es <b>reevaluar el perfil molecular</b> (nueva biopsia o ADN tumoral circulante): mecanismos distintos —amplificación de MET, mutación C797S, transformación a células pequeñas— tienen implicancias terapéuticas específicas. Sin combinación dirigida disponible, la <b>quimioterapia con platino</b> es la base del tratamiento; tras progresar a esta, <b>amivantamab + quimioterapia</b> (MARIPOSA-2) es la opción validada siguiente.</p>
+    `
+  }
   ]
 },
 
@@ -1808,7 +1907,14 @@ alk: {
             feedback:"No hay sustento para retomar un inhibidor de generación anterior tras progresar bajo uno de generación posterior con mayor potencia y penetración al sistema nervioso central; la tolerancia por sí sola no es criterio para esta decisión.",
             paper:"CROWN — Solomon et al., N Engl J Med 2020", finding:"No hay evidencia de beneficio al retomar un inhibidor de ALK de generación previa tras progresión documentada a uno de generación posterior."}
         ]}
-    ]}
+    ],
+    synthesis: `
+      <h3>Adyuvancia y vigilancia</h3>
+      <p>En NSCLC resecado ALK positivo estadio IB-IIIA, <b>alectinib adyuvante por 2 años</b> es superior a la quimioterapia adyuvante y es el estándar actual, con un beneficio particularmente marcado en la reducción de recurrencias cerebrales (ALINA). La hepatotoxicidad se maneja con interrupción temporal y reinicio a dosis reducida, sin necesidad de cambiar de fármaco.</p>
+      <h3>Progresión y secuencia de inhibidores de ALK</h3>
+      <p>Ante <b>progresión aislada en el sistema nervioso central</b> bajo alectinib, la conducta es cambiar a <b>lorlatinib</b> (tercera generación, mayor penetración al sistema nervioso central) — la evidencia aplicable a este escenario puntual proviene del estudio de fase 2 que sí incluyó pacientes con progresión a un inhibidor de ALK previo, no de CROWN (que evaluó lorlatinib únicamente como primera línea sin tratamiento previo). Una vez agotada la secuencia de inhibidores de ALK disponibles, la <b>quimioterapia con platino</b> (habitualmente con pemetrexed) pasa a ser el pilar del tratamiento.</p>
+    `
+  }
   ]
 },
 
@@ -1911,7 +2017,14 @@ nodriver: {
             feedback:"Con buen estado funcional (ECOG 1) y una opción estándar de tercera línea disponible con beneficio demostrado, es prematuro limitar el manejo a cuidados paliativos exclusivos en este momento.",
             paper:"NCCN Guidelines — Non-Small Cell Lung Cancer, versión vigente", finding:"Recomienda continuar evaluando líneas sistémicas activas en pacientes con adecuado estado funcional."}
         ]}
-    ]}
+    ],
+    synthesis: `
+      <h3>Primera línea guiada por PD-L1</h3>
+      <p>Sin alteración molecular accionable y con <b>PD-L1 TPS ≥50%</b>, <b>pembrolizumab en monoterapia</b> es una opción de primera línea preferida, con eficacia bien establecida y mejor perfil de toxicidad que agregar quimioterapia (KEYNOTE-024). La neumonitis inmunomediada grado ≥2 requiere suspender el inhibidor de checkpoint e iniciar corticoides sistémicos, escalando según la severidad.</p>
+      <h3>Líneas posteriores</h3>
+      <p>Tras progresar a la inmunoterapia, la <b>quimioterapia con platino</b> es el estándar de segunda línea. Agotadas la inmunoterapia y la quimioterapia con platino, <b>docetaxel + ramucirumab</b> es una opción validada de línea posterior, con beneficio en supervivencia global frente a docetaxel solo (REVEL).</p>
+    `
+  }
   ]
 },
 
@@ -2015,7 +2128,14 @@ sclc: {
             feedback:"Es una alternativa citotóxica razonable y históricamente utilizada en líneas posteriores de carcinoma de células pequeñas, pero con menor tasa de respuesta y durabilidad que tarlatamab en este contexto específico de progresión a múltiples líneas previas.",
             paper:"NCCN Guidelines — Small Cell Lung Cancer, versión vigente", finding:"Topotecán es una opción citotóxica establecida en líneas posteriores, aunque con eficacia más modesta que las opciones más recientes dirigidas específicamente a este escenario."}
         ]}
-    ]}
+    ],
+    synthesis: `
+      <h3>Primera línea</h3>
+      <p>En enfermedad extensa, el estándar actual de primera línea es <b>quimioterapia con platino y etopósido combinada con un inhibidor de checkpoint</b> (atezolizumab o durvalumab), superando a la quimioterapia sola (IMpower133/CASPIAN). El esquema tiene mielosupresión significativa: la neutropenia febril es una urgencia oncológica que requiere hospitalización y antibióticos empíricos inmediatos, con profilaxis con factor estimulante de colonias en ciclos posteriores.</p>
+      <h3>Recaída y líneas posteriores</h3>
+      <p>Una recaída dentro de los 3-6 meses de finalizado el platino se considera <b>resistente al platino</b>: no corresponde reintroducir el mismo platino, sino cambiar a <b>lurbinectedina</b>, con actividad demostrada específicamente en este escenario de peor pronóstico. Agotadas la quimio-inmunoterapia y la lurbinectedina, <b>tarlatamab</b> (anticuerpo biespecífico anti-DLL3) es la opción de tercera línea con actividad relevante y demostrada.</p>
+    `
+  }
   ]
 }
 
@@ -2454,6 +2574,11 @@ function render(){
     let grade = "Manejo subóptimo — revisar guías";
     if(pct >= 90) grade = "Manejo alineado con guías actuales";
     else if(pct >= 70) grade = "Buen manejo, con oportunidades de ajuste";
+    const synthesisHtml = c.synthesis ? `
+      <div class="synthesis">
+        <div class="synthesis-title">Conclusión · manejo según guías y evidencia actuales</div>
+        ${c.synthesis}
+      </div>` : "";
     panel.innerHTML = `
       <div class="eyebrow">Epicrisis</div>
       <div class="epicrisis">
@@ -2462,6 +2587,7 @@ function render(){
         <div class="grade">${state.score} / ${state.maxScore}</div>
         <p>${grade}</p>
       </div>
+      ${synthesisHtml}
       <button class="next-btn" id="retryBtn">Repetir este caso</button>
       <button class="ghost-btn" id="otherCaseBtn">Elegir otro caso</button>
       <button class="ghost-btn" id="homeBtn">Elegir otro tipo de cáncer</button>
