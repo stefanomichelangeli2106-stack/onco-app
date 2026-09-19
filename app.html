@@ -645,13 +645,13 @@ lumB: {
         options:[
           {label:"Agregar abemaciclib por 2 años", points:2,
             feedback:"Correcto. Cumple criterios de alto riesgo (ganglio positivo con grado 3) para intensificación con CDK4/6i.",
-            paper:"monarchE — Johnston et al., J Clin Oncol 2020; Rastogi et al., J Clin Oncol 2024", finding:"Abemaciclib + terapia endocrina redujo significativamente el riesgo de recurrencia en pacientes de alto riesgo.",
+            paper:"monarchE — Johnston et al., J Clin Oncol 2020; Rastogi et al., J Clin Oncol 2024", finding:"Abemaciclib + terapia endocrina redujo significativamente el riesgo de recurrencia en pacientes de alto riesgo; con seguimiento más prolongado (6 años), el beneficio en supervivencia libre de enfermedad a distancia se mantuvo (85.4% vs 79.5% a 5 años) y, por primera vez para un iCDK4/6 adyuvante en este escenario, se observó también beneficio en supervivencia global (HR 0.84; IC 95% 0.72-0.98).",
             chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva", timeUnit:"meses",
               curves:[
                 {label:"Abemaciclib + terapia endocrina", atMonths:60, survivalPct:83.6, highlight:true},
                 {label:"Terapia endocrina sola", atMonths:60, survivalPct:76.0}
               ],
-              source:"monarchE — Rastogi et al., J Clin Oncol 2024 (actualización a 5 años)"}},
+              source:"monarchE — Rastogi et al., J Clin Oncol 2024 (actualización a 5 años); actualización a 6 años con beneficio en supervivencia global, SABCS 2024/2025"}},
           {label:"Solo terapia endocrina, sin terapia dirigida adicional", points:0,
             feedback:"Sería infratratamiento en este perfil de alto riesgo.",
             paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"El beneficio se concentró en la población de alto riesgo definida por el estudio."},
@@ -728,7 +728,7 @@ lumB: {
         options:[
           {label:"Fulvestrant + alpelisib", points:2,
             feedback:"Correcto. Dirigida específicamente a PIK3CA mutado, en una paciente que ya recibió y progresó a un CDK4/6i.",
-            paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"Casi duplicó la supervivencia libre de progresión frente a fulvestrant solo en PIK3CA mutado. Nota: en pacientes que aún no han recibido CDK4/6i en metastásico y presentan recaída endocrino-resistente (dentro de los 12 meses de finalizar la terapia endocrina adyuvante) con PIK3CA mutado, la combinación de primera línea inavolisib + palbociclib + fulvestrant (estudio INAVO120, Turner et al., N Engl J Med 2024) es hoy una alternativa preferida antes que agregar alpelisib después; ambas actúan sobre la misma vía PI3K pero en momentos distintos de la secuencia terapéutica.",
+            paper:"SOLAR-1 — André et al., N Engl J Med 2019", finding:"Casi duplicó la supervivencia libre de progresión frente a fulvestrant solo en PIK3CA mutado (aunque el beneficio en supervivencia global no alcanzó significancia estadística: HR 0.86, p=0.15). Nota: en pacientes que aún no han recibido CDK4/6i en metastásico y presentan recaída endocrino-resistente (dentro de los 12 meses de finalizar la terapia endocrina adyuvante) con PIK3CA mutado, la combinación de primera línea inavolisib + palbociclib + fulvestrant (estudio INAVO120, Jhaveri et al., N Engl J Med 2024) es hoy una alternativa preferida antes que agregar alpelisib después: mostró una mediana de supervivencia global de 34.0 vs 27.0 meses (HR 0.67, p=0.019), la primera mejora significativa en supervivencia global con un agente anti-PI3K en este contexto; ambas estrategias actúan sobre la misma vía PI3K pero en momentos distintos de la secuencia terapéutica.",
             chart:{type:"km", metric:"Supervivencia libre de progresión (subgrupo PIK3CA mutado)", timeUnit:"meses",
               curves:[
                 {label:"Fulvestrant + alpelisib", atMonths:11.0, survivalPct:50, highlight:true},
@@ -794,7 +794,7 @@ lumB: {
                 {label:"Abemaciclib + terapia endocrina", atMonths:60, survivalPct:83.6, highlight:true},
                 {label:"Terapia endocrina sola", atMonths:60, survivalPct:76.0}
               ],
-              source:"monarchE — Rastogi et al., J Clin Oncol 2024 (actualización a 5 años)"}},
+              source:"monarchE — Rastogi et al., J Clin Oncol 2024 (actualización a 5 años); actualización a 6 años con beneficio en supervivencia global, SABCS 2024/2025"}},
           {label:"Solo terapia endocrina, sin CDK4/6i, dado que logró respuesta patológica completa", points:0,
             feedback:"Es un error conceptual frecuente: a diferencia de HER2+ o triple negativo, en Luminal B el pCR no es el criterio que determina la intensificación adyuvante; el riesgo basal sigue siendo alto.",
             paper:"monarchE — Johnston et al., J Clin Oncol 2020", finding:"La población del estudio se definió por el riesgo clínico-patológico inicial, no por la respuesta a la neoadyuvancia."},
@@ -891,14 +891,14 @@ lumB: {
         prompt:"Enfermedad residual extensa (ypT3N2) tras neoadyuvancia con respuesta mínima. ¿Qué adyuvancia corresponde?",
         options:[
           {label:"Agregar ribociclib adyuvante junto con terapia endocrina", points:2,
-            feedback:"Correcto. A diferencia de abemaciclib (monarchE), ribociclib fue evaluado en NATALEE con criterios de elegibilidad más amplios, incluyendo pacientes con compromiso ganglionar extenso como esta, y es una opción de intensificación adyuvante validada en este perfil de alto riesgo.",
-            paper:"NATALEE — Slamon et al., N Engl J Med 2024", finding:"Ribociclib adyuvante junto con inhibidor de aromatasa redujo el riesgo de recurrencia en pacientes con cáncer de mama en estadio II-III de alto riesgo, incluyendo compromiso ganglionar extenso, con un perfil de toxicidad distinto al de abemaciclib.",
-            chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva a 3 años", timeUnit:"meses",
+            feedback:"Correcto. Con 6/18 ganglios positivos (≥4 ganglios), esta paciente cumple el criterio de mayor riesgo tanto de NATALEE como de monarchE: ambos iCDK4/6 (ribociclib y abemaciclib) están validados como adyuvancia dirigida en este perfil, y la elección entre uno u otro se define hoy por preferencia de esquema de dosificación (continuo en NATALEE vs. 2 años en monarchE) y perfil de toxicidad esperado, no porque uno de los dos «no aplique».",
+            paper:"NATALEE — Slamon et al., N Engl J Med 2024", finding:"Ribociclib adyuvante junto con inhibidor de aromatasa redujo el riesgo de recurrencia en pacientes con cáncer de mama en estadio II-III de alto riesgo. La disección axilar extensa (≥4 ganglios positivos) es, de hecho, el criterio de mayor riesgo compartido con monarchE (Cohorte 1); NATALEE amplía la elegibilidad frente a monarchE en el extremo de menor riesgo nodal (p. ej. T2N0 de alto grado, T3N0 o T4N0), no en el de mayor compromiso ganglionar.",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva a 4 años", timeUnit:"meses",
               curves:[
-                {label:"Ribociclib + inhibidor de aromatasa", atMonths:36, survivalPct:90.7, highlight:true},
-                {label:"Inhibidor de aromatasa solo", atMonths:36, survivalPct:87.6}
+                {label:"Ribociclib + inhibidor de aromatasa", atMonths:48, survivalPct:88.5, highlight:true},
+                {label:"Inhibidor de aromatasa solo", atMonths:48, survivalPct:83.6}
               ],
-              source:"NATALEE — Slamon et al., N Engl J Med 2024"}},
+              source:"NATALEE — actualización a 4 años, HR 0.72 (IC 95% 0.61-0.84), Ann Oncol 2024"}},
           {label:"Solo terapia endocrina, sin CDK4/6i, dado que ya respondió mal a la quimioterapia", points:0,
             feedback:"La respuesta pobre a quimioterapia no descarta el beneficio de un CDK4/6i, que actúa por un mecanismo completamente distinto (bloqueo del ciclo celular vía RE), y esta paciente es justamente de alto riesgo, la población que más se beneficia.",
             paper:"NATALEE — Slamon et al., N Engl J Med 2024", finding:"El beneficio del CDK4/6i adyuvante fue independiente de la respuesta previa a la quimioterapia neoadyuvante."},
@@ -969,7 +969,7 @@ lumB: {
     ],
     synthesis: `
       <h3>Enfermedad temprana</h3>
-      <p>Con compromiso ganglionar extenso y alta proliferación, la neoadyuvancia con <b>AC-T en dosis densas</b> es prioritaria, incluso ante una respuesta patológica finalmente mínima. Una respuesta pobre a la quimioterapia <b>no descarta</b> el beneficio de un CDK4/6i, que actúa por un mecanismo completamente distinto: a diferencia de abemaciclib (monarchE), <b>ribociclib fue validado en NATALEE con criterios más amplios</b>, incluyendo compromiso ganglionar extenso como este, por lo que sigue indicado pese a la quimio-resistencia observada.</p>
+      <p>Con compromiso ganglionar extenso y alta proliferación, la neoadyuvancia con <b>AC-T en dosis densas</b> es prioritaria, incluso ante una respuesta patológica finalmente mínima. Una respuesta pobre a la quimioterapia <b>no descarta</b> el beneficio de un CDK4/6i, que actúa por un mecanismo completamente distinto: con ≥4 ganglios positivos, esta paciente cumple el criterio de mayor riesgo compartido por NATALEE y monarchE (Cohorte 1), por lo que tanto ribociclib como abemaciclib serían opciones válidas de intensificación adyuvante pese a la quimio-resistencia observada; NATALEE amplía la elegibilidad frente a monarchE en el extremo de menor riesgo nodal, no en el de compromiso ganglionar extenso.</p>
       <h3>Enfermedad metastásica</h3>
       <p>Una recaída temprana (menos de 12 meses de la adyuvancia) con <b>compromiso hepático extenso y disfunción orgánica</b> constituye una <b>crisis visceral</b>: la conducta preferida de primera línea es <b>quimioterapia citotóxica</b> (por ejemplo, un taxano), priorizando la velocidad y probabilidad de respuesta por sobre la terapia endocrina-based, incluso en un tumor RE positivo. Una vez <b>resuelta la crisis y lograda la estabilización</b>, el estándar es cambiar a mantenimiento con <b>terapia endocrina + CDK4/6i</b>, reservando la quimioterapia continua para cuando ya no hay alternativa endocrina razonable.</p>
     `
@@ -1392,13 +1392,13 @@ tnbc: {
         options:[
           {label:"No reexponer a pembrolizumab dado el irAE grave, y agregar olaparib adyuvante por 1 año (BRCA1 positivo)", points:2,
             feedback:"Correcto. Un irAE grado 3 que requirió infliximab contraindica en general reexponer al inhibidor de checkpoint; olaparib sigue indicado por mecanismo distinto.",
-            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021; OlympiA — Tutt et al., N Engl J Med 2021", finding:"ASCO desaconseja reexposición tras irAE grado 3 tratado con infliximab. OlympiA mostró beneficio de olaparib adyuvante en BRCA1/2 mutadas de alto riesgo, independiente del uso de pembrolizumab.",
+            paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021; OlympiA — Tutt et al., N Engl J Med 2021 y 2022 (actualización de supervivencia global)", finding:"ASCO desaconseja reexposición tras irAE grado 3 tratado con infliximab. OlympiA mostró beneficio de olaparib adyuvante en BRCA1/2 mutadas de alto riesgo, independiente del uso de pembrolizumab; la actualización posterior confirmó también beneficio en supervivencia global (92.0% vs 88.3% a 3.5 años; HR 0.68, p=0.02).",
             chart:{type:"km", metric:"Supervivencia libre de enfermedad invasiva a 3 años (BRCA1/2 mutado)", timeUnit:"meses",
               curves:[
                 {label:"Olaparib adyuvante", atMonths:36, survivalPct:85.9, highlight:true},
                 {label:"Placebo", atMonths:36, survivalPct:77.1}
               ],
-              source:"OlympiA — Tutt et al., N Engl J Med 2021"}},
+              source:"OlympiA — Tutt et al., N Engl J Med 2021 (iDFS); actualización de supervivencia global, N Engl J Med 2022 (HR 0.68, p=0.02)"}},
           {label:"Reiniciar pembrolizumab de todas formas, y agregar olaparib", points:0,
             feedback:"Alto riesgo de recurrencia del irAE, potencialmente más grave.",
             paper:"ASCO Guideline — Schneider et al., J Clin Oncol 2021", finding:"Mayor riesgo de recurrencia y gravedad al reexponer tras irAE grado 3 tratado con inmunosupresores biológicos."},
@@ -1634,14 +1634,20 @@ tnbc: {
         prompt:"Triple negativo metastásico, PD-L1 CPS negativo, sin tratamiento sistémico metastásico previo. ¿Esquema de primera línea preferido?",
         options:[
           {label:"Quimioterapia sola, sin pembrolizumab", points:2,
-            feedback:"Correcto. En enfermedad metastásica de primera línea, el beneficio de pembrolizumab requiere PD-L1 positivo (CPS ≥10); con PD-L1 negativo, la quimioterapia sola es el estándar.",
-            paper:"KEYNOTE-355 — Cortés et al., Lancet 2020", finding:"El beneficio de agregar pembrolizumab a la quimioterapia de primera línea se limitó a pacientes con CPS ≥10; en PD-L1 negativo no se demostró beneficio significativo."},
+            feedback:"Correcto. En enfermedad metastásica de primera línea, el beneficio de pembrolizumab requiere PD-L1 positivo (CPS ≥10); con PD-L1 negativo, la quimioterapia sigue siendo el estándar histórico, aunque la evidencia más reciente ya identifica alternativas superiores en este mismo perfil (PD-L1 negativo, no candidata a inmunoterapia).",
+            paper:"KEYNOTE-355 — Cortés et al., Lancet 2020; TROPION-Breast02 — Dato-DXd vs quimioterapia, Ann Oncol 2026", finding:"El beneficio de agregar pembrolizumab a la quimioterapia de primera línea se limitó a pacientes con CPS ≥10; en PD-L1 negativo no se demostró beneficio significativo. En este mismo escenario (PD-L1 negativo, no candidata a inmunoterapia), el estudio fase 3 TROPION-Breast02 mostró que datopotamab deruxtecan (un conjugado anticuerpo-fármaco anti-Trop2) mejoró tanto la supervivencia libre de progresión como la supervivencia global frente a la quimioterapia de elección del médico, lo que lo posiciona como una alternativa de primera línea emergente en este perfil.",
+            chart:{type:"km", metric:"Supervivencia global", timeUnit:"meses",
+              curves:[
+                {label:"Datopotamab deruxtecan", atMonths:23.7, survivalPct:50, highlight:true},
+                {label:"Quimioterapia de elección del médico", atMonths:18.7, survivalPct:50}
+              ],
+              source:"TROPION-Breast02 — Dent R et al., Ann Oncol 2026 (HR 0.79, IC 95% 0.64-0.98, p=0.029)"}},
           {label:"Pembrolizumab + quimioterapia, igual que se hizo en la neoadyuvancia", points:0,
             feedback:"Aplica incorrectamente el criterio neoadyuvante (que no requiere PD-L1 positivo) al escenario metastásico, que sí lo requiere.",
             paper:"KEYNOTE-355 — Cortés et al., Lancet 2020", finding:"A diferencia de KEYNOTE-522 en neoadyuvancia, el beneficio de pembrolizumab en metastásico de primera línea depende del estado de PD-L1."},
-          {label:"Sacituzumab govitecan en primera línea", points:0,
-            feedback:"Indicación validada en líneas posteriores, no en primera línea sin tratamiento metastásico previo.",
-            paper:"ASCENT — Bardia et al., N Engl J Med 2021", finding:"Evaluó sacituzumab en pacientes con al menos dos líneas metastásicas previas."},
+          {label:"Sacituzumab govitecan en primera línea", points:1,
+            feedback:"Su indicación clásica (ASCENT) es en líneas posteriores, pero el ensayo fase 3 ASCENT-03 evaluó específicamente su uso en primera línea en este mismo perfil (PD-L1 negativo, no candidata a inmunoterapia), con beneficio en supervivencia libre de progresión; aun así, todavía no desplaza a la quimioterapia como estándar establecido de primera línea en la práctica habitual.",
+            paper:"ASCENT — Bardia et al., N Engl J Med 2021; ASCENT-03 — Tolaney et al., ASCO 2026", finding:"ASCENT evaluó sacituzumab en pacientes con al menos dos líneas metastásicas previas. ASCENT-03 (primera línea, PD-L1 negativo o no candidatas a inmunoterapia) mostró PFS de 9.7 vs 6.9 meses (HR 0.62) frente a quimioterapia, sin beneficio aún demostrado en tasa de respuesta objetiva y con supervivencia global todavía inmadura."},
           {label:"Trastuzumab deruxtecan en primera línea, dado que es triple negativo", points:0,
             feedback:"No corresponde: el tumor es HER2-null (IHQ 0), y T-DXd no ha demostrado beneficio en ese grupo específico, a diferencia de HER2-low (IHQ 1+ o 2+ no amplificado).",
             paper:"DESTINY-Breast04 — Modi et al., N Engl J Med 2022", finding:"Incluyó específicamente tumores HER2-low (IHC 1+ o 2+ no amplificado); los tumores HER2-null (IHC 0) no fueron parte de la población de beneficio demostrado."}
