@@ -57,6 +57,8 @@
   .modcard .tag{font-size:11px;text-transform:uppercase;letter-spacing:1.3px;font-weight:600;padding:3px 9px;border-radius:20px;display:inline-block;margin-bottom:10px;}
   .modcard h3{font-family:'Lora',serif;font-size:19px;margin:0 0 8px;}
   .modcard p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:0;}
+  .tag.mama{background:var(--coral-tint);color:#7A2E19;}
+  .tag.endometrio{background:var(--gold-tint);color:var(--gold);}
   .tag.lumA{background:var(--teal-tint);color:var(--teal-deep);}
   .tag.lumB{background:var(--gold-tint);color:var(--gold);}
   .tag.her2{background:var(--plum-tint);color:var(--plum);}
@@ -222,7 +224,7 @@ const UFTF_MODULES = {
 
 /* ============================================================ LUMINAL A */
 lumA: {
-  tag:"lumA", tagLabel:"Luminal A", title:"Luminal A",
+  group:"mama", tag:"lumA", tagLabel:"Luminal A", title:"Luminal A",
   moduleDesc:"RE/RP muy positivos, Ki67 bajo, HER2 negativo. El subtipo de mejor pronóstico y menor sensibilidad a quimioterapia.",
   cases: [
 
@@ -606,7 +608,7 @@ lumA: {
 
 /* ============================================================ LUMINAL B */
 lumB: {
-  tag:"lumB", tagLabel:"Luminal B", title:"Luminal B",
+  group:"mama", tag:"lumB", tagLabel:"Luminal B", title:"Luminal B",
   moduleDesc:"RE/RP positivos pero con alta proliferación (Ki67 alto, grado 3). Mayor riesgo que Luminal A y decisiones de adyuvancia distintas.",
   cases:[
 
@@ -978,7 +980,7 @@ lumB: {
 
 /* ============================================================ HER2 POSITIVO */
 her2: {
-  tag:"her2", tagLabel:"HER2 positivo", title:"HER2 positivo",
+  group:"mama", tag:"her2", tagLabel:"HER2 positivo", title:"HER2 positivo",
   moduleDesc:"HER2 sobreexpresado o amplificado. Alta sensibilidad a quimioterapia y bloqueo anti-HER2 dirigido, con conjugados anticuerpo-fármaco cada vez más centrales.",
   cases:[
 
@@ -1329,7 +1331,7 @@ her2: {
 
 /* ============================================================ TRIPLE NEGATIVO */
 tnbc: {
-  tag:"tnbc", tagLabel:"Triple negativo", title:"Triple negativo",
+  group:"mama", tag:"tnbc", tagLabel:"Triple negativo", title:"Triple negativo",
   moduleDesc:"Sin receptores hormonales ni sobreexpresión de HER2. El subtipo más transformado por la inmunoterapia y las terapias dirigidas por biomarcador.",
   cases:[
 
@@ -2441,7 +2443,18 @@ const CANCER = {
     label: "UFTF — Unidad Funcional de Tumores Femeninos",
     icon: "Tumores femeninos",
     desc: "Cáncer de mama y de endometrio, con su propia lógica de tratamiento según subtipo molecular, de la cirugía a la enfermedad metastásica.",
-    modules: UFTF_MODULES
+    modules: UFTF_MODULES,
+    groups: {
+      mama: {
+        tag:"mama", tagLabel:"Cáncer de mama", title:"Cáncer de Mama",
+        moduleDesc:"Cuatro subtipos moleculares —Luminal A, Luminal B, HER2 positivo y triple negativo— cada uno con su propia lógica de tratamiento, de la cirugía a la enfermedad metastásica."
+      },
+      endometrio: {
+        tag:"endometrio", tagLabel:"Cáncer de endometrio", title:"Cáncer de Endometrio",
+        moduleDesc:"La clasificación molecular (POLE, dMMR, p53 anormal, NSMP) es hoy el eje central del pronóstico y de la decisión de adyuvancia, por encima incluso del grado histológico.",
+        standalone:true, moduleKey:"endometrio"
+      }
+    }
   },
   pulmon: {
     label: "Cáncer de Pulmón",
@@ -2637,6 +2650,7 @@ auth.onAuthStateChanged(user => {
 /* ===================== ENGINE ===================== */
 
 let activeCancer = null;
+let activeGroup = null;
 let activeModule = null;
 let activeCaseKey = null;
 let stages = null;
@@ -2645,8 +2659,17 @@ let currentOptions = null;
 
 const THEORY_PDFS = new Set(["lumA","lumB","her2","tnbc","endometrio","egfr","alk","nodriver","sclc"]);
 
+function groupKeyForModule(cancerKey, moduleKey){
+  const cancer = CANCER[cancerKey];
+  if(!cancer.groups) return null;
+  const m = cancer.modules[moduleKey];
+  if(m && m.group) return m.group;
+  const entry = Object.entries(cancer.groups).find(([k, g]) => g.standalone && g.moduleKey === moduleKey);
+  return entry ? entry[0] : null;
+}
+
 function renderHome(){
-  activeCancer = null; activeModule = null; activeCaseKey = null;
+  activeCancer = null; activeGroup = null; activeModule = null; activeCaseKey = null;
   const app = document.getElementById("app");
   app.innerHTML = `
     <p class="intro">Elegí qué tipo de cáncer querés simular. Cada sección tiene sus propios módulos por subtipo molecular, y cada módulo tiene varios casos distintos para practicar.</p>
@@ -2657,13 +2680,17 @@ function renderHome(){
     const card = document.createElement("button");
     card.className = "sectioncard" + (key === "pulmon" ? " pulmon" : "");
     card.innerHTML = `<span class="icon">${c.icon}</span><h2>${c.label}</h2><p>${c.desc}</p>`;
-    card.onclick = () => key === "pulmon" ? renderPulmonCaseSelect() : renderModuleSelect(key);
+    card.onclick = () => {
+      if(c.groups) renderGroupSelect(key);
+      else if(key === "pulmon") renderPulmonCaseSelect();
+      else renderModuleSelect(key);
+    };
     grid.appendChild(card);
   });
 }
 
-function renderModuleSelect(cancerKey){
-  activeCancer = cancerKey; activeModule = null; activeCaseKey = null;
+function renderGroupSelect(cancerKey){
+  activeCancer = cancerKey; activeGroup = null; activeModule = null; activeCaseKey = null;
   const cancer = CANCER[cancerKey];
   const app = document.getElementById("app");
   app.innerHTML = `
@@ -2673,19 +2700,48 @@ function renderModuleSelect(cancerKey){
   `;
   document.getElementById("crumbHome").onclick = renderHome;
   const grid = document.getElementById("modgrid");
-  Object.entries(cancer.modules).forEach(([key, m]) => {
+  Object.entries(cancer.groups).forEach(([groupKey, g]) => {
     const card = document.createElement("button");
     card.className = "modcard";
-    card.innerHTML = `<span class="tag ${m.tag}">${m.tagLabel}</span><h3>${m.title}</h3><p>${m.moduleDesc}</p>`;
-    card.onclick = () => renderCaseSelect(cancerKey, key);
+    card.innerHTML = `<span class="tag ${g.tag}">${g.tagLabel}</span><h3>${g.title}</h3><p>${g.moduleDesc}</p>`;
+    card.onclick = () => g.standalone ? renderCaseSelect(cancerKey, g.moduleKey) : renderModuleSelect(cancerKey, groupKey);
     grid.appendChild(card);
   });
 }
 
+function renderModuleSelect(cancerKey, groupKey){
+  activeCancer = cancerKey; activeGroup = groupKey || null; activeModule = null; activeCaseKey = null;
+  const cancer = CANCER[cancerKey];
+  const group = groupKey ? cancer.groups[groupKey] : null;
+  const app = document.getElementById("app");
+  const crumbHtml = group
+    ? `<span id="crumbHome">Inicio</span> / <span id="crumbTop">${cancer.label}</span> / ${group.title}`
+    : `<span id="crumbHome">Inicio</span> / ${cancer.label}`;
+  app.innerHTML = `
+    <div class="crumb">${crumbHtml}</div>
+    <p class="intro">${group ? group.moduleDesc : cancer.desc}</p>
+    <div class="modgrid" id="modgrid"></div>
+  `;
+  document.getElementById("crumbHome").onclick = renderHome;
+  if(group){ document.getElementById("crumbTop").onclick = () => renderGroupSelect(cancerKey); }
+  const grid = document.getElementById("modgrid");
+  Object.entries(cancer.modules)
+    .filter(([key, m]) => !groupKey || m.group === groupKey)
+    .forEach(([key, m]) => {
+      const card = document.createElement("button");
+      card.className = "modcard";
+      card.innerHTML = `<span class="tag ${m.tag}">${m.tagLabel}</span><h3>${m.title}</h3><p>${m.moduleDesc}</p>`;
+      card.onclick = () => renderCaseSelect(cancerKey, key);
+      grid.appendChild(card);
+    });
+}
+
 function renderCaseSelect(cancerKey, moduleKey){
   activeCancer = cancerKey; activeModule = moduleKey; activeCaseKey = null;
+  activeGroup = groupKeyForModule(cancerKey, moduleKey);
   const cancer = CANCER[cancerKey];
   const m = cancer.modules[moduleKey];
+  const group = activeGroup ? cancer.groups[activeGroup] : null;
   const app = document.getElementById("app");
   const theoryHtml = THEORY_PDFS.has(moduleKey) ? `
     <a class="theory-link" href="teoria/${moduleKey}.pdf" target="_blank" rel="noopener">
@@ -2695,14 +2751,27 @@ function renderCaseSelect(cancerKey, moduleKey){
         <small>Descargá el resumen antes de resolver los casos</small>
       </span>
     </a>` : "";
+  let crumbHtml;
+  if(group && group.standalone){
+    crumbHtml = `<span id="crumbHome">Inicio</span> / <span id="crumbTop">${cancer.label}</span> / ${m.title}`;
+  } else if(group){
+    crumbHtml = `<span id="crumbHome">Inicio</span> / <span id="crumbTop">${cancer.label}</span> / <span id="crumbGroup">${group.title}</span> / ${m.title}`;
+  } else {
+    crumbHtml = `<span id="crumbHome">Inicio</span> / <span id="crumbCancer">${cancer.label}</span> / ${m.title}`;
+  }
   app.innerHTML = `
-    <div class="crumb"><span id="crumbHome">Inicio</span> / <span id="crumbCancer">${cancer.label}</span> / ${m.title}</div>
+    <div class="crumb">${crumbHtml}</div>
     <p class="intro">${m.moduleDesc} Elegí uno de los casos para empezar la consulta.</p>
     ${theoryHtml}
     <div class="casegrid" id="casegrid"></div>
   `;
   document.getElementById("crumbHome").onclick = renderHome;
-  document.getElementById("crumbCancer").onclick = () => renderModuleSelect(cancerKey);
+  if(group){
+    document.getElementById("crumbTop").onclick = () => renderGroupSelect(cancerKey);
+    if(!group.standalone) document.getElementById("crumbGroup").onclick = () => renderModuleSelect(cancerKey, activeGroup);
+  } else {
+    document.getElementById("crumbCancer").onclick = () => renderModuleSelect(cancerKey);
+  }
   const grid = document.getElementById("casegrid");
   m.cases.forEach((c, i) => {
     const card = document.createElement("button");
@@ -2751,6 +2820,7 @@ function goToCaseSelect(){
 
 function startCase(cancerKey, moduleKey, caseKey){
   activeCancer = cancerKey; activeModule = moduleKey; activeCaseKey = caseKey;
+  activeGroup = groupKeyForModule(cancerKey, moduleKey);
   const c = CANCER[cancerKey].modules[moduleKey].cases.find(x => x.key === caseKey);
   stages = c.stages;
   state = { step:0, score:0, maxScore:0, answered:false, vitals: Object.assign({}, c.vitals) };
