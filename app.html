@@ -218,7 +218,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 <script>
-const MAMA_MODULES = {
+const UFTF_MODULES = {
 
 /* ============================================================ LUMINAL A */
 lumA: {
@@ -1678,9 +1678,302 @@ tnbc: {
   }
 
   ]
+},
+
+/* ============================================================ CÁNCER DE ENDOMETRIO */
+endometrio: {
+  tag:"endometrio", tagLabel:"Cáncer de endometrio", title:"Cáncer de Endometrio",
+  moduleDesc:"La clasificación molecular (POLE, dMMR, p53 anormal, NSMP) es hoy el eje central del pronóstico y de la decisión de adyuvancia, por encima incluso del grado histológico. La inmunoterapia transformó el manejo de la enfermedad avanzada y recurrente, con estrategias distintas según el estado de reparación de errores de apareamiento (MMR).",
+  cases:[
+
+  { key:"classic", label:"Caso 1",
+    cardDesc:"54 años, posmenopáusica. Sangrado uterino anormal, cáncer de endometrio de alto grado.",
+    patient:"M.D., 54 años · posmenopáusica<br>Motivo: sangrado uterino anormal",
+    vitals:{"Histología":"Endometrioide grado 3","Invasión miometrial":"<50%","LVSI":"Ausente","Clasificación molecular":"POLE mutado","Estadio":"IA","Tratamiento":"—"},
+    timeline:["Diagnóstico","Estudio inicial","Cirugía de estadificación","Adyuvancia según clasificación molecular","Seguimiento","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>M.D., 54 años, posmenopáusica desde hace 4 años, consulta por <b>sangrado uterino anormal</b> de 3 semanas de evolución.</p>
+        <div class="callout warn">Todo sangrado uterino en la posmenopausia debe considerarse cáncer de endometrio hasta que se demuestre lo contrario: es el principal tumor maligno del tracto genital femenino en países desarrollados.</div>`, buttonLabel:"Continuar a la primera decisión →"},
+      {type:"decision", phase:1, eyebrow:"Decisión 1 · Estudio inicial ante sangrado uterino anormal posmenopáusico",
+        prompt:"Sangrado uterino anormal en una paciente posmenopáusica de 54 años. ¿Cuál es la conducta inicial más apropiada?",
+        options:[
+          {label:"Ecografía transvaginal seguida de histeroscopia con biopsia dirigida del endometrio", points:2,
+            feedback:"Correcto. El estudio inicial combina ecografía transvaginal e histeroscopia con biopsia dirigida para obtener diagnóstico histológico.",
+            paper:"Neal O, Barber E, et al. Uterine Neoplasms, NCCN 2024", finding:"El algoritmo diagnóstico estándar ante sangrado uterino anormal posmenopáusico incluye ecografía transvaginal e histeroscopia con biopsia endometrial dirigida, complementado con laboratorio y estudios de imagen según hallazgos."},
+          {label:"Tomografía de tórax, abdomen y pelvis como primer estudio, sin muestra tisular del endometrio", points:0,
+            feedback:"Ningún estudio de imagen reemplaza la necesidad de una muestra tisular del endometrio para el diagnóstico.",
+            paper:"Neal O, Barber E, et al. Uterine Neoplasms, NCCN 2024", finding:"La estadificación por imágenes es posterior a la confirmación histológica, no la reemplaza."},
+          {label:"Observación clínica durante 3 meses, dado que el sangrado posmenopáusico frecuentemente es benigno", points:0,
+            feedback:"Aunque muchas causas de sangrado posmenopáusico son benignas, nunca debe diferirse el estudio: retrasar la biopsia puede retrasar el diagnóstico de un cáncer curable en estadio temprano.",
+            paper:"Neal O, Barber E, et al. Uterine Neoplasms, NCCN 2024", finding:"Todo sangrado uterino posmenopáusico requiere estudio histológico sin demora."},
+          {label:"Legrado uterino fraccionado bajo anestesia general como primer paso, sin intentar histeroscopia ambulatoria", points:1,
+            feedback:"Es una alternativa diagnóstica válida y a veces necesaria, pero como primer paso se prefiere la vía ambulatoria (ecografía + histeroscopia con biopsia), menos invasiva y sin necesidad de anestesia general.",
+            paper:"Neal O, Barber E, et al. Uterine Neoplasms, NCCN 2024", finding:"La histeroscopia con biopsia ambulatoria es el estándar inicial; el legrado bajo anestesia se reserva para cuando la vía ambulatoria no es factible o es insuficiente."}
+        ]},
+      {type:"info", phase:1, eyebrow:"Resultado de la biopsia", vitalsUpdate:{"Tratamiento":"Biopsia realizada"}, html:`
+        <p>Biopsia endometrial: <b>carcinoma endometrioide grado 3</b>. RM de abdomen y pelvis: lesión aparentemente confinada al endometrio, sin adenopatías ni enfermedad a distancia.</p>`, buttonLabel:"Definir la cirugía de estadificación →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 2 · Cirugía de estadificación inicial",
+        prompt:"Carcinoma endometrioide grado 3, aparentemente confinado al útero en la RM. ¿Cuál es la conducta quirúrgica inicial más apropiada?",
+        options:[
+          {label:"Histerectomía total + salpingooforectomía bilateral + biopsia de ganglio centinela pélvico (mapeo)", points:2,
+            feedback:"Correcto. El mapeo de ganglio centinela es una alternativa validada a la linfadenectomía sistemática, con precisión diagnóstica comparable y menor morbilidad.",
+            paper:"FIRES trial — Rossi et al., Lancet Oncol 2017", finding:"La biopsia de ganglio centinela mostró una sensibilidad y valor predictivo negativo comparables a la linfadenectomía pélvica completa para la estadificación del cáncer de endometrio, con menor morbilidad asociada (linfedema, tiempo quirúrgico)."},
+          {label:"Histerectomía + salpingooforectomía bilateral, sin ningún estudio ganglionar", points:0,
+            feedback:"En un tumor grado 3 se pierde información pronóstica y terapéutica relevante al omitir la evaluación ganglionar.",
+            paper:"Neal O, Barber E, et al. Uterine Neoplasms, NCCN 2024", finding:"Recomienda evaluación ganglionar (centinela o linfadenectomía) como parte de la estadificación quirúrgica completa, especialmente en tumores de alto grado."},
+          {label:"Linfadenectomía pélvica y paraaórtica sistemática, sin intentar mapeo de ganglio centinela", points:1,
+            feedback:"Es una alternativa válida y aún ampliamente utilizada, pero conlleva más morbilidad (linfedema) que el mapeo de ganglio centinela, que ha demostrado precisión diagnóstica comparable.",
+            paper:"FIRES trial — Rossi et al., Lancet Oncol 2017", finding:"El mapeo de ganglio centinela se propone como alternativa de menor morbilidad a la linfadenectomía sistemática, con precisión diagnóstica similar."},
+          {label:"Tratamiento hormonal con progestágenos como alternativa a la cirugía, dado que podría preservar la fertilidad", points:0,
+            feedback:"La preservación de fertilidad con progestágenos se reserva para pacientes jóvenes con carcinoma endometrioide grado 1 confinado al endometrio que desean preservar fertilidad; no aplica a esta paciente posmenopáusica con un tumor grado 3.",
+            paper:"NCCN Guidelines — Uterine Neoplasms", finding:"El manejo conservador con progestágenos exige grado 1, enfermedad limitada al endometrio, ausencia de contraindicaciones y deseo expreso de preservar fertilidad; no es el estándar de cuidado fuera de ese contexto."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Resultado de la cirugía y clasificación molecular", vitalsUpdate:{"Tratamiento":"Cirugía de estadificación realizada","Estadio":"IA (pT1aN0)"}, html:`
+        <p>Patología definitiva: carcinoma endometrioide grado 3, <b>invasión miometrial menor al 50%</b>, sin invasión linfovascular, <b>ganglio centinela negativo (pT1aN0)</b>. El panel de clasificación molecular (IHQ de p53 y de proteínas MMR, secuenciación de POLE) informa: <b>mutación patogénica en el dominio exonucleasa de POLE</b>, p53 nativo (wild-type), MMR conservado (pMMR).</p>
+        <div class="callout good">Aunque el grado histológico es alto (G3), la clasificación molecular integrada prioriza el hallazgo de POLE por sobre el grado y otros marcadores (jerarquía POLE > dMMR > p53 anormal > NSMP): los tumores POLE-mutados en estadio temprano tienen un pronóstico excelente, prácticamente independiente del grado.</div>`, buttonLabel:"Definir la adyuvancia →"},
+      {type:"decision", phase:4, eyebrow:"Decisión 3 · Adyuvancia según clasificación molecular",
+        prompt:"Carcinoma endometrioide grado 3, estadio IA, POLE mutado. ¿Cuál es la conducta de adyuvancia más apropiada?",
+        options:[
+          {label:"No indicar ninguna terapia adyuvante, pese al grado histológico 3, dado el excelente pronóstico del perfil POLE mutado", points:2,
+            feedback:"Correcto. Los tumores POLE mutados en estadios I-II se clasifican como bajo riesgo independientemente del grado histológico, y no se recomienda adyuvancia.",
+            paper:"León-Castillo et al., J Clin Oncol 2020 (reclasificación molecular de PORTEC-3); Oaknin A, Bosse TJ, Creutzberg CL, et al. ESMO Clinical Practice Guideline, Ann Oncol 2022", finding:"En el grupo de riesgo de la guía ESGO-ESTRO-ESP/ESMO, el cáncer de endometrio estadio I-II POLE mutado se clasifica como bajo riesgo, para el que no se recomienda terapia adyuvante, independientemente del grado histológico o la profundidad de invasión miometrial. La reclasificación molecular de PORTEC-3 confirmó que los tumores POLE mutados tuvieron una supervivencia libre de recaída y global cercana al 100% a 5 años, sin beneficio demostrado de quimiorradioterapia."},
+          {label:"Braquiterapia vaginal adyuvante, dado que se trata de un grado histológico 3", points:1,
+            feedback:"Sería la conducta correcta en un tumor grado 3 con clasificación dMMR o NSMP (riesgo intermedio), pero el hallazgo de una mutación de POLE reclasifica a esta paciente como bajo riesgo, donde la adyuvancia no aporta beneficio demostrado.",
+            paper:"León-Castillo et al., J Clin Oncol 2020", finding:"El grado histológico por sí solo no determina el grupo de riesgo cuando existe una mutación patogénica de POLE: esta prevalece por sobre el grado en la clasificación integrada."},
+          {label:"Quimioterapia con carboplatino y paclitaxel adyuvante, dado el grado histológico alto", points:0,
+            feedback:"Sería sobretratamiento significativo: la quimioterapia adyuvante se reserva para el grupo de alto riesgo (p53 anormal, histologías no endometrioides, estadios III-IV), no para un tumor POLE mutado en estadio IA.",
+            paper:"Oaknin A, Bosse TJ, Creutzberg CL, et al. ESMO Clinical Practice Guideline, Ann Oncol 2022", finding:"La quimioterapia adyuvante se recomienda específicamente en el grupo de alto riesgo, definido por perfil p53 anormal, histología serosa/indiferenciada o estadios avanzados, no por el grado histológico aislado."},
+          {label:"Radioterapia externa pélvica adyuvante", points:0,
+            feedback:"Es sobretratamiento en un tumor de bajo riesgo molecular: la radioterapia externa se reserva para grupos de riesgo intermedio-alto o alto.",
+            paper:"Oaknin A, Bosse TJ, Creutzberg CL, et al. ESMO Clinical Practice Guideline, Ann Oncol 2022", finding:"Para el grupo de bajo riesgo (incluyendo POLE mutado en estadio I-II), la guía no recomienda ninguna terapia adyuvante."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Seguimiento — 3 años después", vitalsUpdate:{"Tratamiento":"Sin adyuvancia — seguimiento clínico","Estadio":"Sin evidencia de enfermedad"}, html:`
+        <p>A los 3 años de seguimiento sin haber recibido terapia adyuvante, la paciente permanece <b>sin evidencia de enfermedad</b>, confirmando el pronóstico excelente esperado para el perfil POLE mutado.</p>`, buttonLabel:"Ver la epicrisis →"},
+      {type:"epicrisis"}
+    ],
+    synthesis: `
+      <h3>Diagnóstico y estadificación</h3>
+      <p>Ante sangrado uterino posmenopáusico, el estudio inicial combina <b>ecografía transvaginal e histeroscopia con biopsia dirigida</b>. En la cirugía de estadificación, el <b>mapeo de ganglio centinela</b> es hoy una alternativa validada a la linfadenectomía sistemática, con precisión diagnóstica comparable y menor morbilidad (FIRES).</p>
+      <h3>La clasificación molecular por sobre el grado histológico</h3>
+      <p>El hallazgo central de este caso: una <b>mutación patogénica de POLE</b> reclasifica a la paciente como <b>bajo riesgo</b>, incluso con un tumor histológicamente grado 3 — la jerarquía de la clasificación integrada (POLE > dMMR > p53 anormal > NSMP) prioriza el perfil molecular por sobre el grado. En estadios I-II, el cáncer de endometrio POLE mutado no requiere adyuvancia, con supervivencia libre de recaída cercana al 100% (reclasificación molecular de PORTEC-3, León-Castillo et al.; guía ESGO-ESTRO-ESP/ESMO 2022).</p>
+    `
+  },
+
+  { key:"pcr", label:"Caso 2",
+    cardDesc:"67 años, posmenopáusica, con antecedente de cáncer colorrectal. Cáncer de endometrio dMMR.",
+    patient:"C.R., 67 años · posmenopáusica, antecedente de cáncer colorrectal a los 55 años<br>Motivo: sangrado uterino anormal",
+    vitals:{"Histología":"Endometrioide grado 3","Invasión miometrial":"≥50%","LVSI":"Sustancial","Clasificación molecular":"dMMR (pérdida de MSH2/MSH6)","Estadio":"IB","Tratamiento":"—"},
+    timeline:["Diagnóstico","Cirugía y clasificación molecular","Adyuvancia: elección de radioterapia","Manejo de toxicidad","Riesgo hereditario","1ª línea metastásica","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>C.R., 67 años, posmenopáusica, con antecedente personal de <b>cáncer colorrectal a los 55 años</b>, consulta por sangrado uterino anormal. Ecografía transvaginal e histeroscopia con biopsia: <b>carcinoma endometrioide grado 3</b>.</p>
+        <div class="callout">El antecedente de cáncer colorrectal a edad temprana, sumado ahora a un cáncer de endometrio, es un patrón clínico que debe hacer sospechar un síndrome de cáncer hereditario.</div>`, buttonLabel:"Continuar →"},
+      {type:"info", phase:1, eyebrow:"Resultado de la cirugía y clasificación molecular", vitalsUpdate:{"Tratamiento":"Cirugía de estadificación realizada","Estadio":"IB (pT1bN0)"}, html:`
+        <p>Histerectomía + salpingooforectomía bilateral + ganglio centinela: carcinoma endometrioide <b>grado 3, invasión miometrial ≥50%, con invasión linfovascular sustancial</b>, ganglio centinela negativo (pT1bN0). Panel molecular: <b>pérdida de expresión de MSH2 y MSH6 por inmunohistoquímica (dMMR)</b>, p53 nativo.</p>
+        <div class="callout warn">Estadio IB, grado 3, con LVSI sustancial y perfil dMMR: por la combinación de grado alto y LVSI sustancial, este perfil corresponde a un grupo de <b>riesgo alto-intermedio</b>, distinto del riesgo intermedio estándar.</div>`, buttonLabel:"Definir la adyuvancia →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 1 · Adyuvancia: elección de la modalidad de radioterapia",
+        prompt:"Estadio IB, grado 3, LVSI sustancial, dMMR: riesgo alto-intermedio. ¿Cuál es la conducta de adyuvancia más apropiada?",
+        options:[
+          {label:"Radioterapia externa pélvica (EBRT) adyuvante, considerando agregar quimioterapia dado el grado 3 y la LVSI sustancial", points:2,
+            feedback:"Correcto. En el grupo de riesgo alto-intermedio con grado 3 y/o LVSI sustancial, la EBRT es la modalidad recomendada, pudiendo considerarse agregar quimioterapia.",
+            paper:"Oaknin A, Bosse TJ, Creutzberg CL, et al. ESMO Clinical Practice Guideline, Ann Oncol 2022; PORTEC-2 — Wortman et al., Br J Cancer 2018", finding:"La guía ESGO-ESTRO-ESP/ESMO recomienda EBRT adyuvante para el grupo de riesgo alto-intermedio (LVSI sustancial o grado 2-3 con otros factores), considerando agregar quimioterapia especialmente con grado 3 y/o LVSI sustancial. En el subgrupo de PORTEC-2 con factores de riesgo presentes (edad >60 con un factor adicional), la braquiterapia vaginal sola mostró una recurrencia pélvica marcadamente mayor que la EBRT (6.3% frente a 0.9%, p=0.004), sin diferencia en supervivencia global.",
+            chart:{type:"bars", metric:"Recurrencia pélvica a 5 años (subgrupo con factores de riesgo presentes)", unit:"%",
+              bars:[
+                {label:"Radioterapia externa pélvica (EBRT)", value:0.9, highlight:true},
+                {label:"Braquiterapia vaginal sola", value:6.3}
+              ],
+              source:"PORTEC-2 — Wortman et al., Br J Cancer 2018 (subgrupo con factores de riesgo presentes)"}},
+          {label:"Braquiterapia vaginal exclusiva, igual que en el perfil de riesgo intermedio estándar", points:1,
+            feedback:"La braquiterapia vaginal sola es la conducta correcta en el riesgo intermedio estándar (grado 1-2, sin LVSI sustancial), pero el grado 3 con LVSI sustancial de esta paciente la ubica en el grupo de riesgo alto-intermedio, donde la EBRT reduce más la recurrencia pélvica.",
+            paper:"PORTEC-2 — Wortman et al., Br J Cancer 2018", finding:"En el subgrupo con factores de riesgo presentes, la braquiterapia vaginal sola se asoció a mayor recurrencia pélvica que la EBRT, sin comprometer la supervivencia vaginal ni global en la población general del estudio."},
+          {label:"Ninguna terapia adyuvante, dado que el estatus dMMR por sí solo confiere buen pronóstico", points:0,
+            feedback:"El estatus dMMR es un factor pronóstico dentro de la clasificación molecular, pero no reemplaza la evaluación de los factores de riesgo clásicos (grado, invasión, LVSI) que definen la necesidad de radioterapia local.",
+            paper:"Oaknin A, Bosse TJ, Creutzberg CL, et al. ESMO Clinical Practice Guideline, Ann Oncol 2022", finding:"El grupo de riesgo alto-intermedio (dMMR o NSMP con grado 3 y/o LVSI sustancial) tiene indicación de radioterapia adyuvante pese al perfil molecular dMMR."},
+          {label:"Quimioterapia sistémica sola, sin ningún componente de radioterapia", points:0,
+            feedback:"Omite el componente de control locorregional que aporta la radioterapia, central en este grupo de riesgo.",
+            paper:"Oaknin A, Bosse TJ, Creutzberg CL, et al. ESMO Clinical Practice Guideline, Ann Oncol 2022", finding:"En el riesgo alto-intermedio, la radioterapia (EBRT) es el componente recomendado; la quimioterapia es un agregado a considerar, no un reemplazo."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · semana 4 de radioterapia pélvica", vitalsUpdate:{"Tratamiento":"EBRT — evento de toxicidad"}, html:`
+        <p>Durante la cuarta semana de EBRT, presenta <b>diarrea grado 2 (4-6 deposiciones/día) y urgencia miccional</b>, sin fiebre ni sangrado.</p>
+        <div class="callout warn">La enteritis y cistitis actínicas agudas son toxicidades esperables durante la radioterapia pélvica, generalmente manejables sin interrumpir el tratamiento.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Enteritis y cistitis actínica aguda",
+        prompt:"Diarrea grado 2 y urgencia miccional durante la semana 4 de EBRT pélvica. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Manejo sintomático (loperamida, hidratación, ajuste dietario, anticolinérgicos si es necesario), continuar la EBRT sin interrupción salvo empeoramiento", points:2,
+            feedback:"Correcto. La toxicidad gastrointestinal y urinaria grado 1-2 durante la radioterapia pélvica se maneja sintomáticamente, sin necesidad de interrumpir el tratamiento planificado.",
+            paper:"NCCN Guidelines — Uterine Neoplasms", finding:"Recomienda manejo de soporte para la toxicidad aguda grado 1-2 de la radioterapia pélvica, reservando la interrupción del tratamiento para toxicidad grado 3 o mayor."},
+          {label:"Suspender la radioterapia de inmediato ante cualquier síntoma digestivo", points:0,
+            feedback:"Es una conducta excesiva para una toxicidad grado 2 manejable con medidas de soporte; interrumpir el tratamiento sin necesidad compromete el control oncológico.",
+            paper:"NCCN Guidelines — Uterine Neoplasms", finding:"La interrupción de la radioterapia se reserva para toxicidad de mayor grado, no para eventos grado 1-2."},
+          {label:"Iniciar antibióticos empíricos asumiendo colitis infecciosa", points:0,
+            feedback:"El cuadro clínico (sin fiebre, en el contexto temporal esperado de la radioterapia pélvica) es característico de toxicidad actínica, no infecciosa; los antibióticos no están indicados de entrada.",
+            paper:"NCCN Guidelines — Uterine Neoplasms", finding:"La enteritis actínica aguda se maneja con medidas sintomáticas, no con antibióticos empíricos sin sospecha de infección."},
+          {label:"Reducir la dosis total de radioterapia planificada para disminuir la toxicidad", points:0,
+            feedback:"Reducir la dosis compromete el control oncológico local; la toxicidad grado 2 se maneja con soporte, no modificando la dosis planificada.",
+            paper:"NCCN Guidelines — Uterine Neoplasms", finding:"No recomienda reducir la dosis total planificada de radioterapia por toxicidad aguda grado 1-2 manejable con medidas de soporte."}
+        ]},
+      {type:"decision", phase:4, eyebrow:"Decisión 2 · Manejo del riesgo hereditario",
+        prompt:"Pérdida de expresión de MSH2/MSH6 por inmunohistoquímica, con antecedente personal de cáncer colorrectal a los 55 años. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Derivar a asesoramiento genético para estudio germinal de síndrome de Lynch", points:2,
+            feedback:"Correcto. El patrón de pérdida de MSH2/MSH6 (a diferencia de la pérdida de MLH1/PMS2, más frecuentemente esporádica) junto con el antecedente personal de cáncer colorrectal temprano hace prioritario el estudio germinal.",
+            paper:"NCCN Guidelines — Genetic/Familial High-Risk Assessment; Neal O, Barber E, et al. Uterine Neoplasms, NCCN 2024", finding:"Recomienda derivación a asesoramiento genético y estudio germinal de síndrome de Lynch ante pérdida de expresión de MSH2, MSH6 o PMS2 (sin evidencia de metilación de MLH1), especialmente con antecedentes personales o familiares sugestivos, dado el riesgo de neoplasias sincrónicas o metacrónicas y las implicancias para familiares."},
+          {label:"No se requiere ningún estudio adicional, ya que la pérdida de MMR por inmunohistoquímica ya es diagnóstica de síndrome de Lynch", points:0,
+            feedback:"La pérdida de expresión por inmunohistoquímica identifica un tumor dMMR, pero el diagnóstico de síndrome de Lynch (una condición hereditaria) requiere confirmación con estudio genético germinal.",
+            paper:"NCCN Guidelines — Genetic/Familial High-Risk Assessment", finding:"El estatus dMMR tumoral es un hallazgo de tamizaje; el diagnóstico de síndrome de Lynch se confirma con estudio genético germinal."},
+          {label:"Solicitar metilación del promotor de MLH1 antes de cualquier otro estudio, dado que es el paso estándar en toda paciente con dMMR", points:0,
+            feedback:"El estudio de metilación de MLH1 es el paso reflejo específicamente cuando la pérdida es de MLH1/PMS2 (para distinguir causa esporádica de germinal); con un patrón de pérdida de MSH2/MSH6, se va directamente al estudio genético germinal.",
+            paper:"NCCN Guidelines — Genetic/Familial High-Risk Assessment", finding:"El algoritmo reflejo de metilación de MLH1 aplica al patrón de pérdida de MLH1/PMS2, no al patrón de pérdida de MSH2/MSH6, que tiene mucha menor probabilidad de causa esporádica."},
+          {label:"Descartar el riesgo hereditario únicamente en base a la edad de la paciente (67 años)", points:0,
+            feedback:"El cáncer de endometrio asociado a síndrome de Lynch puede presentarse en un rango etario amplio; la edad por sí sola, sumada a este patrón de inmunohistoquímica y al antecedente personal, no descarta el riesgo hereditario.",
+            paper:"NCCN Guidelines — Genetic/Familial High-Risk Assessment", finding:"Recomienda evaluar el riesgo hereditario según el patrón de inmunohistoquímica y los antecedentes personales/familiares, no según un punto de corte de edad aislado."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Recaída — 3 años después", vitalsUpdate:{"Tratamiento":"Recaída pélvica y hepática","Estadio":"Metastásico (pélvico + hepático)"}, html:`
+        <p>A los 3 años, un control de rutina detecta <b>recaída pélvica y una lesión hepática</b>. Biopsia de la lesión hepática: <b>carcinoma endometrioide recurrente, dMMR persistente</b> (pérdida de MSH2/MSH6).</p>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:6, eyebrow:"Decisión 3 · Primera línea metastásica/recurrente (dMMR)",
+        prompt:"Cáncer de endometrio recurrente, dMMR confirmado, sin tratamiento sistémico metastásico previo. ¿Cuál es el esquema de primera línea preferido?",
+        options:[
+          {label:"Dostarlimab + carboplatino/paclitaxel, seguido de mantenimiento con dostarlimab", points:2,
+            feedback:"Correcto. En enfermedad dMMR/MSI-H, agregar un inhibidor de checkpoint a la quimioterapia de primera línea, seguido de mantenimiento, es el estándar actual con beneficio marcado.",
+            paper:"RUBY — Mirza et al., N Engl J Med 2023", finding:"En el subgrupo dMMR/MSI-H, dostarlimab + carboplatino/paclitaxel mostró una supervivencia libre de progresión a 24 meses de 61.4% frente a 15.7% con quimioterapia sola (diferencia altamente significativa), estableciendo esta combinación como nuevo estándar de primera línea en enfermedad dMMR. Un beneficio de magnitud comparable se observó con pembrolizumab + carboplatino/paclitaxel en el mismo perfil molecular (NRG-GY018 — Eskander et al., N Engl J Med 2023).",
+            chart:{type:"km", metric:"Supervivencia libre de progresión a 24 meses (dMMR/MSI-H)", timeUnit:"meses",
+              curves:[
+                {label:"Dostarlimab + carboplatino/paclitaxel", atMonths:24, survivalPct:61.4, highlight:true},
+                {label:"Placebo + carboplatino/paclitaxel", atMonths:24, survivalPct:15.7}
+              ],
+              source:"RUBY — Mirza et al., N Engl J Med 2023 (subgrupo dMMR/MSI-H)"}},
+          {label:"Carboplatino/paclitaxel solo, sin inmunoterapia, reservando el inhibidor de checkpoint para líneas posteriores", points:0,
+            feedback:"En un tumor dMMR, el beneficio del inhibidor de checkpoint agregado en primera línea es tan marcado que diferirlo a líneas posteriores implica perder la oportunidad de mayor impacto en la enfermedad.",
+            paper:"RUBY — Mirza et al., N Engl J Med 2023", finding:"El beneficio de agregar dostarlimab se demostró específicamente en primera línea junto con la quimioterapia, no como rescate diferido."},
+          {label:"Pembrolizumab en monoterapia, sin quimioterapia de entrada", points:1,
+            feedback:"Un inhibidor de checkpoint en monoterapia es una opción validada en tumores dMMR/MSI-H (especialmente en líneas posteriores), pero el estándar de primera línea con mayor evidencia combina el inhibidor de checkpoint con quimioterapia desde el inicio.",
+            paper:"RUBY — Mirza et al., N Engl J Med 2023; NRG-GY018 — Eskander et al., N Engl J Med 2023", finding:"Ambos estudios evaluaron la combinación de inhibidor de checkpoint con quimioterapia de primera línea, no la monoterapia de entrada."},
+          {label:"Lenvatinib + pembrolizumab de entrada, sin quimioterapia", points:0,
+            feedback:"Esta combinación está validada específicamente en tumores pMMR que progresaron a quimioterapia con platino previa, no como primera línea en un tumor dMMR.",
+            paper:"KEYNOTE-775 — Makker et al., N Engl J Med 2022", finding:"La población de beneficio del estudio fueron pacientes con progresión previa a platino, predominantemente pMMR; no evaluó esta combinación como primera línea en dMMR."}
+        ]}
+    ],
+    synthesis: `
+      <h3>Adyuvancia guiada por el grupo de riesgo</h3>
+      <p>Con grado 3 y LVSI sustancial —factores que definen <b>riesgo alto-intermedio</b> incluso en un tumor dMMR—, la <b>radioterapia externa pélvica</b> es la modalidad preferida sobre la braquiterapia vaginal sola, que en el subgrupo con factores de riesgo presentes mostró más recurrencia pélvica (PORTEC-2).</p>
+      <h3>Riesgo hereditario</h3>
+      <p>El patrón de pérdida de <b>MSH2/MSH6</b> por inmunohistoquímica —a diferencia de la pérdida de MLH1/PMS2, con mayor probabilidad de causa esporádica por metilación— junto con el antecedente personal de cáncer colorrectal temprano, hace prioritaria la <b>derivación a estudio genético germinal de síndrome de Lynch</b>.</p>
+      <h3>Enfermedad recurrente/metastásica dMMR</h3>
+      <p>En la recaída con perfil <b>dMMR confirmado</b>, el estándar de primera línea es <b>un inhibidor de checkpoint (dostarlimab o pembrolizumab) agregado a carboplatino/paclitaxel</b>, seguido de mantenimiento, con un beneficio en supervivencia libre de progresión particularmente marcado en este subgrupo molecular (RUBY; NRG-GY018).</p>
+    `
+  },
+
+  { key:"crisis", label:"Caso 3",
+    cardDesc:"71 años, posmenopáusica. Cáncer de endometrio de tipo seroso, alto riesgo.",
+    patient:"A.V., 71 años · posmenopáusica<br>Motivo: sangrado uterino y distensión abdominal",
+    vitals:{"Histología":"Carcinoma seroso","Clasificación molecular":"p53 anormal (p53abn)","HER2":"positivo (IHQ 3+)","Estadio":"IIIC1","Tratamiento":"—"},
+    timeline:["Diagnóstico","Cirugía de estadificación","Adyuvancia: quimiorradioterapia","Manejo de toxicidad","1ª línea metastásica (HER2)","2ª línea metastásica (pMMR)","Epicrisis"],
+    stages:[
+      {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
+        <p>A.V., 71 años, posmenopáusica, consulta por sangrado uterino y distensión abdominal. Ecografía transvaginal e histeroscopia con biopsia: <b>carcinoma seroso uterino</b>, una histología no endometrioide de comportamiento clínico agresivo.</p>
+        <div class="callout warn">El carcinoma seroso, a diferencia del endometrioide, es una histología "tipo 2": de alto grado por definición, con mayor tendencia a la diseminación temprana, independientemente del estadio aparente por imágenes.</div>`, buttonLabel:"Continuar a la cirugía →"},
+      {type:"info", phase:1, eyebrow:"Resultado de la cirugía y clasificación molecular", vitalsUpdate:{"Tratamiento":"Cirugía de estadificación realizada","Estadio":"IIIC1 (pT3aN1)"}, html:`
+        <p>Histerectomía + salpingooforectomía bilateral + omentectomía + linfadenectomía: carcinoma seroso con <b>compromiso anexial y 2/14 ganglios pélvicos positivos (pT3aN1) — estadio IIIC1</b>. Panel molecular: <b>mutación de TP53 (p53 anormal)</b>, MMR conservado (pMMR). Dado que se trata de un carcinoma seroso, se solicita además <b>panel de HER2</b>: <b>IHQ 3+ (positivo)</b>.</p>
+        <div class="callout">El carcinoma seroso es la histología en la que específicamente se recomienda testear HER2, dado el rol terapéutico validado que tiene en este subtipo, a diferencia del endometrioide.</div>`, buttonLabel:"Definir la adyuvancia →"},
+      {type:"decision", phase:2, eyebrow:"Decisión 1 · Adyuvancia en enfermedad p53 anormal de alto riesgo",
+        prompt:"Carcinoma seroso, p53 anormal, estadio IIIC1 con compromiso ganglionar. ¿Cuál es la conducta de adyuvancia más apropiada?",
+        options:[
+          {label:"Quimioterapia con carboplatino/paclitaxel y radioterapia (quimiorradioterapia)", points:2,
+            feedback:"Correcto. En el grupo de alto riesgo (p53 anormal con compromiso ganglionar, estadio III), la combinación de quimioterapia y radioterapia es el estándar recomendado.",
+            paper:"PORTEC-3 — de Boer et al., Lancet Oncol 2018; GOG258 — Matei et al., N Engl J Med 2019", finding:"En el estadio III, PORTEC-3 mostró una supervivencia libre de fallo a 5 años de 69.3% con quimiorradioterapia frente a 58% con radioterapia sola (HR 0.66). GOG258 comparó quimiorradioterapia secuencial frente a quimioterapia sola, sin diferencia significativa en supervivencia libre de recurrencia, pero con menor recurrencia locorregional con el componente de radioterapia. En conjunto, la evidencia respalda combinar quimioterapia y radioterapia (concurrente o secuencial) en el grupo de alto riesgo, especialmente con compromiso ganglionar."},
+          {label:"Braquiterapia vaginal exclusiva, dado que ya se realizó cirugía completa", points:0,
+            feedback:"Es claramente insuficiente para un perfil de alto riesgo (p53 anormal, compromiso ganglionar, histología serosa): la braquiterapia sola se reserva para grupos de riesgo mucho menor.",
+            paper:"Oaknin A, Bosse TJ, Creutzberg CL, et al. ESMO Clinical Practice Guideline, Ann Oncol 2022", finding:"Todos los estadios con histología serosa e invasión miometrial, y todo estadio III con p53 anormal, se clasifican como alto riesgo, con indicación de quimioterapia y radioterapia adyuvantes."},
+          {label:"Observación sin adyuvancia, dado que la cirugía logró resección completa", points:0,
+            feedback:"El riesgo de recurrencia en un perfil p53 anormal con compromiso ganglionar sigue siendo alto pese a la resección completa; omitir la adyuvancia sería un error significativo.",
+            paper:"Oaknin A, Bosse TJ, Creutzberg CL, et al. ESMO Clinical Practice Guideline, Ann Oncol 2022", finding:"El grupo de alto riesgo requiere adyuvancia sistémica y local independientemente del resultado quirúrgico macroscópico."},
+          {label:"Solo radioterapia externa pélvica, sin quimioterapia", points:1,
+            feedback:"Fue el estándar histórico y sigue reduciendo la recurrencia locorregional, pero en el estadio III agregar quimioterapia mejoró la supervivencia libre de fallo frente a la radioterapia sola.",
+            paper:"PORTEC-3 — de Boer et al., Lancet Oncol 2018", finding:"En el estadio III, la quimiorradioterapia mostró supervivencia libre de fallo superior a la radioterapia sola (69.3% frente a 58% a 5 años, HR 0.66)."}
+        ]},
+      {type:"info", phase:3, eyebrow:"Evento de toxicidad · ciclo 3 de quimioterapia", vitalsUpdate:{"Tratamiento":"Carboplatino/paclitaxel — evento de toxicidad"}, html:`
+        <p>Ocho días después del tercer ciclo de carboplatino/paclitaxel, consulta por <b>fiebre de 38.7°C</b>. Laboratorio: <b>recuento absoluto de neutrófilos 350/mm³</b> (neutropenia grado 4).</p>
+        <div class="callout warn">La neutropenia febril es una urgencia oncológica que requiere manejo hospitalario inmediato.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
+      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Neutropenia febril post-quimioterapia",
+        prompt:"Fiebre 38.7°C con ANC 350/mm³ a los 8 días del tercer ciclo de carboplatino/paclitaxel. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Internar de inmediato, tomar hemocultivos y cultivos según foco, iniciar antibióticos empíricos de amplio espectro sin demora, y agregar profilaxis con factor estimulante de colonias en los ciclos siguientes", points:2,
+            feedback:"Correcto. La neutropenia febril grado 4 es una urgencia oncológica que requiere hospitalización y antibióticos empíricos inmediatos, con profilaxis en ciclos posteriores.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia in Patients With Cancer", finding:"Establece que la fiebre con ANC menor a 500/mm³ requiere hospitalización y antibióticos empíricos de amplio espectro de forma inmediata, con profilaxis primaria con factor estimulante de colonias en ciclos posteriores tras un episodio de neutropenia febril."},
+          {label:"Manejo ambulatorio con antibióticos orales y control en 48 horas", points:0,
+            feedback:"Insuficiente para el grado de neutropenia (ANC 350, grado 4) con fiebre; el manejo ambulatorio se reserva para pacientes de bajo riesgo cuidadosamente seleccionados.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia", finding:"El manejo ambulatorio generalmente excluye neutropenia grado 4."},
+          {label:"Esperar el resultado de los cultivos antes de iniciar antibióticos", points:0,
+            feedback:"Retrasar el inicio de antibióticos hasta tener cultivos puede ser fatal en este contexto.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia", finding:"Recomienda iniciar antibióticos empíricos dentro de la primera hora de la evaluación."},
+          {label:"Suspender la quimioterapia de forma definitiva sin planear reanudarla", points:0,
+            feedback:"No corresponde discontinuar definitivamente por un episodio tratable de neutropenia febril; con profilaxis de factor estimulante de colonias se puede continuar el tratamiento planificado.",
+            paper:"NCCN Guidelines — Management of Fever and Neutropenia", finding:"Recomienda profilaxis con factor estimulante de colonias en ciclos posteriores, permitiendo continuar el tratamiento."}
+        ]},
+      {type:"info", phase:4, eyebrow:"Recaída — 14 meses después", vitalsUpdate:{"Tratamiento":"Recaída hepática y peritoneal","Estadio":"Metastásico (hepático + peritoneal)"}, html:`
+        <p>A los 14 meses de completar la adyuvancia, una tomografía de control muestra <b>lesiones hepáticas y compromiso peritoneal</b>. Biopsia: <b>carcinoma seroso persistente, p53 anormal, HER2 IHQ 3+ (positivo), MMR conservado (pMMR)</b>.</p>`, buttonLabel:"Definir primera línea metastásica →"},
+      {type:"decision", phase:5, eyebrow:"Decisión 2 · Primera línea metastásica dirigida por HER2",
+        prompt:"Carcinoma seroso metastásico, HER2 IHQ 3+ confirmado, sin tratamiento sistémico metastásico previo. ¿Cuál es el esquema de primera línea preferido?",
+        options:[
+          {label:"Carboplatino/paclitaxel + trastuzumab", points:2,
+            feedback:"Correcto. En el carcinoma seroso uterino HER2 positivo, agregar trastuzumab a la quimioterapia estándar mejora la supervivencia libre de progresión y global.",
+            paper:"Fader et al., J Clin Oncol 2018; actualización de supervivencia global, Fader et al., Clin Cancer Res 2020", finding:"En este ensayo aleatorizado de fase II en carcinoma seroso uterino HER2 positivo, agregar trastuzumab a carboplatino/paclitaxel mejoró la mediana de supervivencia libre de progresión (12.9 frente a 8.0 meses) y la mediana de supervivencia global (29.6 frente a 24.4 meses) frente a la quimioterapia sola.",
+            chart:{type:"km", metric:"Supervivencia libre de progresión", timeUnit:"meses",
+              curves:[
+                {label:"Carboplatino/paclitaxel + trastuzumab", atMonths:12.9, survivalPct:50, highlight:true},
+                {label:"Carboplatino/paclitaxel solo", atMonths:8.0, survivalPct:50}
+              ],
+              source:"Fader et al., J Clin Oncol 2018 (población global del estudio)"}},
+          {label:"Continuar solo con quimioterapia estándar, sin trastuzumab, reservando el bloqueo anti-HER2 para líneas posteriores", points:0,
+            feedback:"Con HER2 confirmado positivo, el estándar es agregar trastuzumab desde la primera línea metastásica, no diferirlo.",
+            paper:"Fader et al., J Clin Oncol 2018", finding:"El beneficio de trastuzumab se demostró específicamente al agregarlo en primera línea junto con la quimioterapia estándar."},
+          {label:"Pembrolizumab + lenvatinib de entrada, aprovechando que es un tumor pMMR", points:0,
+            feedback:"Esta combinación está validada específicamente después de progresión a quimioterapia con platino previa, no como primera línea; además, omite la opción dirigida por HER2 ya validada en esta histología.",
+            paper:"KEYNOTE-775 — Makker et al., N Engl J Med 2022", finding:"La población de beneficio del estudio había recibido quimioterapia con platino previa; no evaluó esta combinación como primera línea de entrada."},
+          {label:"Trastuzumab deruxtecan (T-DXd) en primera línea", points:1,
+            feedback:"T-DXd tiene actividad relevante en tumores HER2 positivos, pero el estándar validado específicamente como primera línea en carcinoma seroso HER2 positivo es carboplatino/paclitaxel + trastuzumab; T-DXd se reserva para líneas posteriores.",
+            paper:"Fader et al., J Clin Oncol 2018", finding:"El esquema validado en primera línea en esta histología es carboplatino/paclitaxel + trastuzumab, no T-DXd."}
+        ]},
+      {type:"info", phase:5, eyebrow:"Progresión — 9 meses de primera línea", vitalsUpdate:{"Tratamiento":"Progresión bajo carboplatino/paclitaxel + trastuzumab"}, html:`
+        <p>A los 9 meses, progresión hepática adicional. Re-biopsia: <b>pMMR confirmado nuevamente</b>, sin otras alteraciones accionables reportadas. ECOG 1.</p>`, buttonLabel:"Definir segunda línea →"},
+      {type:"decision", phase:6, eyebrow:"Decisión 3 · Segunda línea metastásica (pMMR, progresión a platino)",
+        prompt:"Progresión tras carboplatino/paclitaxel + trastuzumab, pMMR confirmado, buen estado funcional. ¿Cuál es la conducta más apropiada?",
+        options:[
+          {label:"Lenvatinib + pembrolizumab", points:2,
+            feedback:"Correcto. Esta combinación es el estándar validado específicamente en tumores pMMR que progresaron tras quimioterapia con platino, con beneficio marcado en supervivencia libre de progresión y global.",
+            paper:"KEYNOTE-775 — Makker et al., N Engl J Med 2022", finding:"En la población pMMR (la mayoría de los tumores endometriales), lenvatinib + pembrolizumab mejoró la mediana de supervivencia libre de progresión (6.6 frente a 3.8 meses, HR 0.60) y la mediana de supervivencia global (17.4 frente a 12.0 meses, HR 0.68) frente a la quimioterapia de elección del investigador, en pacientes ya tratadas con platino.",
+            chart:{type:"km", metric:"Supervivencia global (población pMMR)", timeUnit:"meses",
+              curves:[
+                {label:"Lenvatinib + pembrolizumab", atMonths:17.4, survivalPct:50, highlight:true},
+                {label:"Quimioterapia de elección del investigador", atMonths:12.0, survivalPct:50}
+              ],
+              source:"KEYNOTE-775 — Makker et al., N Engl J Med 2022 (población pMMR)"}},
+          {label:"Reintroducir el mismo esquema de carboplatino/paclitaxel + trastuzumab", points:0,
+            feedback:"La progresión documentada bajo este esquema indica que ya no controla la enfermedad; no hay sustento para reintroducirlo sin cambios.",
+            paper:"NCCN Guidelines — Uterine Neoplasms", finding:"Recomienda cambiar de línea de tratamiento ante progresión documentada."},
+          {label:"Dostarlimab en monoterapia, dado que ya recibió quimioterapia con platino", points:0,
+            feedback:"El inhibidor de checkpoint en monoterapia tiene su evidencia más robusta en tumores dMMR/MSI-H; en un tumor pMMR como este, la combinación con lenvatinib es la que demostró mayor beneficio.",
+            paper:"KEYNOTE-775 — Makker et al., N Engl J Med 2022", finding:"El beneficio de la combinación lenvatinib + pembrolizumab en la población pMMR fue sustancialmente mayor que lo esperado con inhibidores de checkpoint en monoterapia en este perfil molecular."},
+          {label:"Quimioterapia con doxorrubicina liposomal en monoterapia", points:1,
+            feedback:"Es una alternativa citotóxica razonable de línea posterior, pero con menor evidencia de beneficio en este escenario específico que lenvatinib + pembrolizumab, validado puntualmente para pMMR post-platino.",
+            paper:"NCCN Guidelines — Uterine Neoplasms", finding:"Es una opción citotóxica recomendada en líneas posteriores, con eficacia más modesta que las opciones dirigidas más recientes en este escenario."}
+        ]}
+    ],
+    synthesis: `
+      <h3>Adyuvancia en enfermedad p53 anormal de alto riesgo</h3>
+      <p>El carcinoma seroso con mutación de <b>TP53 (p53 anormal)</b> y compromiso ganglionar define el grupo de <b>alto riesgo</b>: la adyuvancia estándar combina <b>quimioterapia y radioterapia</b> (PORTEC-3; GOG258), muy por encima de la braquiterapia sola o la observación. En esta histología específica se solicita además <b>panel de HER2</b>, con implicancias terapéuticas concretas si resulta positivo.</p>
+      <h3>Enfermedad metastásica: la secuencia según biomarcadores</h3>
+      <p>Con <b>HER2 positivo</b>, la primera línea metastásica agrega <b>trastuzumab</b> a la quimioterapia estándar (Fader et al.). Tras progresar a platino, en un tumor <b>pMMR</b>, la opción con mayor evidencia es <b>lenvatinib + pembrolizumab</b> (KEYNOTE-775) — un algoritmo de secuenciación completamente distinto al del Caso 2 (dMMR), donde el inhibidor de checkpoint se agregaba ya desde la primera línea junto con quimioterapia. La clasificación molecular no solo guía la adyuvancia: redefine toda la secuencia terapéutica en enfermedad avanzada.</p>
+    `
+  }
+
+  ]
 }
 
 };
+
+/* ============================================================ CÁNCER DE PULMÓN */
 const PULMON_MODULES = {
 
 /* ============================================================ CPNM EGFR MUTADO */
@@ -2144,11 +2437,11 @@ sclc: {
 /* ===================== CANCER TYPES (nivel superior) ===================== */
 
 const CANCER = {
-  mama: {
-    label: "Cáncer de Mama",
-    icon: "Oncología mamaria",
-    desc: "Cuatro subtipos moleculares —Luminal A, Luminal B, HER2 positivo y triple negativo— cada uno con su propia lógica de tratamiento, de la cirugía a la enfermedad metastásica.",
-    modules: MAMA_MODULES
+  uftf: {
+    label: "UFTF — Unidad Funcional de Tumores Femeninos",
+    icon: "Tumores femeninos",
+    desc: "Cáncer de mama y de endometrio, con su propia lógica de tratamiento según subtipo molecular, de la cirugía a la enfermedad metastásica.",
+    modules: UFTF_MODULES
   },
   pulmon: {
     label: "Cáncer de Pulmón",
@@ -2350,7 +2643,7 @@ let stages = null;
 let state = { step:0, score:0, maxScore:0, answered:false, vitals:{} };
 let currentOptions = null;
 
-const THEORY_PDFS = new Set(["lumA","lumB","her2","tnbc","egfr","alk","nodriver","sclc"]);
+const THEORY_PDFS = new Set(["lumA","lumB","her2","tnbc","endometrio","egfr","alk","nodriver","sclc"]);
 
 function renderHome(){
   activeCancer = null; activeModule = null; activeCaseKey = null;
