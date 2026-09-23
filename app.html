@@ -1772,7 +1772,7 @@ endometrio: {
     cardDesc:"67 años, posmenopáusica, con antecedente de cáncer colorrectal. Cáncer de endometrio dMMR.",
     patient:"C.R., 67 años · posmenopáusica, antecedente de cáncer colorrectal a los 55 años<br>Motivo: sangrado uterino anormal",
     vitals:{"Histología":"Endometrioide grado 3","Invasión miometrial":"≥50%","LVSI":"Sustancial","Clasificación molecular":"dMMR (pérdida de MSH2/MSH6)","Estadio":"IB","Tratamiento":"—"},
-    timeline:["Diagnóstico","Cirugía y clasificación molecular","Adyuvancia: elección de radioterapia","Manejo de toxicidad","Riesgo hereditario","1ª línea metastásica","Epicrisis"],
+    timeline:["Diagnóstico","Cirugía y clasificación molecular","Adyuvancia: elección de radioterapia","Adyuvancia: ¿agregar pembrolizumab?","Manejo de toxicidad","Riesgo hereditario","1ª línea metastásica","Epicrisis"],
     stages:[
       {type:"info", phase:0, eyebrow:"Consulta inicial", html:`
         <p>C.R., 67 años, posmenopáusica, con antecedente personal de <b>cáncer colorrectal a los 55 años</b>, consulta por sangrado uterino anormal. Ecografía transvaginal e histeroscopia con biopsia: <b>carcinoma endometrioide grado 3</b>.</p>
@@ -1802,10 +1802,34 @@ endometrio: {
             feedback:"Omite el componente de control locorregional que aporta la radioterapia, central en este grupo de riesgo.",
             paper:"Oaknin A, Bosse TJ, Creutzberg CL, et al. ESMO Clinical Practice Guideline, Ann Oncol 2022", finding:"En el riesgo alto-intermedio, la radioterapia (EBRT) es el componente recomendado; la quimioterapia es un agregado a considerar, no un reemplazo."}
         ]},
-      {type:"info", phase:3, eyebrow:"Evento de toxicidad · semana 4 de radioterapia pélvica", vitalsUpdate:{"Tratamiento":"EBRT — evento de toxicidad"}, html:`
+      {type:"info", phase:3, eyebrow:"Discusión en comité · antes de iniciar la radioterapia", html:`
+        <p>Antes de iniciar la EBRT, el comité de tumores discute si corresponde agregar tratamiento sistémico, dado que esta paciente combina <b>grado 3 y LVSI sustancial</b> (el subgrupo dentro del riesgo alto-intermedio donde se considera sumar quimioterapia) y tiene además un perfil <b>dMMR</b> confirmado.</p>`, buttonLabel:"Definir si agregar tratamiento sistémico →"},
+      {type:"decision", phase:3, eyebrow:"Decisión 2 · ¿Agregar quimioterapia y/o pembrolizumab a la radioterapia?",
+        prompt:"Estadio IB, grado 3, LVSI sustancial, dMMR (pérdida de MSH2/MSH6). ¿Qué corresponde agregar a la radioterapia adyuvante ya decidida?",
+        options:[
+          {label:"Carboplatino-paclitaxel + pembrolizumab concurrentes con la radioterapia, seguido de mantenimiento con pembrolizumab", points:2,
+            feedback:"Correcto en este perfil puntual. El estudio KEYNOTE-B21 (pembrolizumab adyuvante ± radioterapia en alto riesgo) fue negativo en su población general, pero en el subgrupo preespecificado dMMR —exactamente el perfil de esta paciente— mostró un beneficio marcado en supervivencia libre de enfermedad. Es la evidencia más específica disponible hoy para agregar inmunoterapia a la adyuvancia en dMMR.",
+            paper:"ENGOT-en11/GOG-3053/KEYNOTE-B21 — Ann Oncol 2024 (población global); resultados del subgrupo dMMR, J Clin Oncol 2024/2025", finding:"En el subgrupo preespecificado dMMR (281 pacientes, 26% de la población del estudio), agregar pembrolizumab a la quimioterapia (± radioterapia) mostró HR de supervivencia libre de enfermedad 0.31 (IC 95% 0.14-0.69), con eventos en 5.7% de las pacientes tratadas con pembrolizumab frente a 17.9% con placebo — pese a que el ensayo no cumplió su objetivo primario en la población general (no seleccionada por MMR).",
+            chart:{type:"km", metric:"Supervivencia libre de enfermedad (subgrupo dMMR)", timeUnit:"meses",
+              curves:[
+                {label:"Quimioterapia + pembrolizumab ± RT", atMonths:24, survivalPct:94.3, highlight:true},
+                {label:"Quimioterapia + placebo ± RT", atMonths:24, survivalPct:82.1}
+              ],
+              source:"KEYNOTE-B21 — subgrupo dMMR (eventos de DFS: 5.7% vs. 17.9%), HR 0.31 (IC 95% 0.14-0.69)"}},
+          {label:"Solo la radioterapia ya decidida, sin agregar nada más, dado que el ensayo que evaluó pembrolizumab adyuvante fue negativo", points:1,
+            feedback:"Es una lectura parcial: el ensayo fue negativo en su población general, pero esta paciente pertenece exactamente al subgrupo preespecificado (dMMR) donde sí se observó un beneficio marcado y consistente. Ignorar esa distinción deja fuera la opción con mejor evidencia específica para este perfil, aunque sea razonable reconocer que aún no es un estándar categoría 1 universal.",
+            paper:"KEYNOTE-B21", finding:"El resultado negativo del ensayo corresponde a la población global no seleccionada por MMR; el subgrupo dMMR tuvo un resultado positivo y clínicamente relevante."},
+          {label:"Agregar quimioterapia (carboplatino-paclitaxel) sin pembrolizumab, por el grado 3 y la LVSI sustancial, sin considerar el estatus dMMR", points:1,
+            feedback:"Es una conducta razonable según los criterios clásicos de riesgo (grado 3 + LVSI sustancial), pero no incorpora la evidencia más reciente y específica para el perfil molecular dMMR de esta paciente, que es precisamente donde el agregado de pembrolizumab mostró el mayor beneficio.",
+            paper:"KEYNOTE-B21; PORTEC-3 — León-Castillo et al., J Clin Oncol 2020", finding:"Agregar quimioterapia sin inmunoterapia se apoya en los criterios clásicos de riesgo clínico-patológico, pero no aprovecha la señal específica de beneficio de pembrolizumab en dMMR."},
+          {label:"Pembrolizumab en monoterapia adyuvante, sin quimioterapia ni radioterapia", points:0,
+            feedback:"No es el esquema evaluado: KEYNOTE-B21 estudió pembrolizumab agregado a quimioterapia (± radioterapia), no en monoterapia ni reemplazando el control locorregional que aporta la radioterapia.",
+            paper:"KEYNOTE-B21", finding:"El diseño del estudio combinó pembrolizumab con quimioterapia adyuvante, con radioterapia según indicación clínica; no evaluó la monoterapia con pembrolizumab."}
+        ]},
+      {type:"info", phase:4, eyebrow:"Evento de toxicidad · semana 4 de radioterapia pélvica", vitalsUpdate:{"Tratamiento":"EBRT + carboplatino-paclitaxel + pembrolizumab — evento de toxicidad"}, html:`
         <p>Durante la cuarta semana de EBRT, presenta <b>diarrea grado 2 (4-6 deposiciones/día) y urgencia miccional</b>, sin fiebre ni sangrado.</p>
         <div class="callout warn">La enteritis y cistitis actínicas agudas son toxicidades esperables durante la radioterapia pélvica, generalmente manejables sin interrumpir el tratamiento.</div>`, buttonLabel:"Decidir conducta ante la toxicidad →"},
-      {type:"decision", phase:3, eyebrow:"Decisión de toxicidad · Enteritis y cistitis actínica aguda",
+      {type:"decision", phase:4, eyebrow:"Decisión de toxicidad · Enteritis y cistitis actínica aguda",
         prompt:"Diarrea grado 2 y urgencia miccional durante la semana 4 de EBRT pélvica. ¿Cuál es la conducta más apropiada?",
         options:[
           {label:"Manejo sintomático (loperamida, hidratación, ajuste dietario, anticolinérgicos si es necesario), continuar la EBRT sin interrupción salvo empeoramiento", points:2,
@@ -1821,7 +1845,7 @@ endometrio: {
             feedback:"Reducir la dosis compromete el control oncológico local; la toxicidad grado 2 se maneja con soporte, no modificando la dosis planificada.",
             paper:"NCCN Guidelines — Uterine Neoplasms", finding:"No recomienda reducir la dosis total planificada de radioterapia por toxicidad aguda grado 1-2 manejable con medidas de soporte."}
         ]},
-      {type:"decision", phase:4, eyebrow:"Decisión 2 · Manejo del riesgo hereditario",
+      {type:"decision", phase:5, eyebrow:"Decisión 3 · Manejo del riesgo hereditario",
         prompt:"Pérdida de expresión de MSH2/MSH6 por inmunohistoquímica, con antecedente personal de cáncer colorrectal a los 55 años. ¿Cuál es la conducta más apropiada?",
         options:[
           {label:"Derivar a asesoramiento genético para estudio germinal de síndrome de Lynch", points:2,
@@ -1837,9 +1861,9 @@ endometrio: {
             feedback:"El cáncer de endometrio asociado a síndrome de Lynch puede presentarse en un rango etario amplio; la edad por sí sola, sumada a este patrón de inmunohistoquímica y al antecedente personal, no descarta el riesgo hereditario.",
             paper:"NCCN Guidelines — Genetic/Familial High-Risk Assessment", finding:"Recomienda evaluar el riesgo hereditario según el patrón de inmunohistoquímica y los antecedentes personales/familiares, no según un punto de corte de edad aislado."}
         ]},
-      {type:"info", phase:5, eyebrow:"Recaída — 3 años después", vitalsUpdate:{"Tratamiento":"Recaída pélvica y hepática","Estadio":"Metastásico (pélvico + hepático)"}, html:`
+      {type:"info", phase:6, eyebrow:"Recaída — 3 años después", vitalsUpdate:{"Tratamiento":"Recaída pélvica y hepática","Estadio":"Metastásico (pélvico + hepático)"}, html:`
         <p>A los 3 años, un control de rutina detecta <b>recaída pélvica y una lesión hepática</b>. Biopsia de la lesión hepática: <b>carcinoma endometrioide recurrente, dMMR persistente</b> (pérdida de MSH2/MSH6).</p>`, buttonLabel:"Definir primera línea metastásica →"},
-      {type:"decision", phase:6, eyebrow:"Decisión 3 · Primera línea metastásica/recurrente (dMMR)",
+      {type:"decision", phase:7, eyebrow:"Decisión 4 · Primera línea metastásica/recurrente (dMMR)",
         prompt:"Cáncer de endometrio recurrente, dMMR confirmado, sin tratamiento sistémico metastásico previo. ¿Cuál es el esquema de primera línea preferido?",
         options:[
           {label:"Dostarlimab + carboplatino/paclitaxel, seguido de mantenimiento con dostarlimab", points:2,
@@ -1865,6 +1889,8 @@ endometrio: {
     synthesis: `
       <h3>Adyuvancia guiada por el grupo de riesgo</h3>
       <p>Con grado 3 y LVSI sustancial —factores que definen <b>riesgo alto-intermedio</b> incluso en un tumor dMMR—, la <b>radioterapia externa pélvica</b> es la modalidad preferida sobre la braquiterapia vaginal sola, que en el subgrupo con factores de riesgo presentes mostró más recurrencia pélvica (PORTEC-2).</p>
+      <h3>Agregar inmunoterapia en la adyuvancia: la excepción dMMR</h3>
+      <p>En general, la inmunoterapia adyuvante todavía no es un estándar en cáncer de endometrio: KEYNOTE-B21 fue negativo en su población global. Pero el <b>subgrupo preespecificado dMMR</b> de ese mismo estudio —el perfil molecular de esta paciente— mostró un beneficio marcado al agregar <b>pembrolizumab</b> a la quimioterapia (± radioterapia), con HR de supervivencia libre de enfermedad de 0.31. Es la evidencia más específica disponible hoy para intensificar la adyuvancia en dMMR de riesgo alto-intermedio o alto, aunque conviene recordar que se trata de un análisis de subgrupo, no de un ensayo positivo de punta a punta.</p>
       <h3>Riesgo hereditario</h3>
       <p>El patrón de pérdida de <b>MSH2/MSH6</b> por inmunohistoquímica —a diferencia de la pérdida de MLH1/PMS2, con mayor probabilidad de causa esporádica por metilación— junto con el antecedente personal de cáncer colorrectal temprano, hace prioritaria la <b>derivación a estudio genético germinal de síndrome de Lynch</b>.</p>
       <h3>Enfermedad recurrente/metastásica dMMR</h3>
